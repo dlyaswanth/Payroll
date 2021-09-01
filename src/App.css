@@ -1,0 +1,213 @@
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s;
+  /* padding: 20px; */
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+.d-flex
+{
+  margin-right: 60px;
+}
+.navbar-collapse
+{
+  margin-left: 350px !important;
+  margin-top: 15px !important;
+}
+.company_name
+{
+  margin-left: 250px !important;
+}
+.view
+{
+  width:120px;
+}
+.card 
+{
+  background-color: lightgray;
+}
+.container
+{
+  margin-left: inherit;
+  width:100%;
+  max-width: 900px !important;
+}
+.pointer
+{
+  cursor: pointer;
+  color: dodgerblue;
+  text-decoration: underline;
+}
+.top
+{
+  margin-top: 15px;
+  font-weight: 600;
+}
+.small
+{
+  font-size: large !important;
+  list-style: none;
+  margin-left: -8%;
+}
+.employee
+{
+  max-width: 95% !important;
+  margin-left: 2.5% ;
+  margin-right: 2.5%;
+}
+.settings:hover
+{
+  background-color: white !important;
+}
+.container1 {
+  width: 800;
+  height: 300;
+  margin: 100px auto;
+}
+
+.btn1 {
+  margin-top: 20px;
+  cursor: pointer !important;
+  margin-left: 80px;
+  background-color: tomato;
+  color: azure;
+}
+.row1
+{
+  margin-left: 0% !important;
+  margin-right: 0% !important;
+  margin-top: 5% !important;
+}
+#App4 {
+  text-align: center;
+  }
+  .container1
+  {
+  background-color:azure;
+  }
+  #App2
+  {
+  margin-left:30%;
+  }
+  .App3
+  {
+  margin-left:30%;
+  }
+  #samplecalc
+  {
+  background-color: #FAECEA;
+  }
+
+  #samplecalc1
+  {
+  background-color: #F6F3F3;
+  }
+
+#toggbut 
+{
+  padding-left:100px;
+  
+}
+#para1
+{
+margin-left:375px;
+}
+#para11
+{
+margin-left:430px;
+}
+#para2
+{
+margin-left:-712px;
+}
+#parasize
+{
+font-size:15px;
+}
+#paraepf1
+{
+margin-left:-660px;
+}
+#epfmain
+{
+margin-left:-660px;
+}
+#epfmain1
+{
+margin-right:400px;
+}
+#table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+th
+{
+height:70px;
+}
+th{
+  text-align:right;
+}
+#enable
+{
+color: green;
+}
+.btn2 {
+  width: auto;
+  display: flex;
+  margin-left: 35%;
+}
+.form {
+  /* border: 1px solid #121212; */
+  margin-left: 25%;
+  margin-right: 25%;
+}
+.errorMsg {
+  color: #cc0000;
+  margin-bottom: 12px;
+}
+
+.skip {
+  text-decoration:none;
+}
