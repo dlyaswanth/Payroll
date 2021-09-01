@@ -20,6 +20,7 @@ function Loginpage()
           if(password === data.password){
             toast.success(data.message,{autoClose:2500})
             history.push("/home")
+            localStorage.setItem('company_id',data._id);
           }
           else{
             toast.error(data.error,{autoClose:2500})
