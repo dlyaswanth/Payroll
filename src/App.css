@@ -124,11 +124,11 @@
   }
   .container1
   {
-  background-color:azure;
+  background-color:white;
   }
   #App2
   {
-  margin-left:30%;
+  margin-left:28%;
   }
   .App3
   {
@@ -142,6 +142,12 @@
   #samplecalc1
   {
   background-color: #F6F3F3;
+  margin-left: 30%;
+  }
+  #samplecalc2
+  {
+  background-color: #F6F3F3;
+  
   }
 
 #toggbut 
