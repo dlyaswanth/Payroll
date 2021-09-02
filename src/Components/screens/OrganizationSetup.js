@@ -56,22 +56,19 @@ class OrganizationSetup extends React.Component {
                   companyType : this.state.fields.industry
           })
       };
-      fetch('https://payroll-fastify.herokuapp.com/api/Company/'+localStorage.getItem('companyId'), requestOptions)
+      fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('companyId'), requestOptions)
           .then(console.log(companyid))
           .then(response => response.json())
-          .then(data => {
-            console.log(data.location)
-          })
           .then(data=>{
-            if (data.error)
-            toast.error(data.error,{autoClose:2500})
+            if (!data)
+              toast.error("error",{autoClose:2500})
             else
             {
                 toast.success(data.message,{autoClose:2500})
                 history.push('/taxinfo');
             }
         })
-          
+
           //api integration
 
 
@@ -90,7 +87,7 @@ class OrganizationSetup extends React.Component {
           fields["industry"] = "";
           fields["state"] = "";
           this.setState({fields:fields});
-          alert("Form saved");
+          //alert("Form saved");
           
       }
 

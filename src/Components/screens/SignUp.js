@@ -111,6 +111,8 @@ const SignUpForm = () => {
                   //pay schedule
                   payDate : "",
                   payRollStartFrom :"",
+                  workHours: 0,
+                  workdays:[],
 
                   //tax details
                   pan : "",
@@ -130,21 +132,29 @@ const SignUpForm = () => {
                   logArray : []
           })
       };
-      fetch('https://payroll-fastify.herokuapp.com/api/Company', requestOptions)
+      fetch('https://payroll-fastify.herokuapp.com/api/company', requestOptions)
           .then(response => response.json())
           .then(data => {
-            localStorage.setItem('companyId', data._id);
-            console.log(data._id)
-          })
-          .then(data=>{
-            if (data.error)
-            toast.error(data.error,{autoClose:2500})
-            else
-            {
-                toast.success(data.message,{autoClose:2500})
-                history.push('/organizationsetup');
+            if(data){
+              localStorage.setItem('companyId', data._id);
+              console.log(data._id);
+              history.push('/organizationsetup');
             }
-        })
+            else{
+              toast.error("ERROR",{autoClose:2500})
+            }
+          })
+        //   .then(data=>{
+        //     console.log(data);
+            
+        //     // if (data.error)
+        //     // toast.error(data.error,{autoClose:2500})
+        //     // else
+        //     // {
+        //     //     toast.success(data.message,{autoClose:2500})
+        //     //     history.push('/organizationsetup');
+        //     // }
+        // })
   };
 
   const handleSubmit = (e) => {
@@ -276,8 +286,8 @@ const SignUpForm = () => {
             onChange={(e) => setLocation(e.target.value)}
           />
           
-            <span><input type="checkbox" id="agree" onChange={checkboxHandler} />
-            <label htmlFor="agree" style={{fontSize:"10px"}}>
+            <span className="row ms-1"><input className="col-1 " style={{marginTop:"6px"}} type="checkbox" id="agree" onChange={checkboxHandler} />
+            <label className="mt-1 col-10 p-0" htmlFor="agree" style={{fontSize:"10px"}}>
               {" "}
               I agree to <a href="">Terms of Service</a> and{" "}
               <a href="">Privacy Policy</a>

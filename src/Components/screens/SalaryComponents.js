@@ -13,18 +13,19 @@ function SalaryComponents()
     const [name,setName]=useState('')
     const [pay,setPay]=useState('')
     const [type,setType]=useState('')
-    const [ctype,setCtype]=useState('')
+   // const [ctype,setCtype]=useState('')
     const [rupee,setRupee]=useState('')
     var newopt1={};
     function checkhandler(options)
     {
-        options[3]=!options[3]
-        if (options[3] === true)
-        finalValues.push(options)
+        options["opted"]=!options["opted"]
+        if (options["opted"] === true)
+            finalValues.push({"type":options.type,"name":options.name,"payType":options.payType,
+                             "amount":options.amount});
         // finalValues.push(options[0])
-        else if (options[3] === false)
+        else if (options["opted"] === false)
         {
-            finalValues.splice(finalValues.indexOf(options[0]),1)
+            finalValues.splice(finalValues.indexOf(options["name"]),1)
             console.log()
         }
     }
@@ -32,10 +33,10 @@ function SalaryComponents()
     {
         setType(value);
     }
-    function handelCType(value)
-    {
-        setCtype(value)
-    }
+    // function handelCType(value)
+    // {
+    //     setCtype(value)
+    // }
     function onSave(){
         console.log(finalValues);
 
@@ -47,38 +48,42 @@ function SalaryComponents()
                    earningsDocArray:finalValues
             })
         };
-        fetch('https://payroll-fastify.herokuapp.com/api/Company/'+localStorage.getItem('companyId'), requestOptions)
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('companyId'), requestOptions)
             .then(console.log(localStorage.getItem('companyId')))
             .then(response => response.json())
             .then(data=>{
-                if (data.error)
-                toast.error(data.error,{autoClose:2500})
+                if (!data)
+                toast.error("ERROR",{autoClose:2500})
                 else
                 {
                     toast.success(data.message,{autoClose:2500})
-                    history.push('/login');
+                    //history.push('/login');
                 }
             })
             //api integration
 
     }
+    function reset(){
+        setNewopt("");
+        setName("");
+        setType("");
+        setPay("");
+        setRupee("");
+        //setCtype("");
+    }
+
     function add()
     {   
-        newopt1[0]=newopt
-        newopt1[1]=name
-        newopt1[2]=type
-        newopt1[3]=false
-        newopt1[4]=rupee
+        newopt1["type"]=newopt
+        newopt1["name"]=name
+        newopt1["payType"]=type
+        newopt1["opted"]=false
+        newopt1["amount"]=rupee
         setOptions([...options,newopt1])
         console.log(finalValues);
-        console.log(ctype,rupee,pay);
+        console.log(type,rupee,pay);
+        reset();
         
-        // newopt1[0]=newopt
-        // newopt1[1]=name
-        // newopt1[2]=type
-        // setOptions([...options,newopt1])
-        // console.log(finalValues);
-        // console.log(ctype,rupee,pay);
     }
     function proceed()
     {
@@ -114,11 +119,11 @@ function SalaryComponents()
                         <>
                         <br />
                             <div className="col-6 col-sm-4">
-                            <input type="checkbox" value={items[0]} name={items[0]}  style={{cursor:"pointer"}} onChange={()=>checkhandler(items)}/>
-                            <span style={{color:"dodgerblue",cursor:"pointer"}}>&nbsp;{items[0]}</span>
+                            <input type="checkbox" value={items["type"]} name={items["type"]}  style={{cursor:"pointer"}} onChange={()=>checkhandler(items)}/>
+                            <span style={{color:"dodgerblue",cursor:"pointer"}}>&nbsp;{items["type"]}</span>
                             </div>
-                            <div className="col-6 col-sm-4">{items[1]}</div>
-                            <div className="col-6 col-sm-4">{items[2]}</div>
+                            <div className="col-6 col-sm-4">{items["name"]}</div>
+                            <div className="col-6 col-sm-4">{items["payType"]}</div>
                             <div className="w-100 d-none d-md-block"></div>
                         </>
                     )
@@ -140,23 +145,23 @@ function SalaryComponents()
                     <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="exampleModalLabel">New Earnings</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>reset()}></button>
                     </div>
                     <div className="modal-body">
                         <label>Earning Type : </label>
                         <br/>
                         <div className="input-group mb-3">
-                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>setNewopt(event.target.value)}  autoFocus/>
+                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={newopt} onChange={(event)=>setNewopt(event.target.value)}  autoFocus/>
                         </div>
                         <label>Earning Name : </label>
                         <br/>
                         <div className="input-group mb-3">
-                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>setName(event.target.value)}  />
+                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={name} onChange={(event)=>setName(event.target.value)}  />
                         </div>
                         <label>Name in Pay Slip : </label>
                         <br/>
                         <div className="input-group mb-3">
-                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>setPay(event.target.value)}  />
+                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={pay} onChange={(event)=>setPay(event.target.value)}  />
                         </div>
                         <label>Pay type : </label>
                         <br/><br/>
@@ -167,30 +172,30 @@ function SalaryComponents()
                             </label>
                         </div>
                         <div className="form-check"><br/>
-                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  onClick={()=>handelType("Variable")} value="Variable"/>
+                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={()=>handelType("Variable")} value="Variable"/>
                             <label className="form-check-label" >
                                 <b>Variable Pay</b> (Variable amount paid at any payroll)
                             </label>
                         </div><br/>
-                        <label>Calculation type : </label><br/>
+                        {/* <label>Calculation type : </label><br/>
                         <br/>
                         <div className="form-check">
-                            <input className="form-check-input" type="radio" name="flexRadioDefault1" id="flexRadioDefault1" onClick={()=>handelCType("Flat Amount")}/>
+                            <input className="form-check-input" type="radio" name="flexRadioDefault1" id="flexRadioDefault1" value={ctype} onClick={()=>handelCType("Flat Amount")}/>
                             <label className="form-check-label" >
                                 <b>Flat Amount</b> 
                             </label>
                         </div><br/>
                         <div className="form-check">
-                            <input className="form-check-input" type="radio" name="flexRadioDefault1" id="flexRadioDefault2"  onClick={()=>handelCType("Percentage Amount")}/>
+                            <input className="form-check-input" type="radio" name="flexRadioDefault1" id="flexRadioDefault2"  value={newopt} onClick={()=>handelCType("Percentage Amount")}/>
                             <label className="form-check-label" >
                                 <b>Percentage of basic</b>
                             </label>
-                        </div>
+                        </div> */}
                         <label>Enter Amount : </label><br/>
                         <br/>
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="basic-addon1">₹</span>
-                           <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>setRupee(event.target.value)}  />
+                           <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={rupee} onChange={(event)=>setRupee(event.target.value)}  />
                         </div>
                         <ul className="list-group">
                             <li className="list-group-item d-flex justify-content-between align-items-center">
@@ -200,8 +205,8 @@ function SalaryComponents()
                         </ul>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-outline-success"onClick={()=>add()} >Add New</button>
-                        <button type="button" className="btn btn-oultine-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" className="btn btn-outline-success"onClick={()=>add()} >Add New</button>
+                        <button type="button" className="btn btn-oultine-secondary" data-bs-dismiss="modal" onClick={()=>reset()}>Close</button>
                     </div>
                     </div>
                     </div>

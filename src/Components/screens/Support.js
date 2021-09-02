@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AdminNavbar from "../Navbar/AdminNavbar";
+import Logout from './Logout';
 function Support()
 {
     const [name,setName]=useState('')
@@ -25,7 +26,7 @@ function Support()
                                 &nbsp;
                                 <button className="btn btn-outline-success"  onClick={()=>Search(name)}>Search</button>
                             </li>
-                            <li className="company_name">
+                            <li className="company_name me-2">
                                 <button type="button" className="btn btn-outline-info" disabled aria-label="Close">
                                     Codingmart
                                 </button>
@@ -42,6 +43,9 @@ function Support()
                                         <li className="settings"><Link className="dropdown-item settings" to="/">Pay Schedule</Link></li>
                                     </ul>
                                 </div>
+                            </li>
+                            <li>
+                                <Logout />
                             </li>
                         </ul>
                     </div>

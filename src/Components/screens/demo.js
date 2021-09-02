@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import {ToastContainer,toast} from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css';
+
 function Demo()
 {
     const [options,setOptions]=useState([])
     var finalValues=[]
+    const [newopt,setNewopt]=useState('')
     const [name,setName]=useState('')
     const [type,setType]=useState('')
     const [rupee,setRupee]=useState('')
     var newopt1={};
     function checkhandler(options)
     {
-        options["opted"]=!options["opted"]
-        if (options["opted"] === true)
-            finalValues.push({"type":options.type,"name":options.name,"amount":options.amount});
+        options[3]=!options[3]
+        if (options[3] === true)
+        finalValues.push(options)
         // finalValues.push(options[0])
-        else if (options["opted"] === false)
+        else if (options[3] === false)
         {
-            finalValues.splice(finalValues.indexOf(options["name"]),1)
+            finalValues.splice(finalValues.indexOf(options[0]),1)
             console.log()
         }
     }
@@ -30,42 +30,29 @@ function Demo()
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
               reimbursmentArray:finalValues,
-              logArray: ["Your Company has joined in Payroll"]
+              logArray: ["New Company Created"]
             })
         };
         fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('companyId'), requestOptions)
             .then(console.log(localStorage.getItem('companyId')))
             .then(response => response.json())
-            .then(data=>{
-                if (!data)
-                toast.error("error",{autoClose:2500})
-                else
-                {
-                    toast.success(data.message,{autoClose:2500})
-                   // history.push('/salary');
-                }
-            })
             
     //         //api integration
 
     }
-
-    function reset(){
-        setName("");
-        setType("");
-        setRupee("");
+    function handelType(value)
+    {
+        setType(value);
     }
-
     function add()
     {   
-        newopt1["name"]=name
-        newopt1["type"]=type
-        newopt1["amount"]=rupee
-        newopt1["opted"]=false
+        newopt1[0]=name
+        newopt1[1]=type
+        newopt1[2]=rupee
         setOptions([...options,newopt1])
         console.log(finalValues);
         console.log(name,type,rupee);
-        reset();
+        
         // newopt1[0]=newopt
         // newopt1[1]=name
         // newopt1[2]=type
@@ -75,8 +62,8 @@ function Demo()
     }
     return(
         <div >
-           <ToastContainer />
-            <div style={{marginLeft:"10%"}}>
+           
+            <div style={{marginLeft:"10%"}} id="collapseExample1" className="collapse">
             <div className="row row1">
                 <div className="col-6 col-sm-4"><b>Name</b></div>
                 <div className="col-6 col-sm-4"><b>Type</b></div>
@@ -91,11 +78,11 @@ function Demo()
                         <>
                         <br />
                             <div className="col-6 col-sm-4">
-                            <input type="checkbox" value={items["name"]} name={items["name"]} style={{cursor:"pointer"}} onChange={()=>checkhandler(items)}/>
-                            <span style={{color:"dodgerblue",cursor:"pointer"}}>&nbsp;{items["name"]}</span>
+                            <input type="checkbox" value={items[0]} name={items[0]} style={{cursor:"pointer"}} onChange={()=>checkhandler(items)}/>
+                            <span style={{color:"dodgerblue",cursor:"pointer"}}>&nbsp;{items[0]}</span>
                             </div>
-                            <div className="col-6 col-sm-4">{items["type"]}</div>
-                            <div className="col-6 col-sm-4">{items["amount"]}</div>
+                            <div className="col-6 col-sm-4">{items[1]}</div>
+                            <div className="col-6 col-sm-4">{items[2]}</div>
                             <div className="w-100 d-none d-md-block"></div>
                         </>
                     )
@@ -106,35 +93,34 @@ function Demo()
             </div>
             <br />
             <button className="btn btn-primary" onClick={()=>onSave()}>
-                    Save
+                    save
                 </button>
             
-            <br /><br />
             <br />
-           
+            
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="exampleModalLabel">New Reimbursement</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>reset()}></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
                         <label>Reimbursement Name : </label>
                         <br/>
                         <div className="input-group mb-3">
-                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={name} onChange={(event)=>setName(event.target.value)}  autoFocus/>
+                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>setName(event.target.value)}  autoFocus/>
                         </div>
                         <label>Reimbursement Type : </label>
                         <br/>
                         <div className="input-group mb-3">
-                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={type} onChange={(event)=>setType(event.target.value)}  />
+                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>setType(event.target.value)}  />
                         </div>
                         <label>Enter Amount : </label><br/>
                         <br/>
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="basic-addon1">₹</span>
-                           <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={rupee} onChange={(event)=>setRupee(event.target.value)}  />
+                           <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>setRupee(event.target.value)}  />
                         </div>
                         <ul className="list-group">
                             <li className="list-group-item d-flex justify-content-between align-items-center">
@@ -144,13 +130,14 @@ function Demo()
                         </ul>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-outline-success" onClick={()=>add()} >Add New</button>
-                        <button type="button" className="btn btn-oultine-secondary" data-bs-dismiss="modal" onClick={()=>reset()}>Close</button>
+                        <button type="button" className="btn btn-outline-success"onClick={()=>add()} >Add New</button>
+                        <button type="button" className="btn btn-oultine-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                     </div>
                     </div>
                 </div>
                 </div>
+                
             </div>
     )
 }

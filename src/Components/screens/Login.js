@@ -1,7 +1,9 @@
+/* eslint-disable no-lone-blocks */
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+export let value =false;
 function Loginpage()
 {
     let history = useHistory();
@@ -13,12 +15,13 @@ function Loginpage()
     const[password,setPassword] = useState('')
     function login(){
         toast.info('Please Wait !',{autoClose:2500})
-        fetch('https://payroll-fastify.herokuapp.com/api/CompanyEmail/'+name, requestOptions)
+        fetch('https://payroll-fastify.herokuapp.com/api/companyEmail/'+name, requestOptions)
         .then(response => response.json())
         .then(data => {
           console.log(data.password)
           if(password === data.password){
             toast.success(data.message,{autoClose:2500})
+            value=true;
             history.push("/home")
             localStorage.setItem('company_id',data._id);
           }
@@ -26,18 +29,25 @@ function Loginpage()
             toast.error(data.error,{autoClose:2500})
           }
         });
-    
         //console.log(name,password)
     }
     return (
-        <div>
+        <div className="d-flex justify-content-center align-items-center" style={{height:"500px"}}>
             <ToastContainer />
-            <h1>Login</h1>
-            <input className="form-control me-2" type="text" placeholder="Email" aria-label="Search" onChange={(event)=>setName(event.target.value)}/>
-            <input className="form-control me-2" type="password" placeholder="Password" aria-label="Search" onChange={(event)=>setPassword(event.target.value)}/>
-            <button onClick={() => login()}>Login</button>
-
-            
+            <div className="container text-center row border border-secondary p-5 mt-5" style={{width:"30%",height:"70%"}}>
+              <h1 className="col-12 mb-4">Login</h1>
+              <div className="col-12">
+              <div className="input-group mb-3">
+                <span className="input-group-text" id="basic-addon1"><i className="far fa-envelope"></i></span>
+                <input className="form-control" type="text" placeholder="Email" aria-label="Search" onChange={(event)=>setName(event.target.value)}/>
+              </div>
+              <div className="input-group mb-3">
+                <span className="input-group-text" id="basic-addon1"><i className="fas fa-unlock-alt"></i></span>
+                <input className="form-control" type="password" placeholder="Password" aria-label="Search" onChange={(event)=>setPassword(event.target.value)}/>
+              </div>
+                <div className="text-center"><button className="btn btn-primary mb-3" onClick={() => login()}>Login</button></div>
+              </div>
+            </div>
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AdminNavbar from '../Navbar/AdminNavbar';
+import Logout from './Logout';
 function AdminReports()
 {
     const [name,setName]=useState('')
@@ -25,7 +26,7 @@ function AdminReports()
                                 &nbsp;
                                 <button className="btn btn-outline-success"  onClick={()=>Search(name)}>Search</button>
                             </li>
-                            <li className="company_name">
+                            <li className="company_name me-2">
                                 <button type="button" className="btn btn-outline-info" disabled aria-label="Close">
                                     Codingmart
                                 </button>
@@ -43,7 +44,11 @@ function AdminReports()
                                     </ul>
                                 </div>
                             </li>
+                            <li>
+                                <Logout />
+                            </li>
                         </ul>
+
                     </div>
                 </div>
             </nav>

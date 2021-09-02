@@ -1,12 +1,10 @@
-/* eslint-disable react/jsx-no-duplicate-props */
+import '../../App.css';
+import SideBar from "./SideBar";
 import React, { useState } from 'react';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
-import { useHistory } from 'react-router-dom';
-import {ToastContainer,toast} from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css';
-import SideBar from "./SideBar";
-function Statutory() {
-  let history=useHistory();
+
+function Basic() {
+
   const [isOpen, setIsOpen] = useState(false);
   const [epfnum, setEpfnum] = useState('');
   const [empcont1, setEmpcont1] =useState('12% of Actual PF Wage');
@@ -27,8 +25,8 @@ function Statutory() {
   const [einum, setEinum] = useState('');
   const [ninum, setNinum] = useState('');
 
-  const handleSubmit = () => {
-    // e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const statutory = {epfnum,empcont1,empcont2,dc,dc1,dc2,esinum,worl,ptnum,
     onenum,twnum,thrnum,frnum,finum,sinum,senum,einum,ninum}
     console.log(statutory);
@@ -47,22 +45,14 @@ function Statutory() {
 fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('companyId'), requestOptions)
     .then(console.log(localStorage.getItem('companyId')))
     .then(response => response.json())
-    .then(data=>{
-      if (data.error)
-      toast.error(data.error,{autoClose:2500})
-      else
-      {
-          toast.success(data.message,{autoClose:2500})
-          history.push('/salary');
-      }
-  })
+
   }
+
   const toggle = () => setIsOpen(!isOpen);
 
   return (
     <div className="container">
       <SideBar />
-      <ToastContainer />
     <div style={{marginLeft:"28%",marginTop:"8%"}}>
           <h3 style={{marginLeft:"28%"}}>Configure PF, ESI, and Professional Tax </h3>
           <h6 style={{marginLeft:"28%"}}>These benefits and taxes are recommended by the government for your employees. Enable the components</h6>
@@ -73,27 +63,27 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
           <h6 style={{marginLeft:"28%"}}>a retirement benefit plan for all salaried employees.</h6>  
 
           <div id="App2">
-          <div className="container1">
+          <div class="container1">
 
-          <form > 
-            <div className="form-group col-md-4">
+          <form onSubmit={handleSubmit}> 
+            <div class="form-group col-md-4">
         <label for="epfnum1">EPF Number</label>
-        <input type="text" className="form-control" id="epfnum1" value= {epfnum} onChange={(e) => setEpfnum(e.target.value)} aria-describedby="emailHelp" placeholder="AA/AAA/0000000/000"/>
+        <input type="text" class="form-control" id="epfnum1" value= {epfnum} onChange={(e) => setEpfnum(e.target.value)} aria-describedby="emailHelp" placeholder="AA/AAA/0000000/000"/>
       </div>
       <br/>
 
-      <div className="form-group col-md-4">
+      <div class="form-group col-md-4">
         <label for="ecr1">Employer Contribution Rate</label>
-        <select className="form-select"  value= {empcont1} onChange={(e) => setEmpcont1(e.target.value)}>
+        <select class="form-select"  value= {empcont1} onChange={(e) => setEmpcont1(e.target.value)}>
       <option>12% of Actual PF Wage</option>
       <option>Restrict Contribution to ₹15,000 of PF Wage</option>
     </select>
       </div>
       <br/>
 
-      <div className="form-group col-md-4">
+      <div class="form-group col-md-4">
         <label for="ecr2">Employee Contribution Rate</label>
-        <select className="form-select"  value= {empcont2} onChange={(e) => setEmpcont2(e.target.value)}>
+        <select class="form-select"  value= {empcont2} onChange={(e) => setEmpcont2(e.target.value)}>
       <option>12% of Actual PF Wage</option>
       <option>Restrict Contribution to ₹15,000 of PF Wage</option>
     </select>
@@ -101,13 +91,13 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
 
     <br/>
 
-        <div className="form-group col-md-4">
+        <div class="form-group col-md-4">
         <label for="dc1">Deduction Cycle</label>  <i className="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Provident Fund (PF) contributions for each month should be deposited to the Employee Provident Fund Organisation (EPFO) within the 15th of the following month"></i>
-        <input type="text" className="form-control" id="dc1" aria-describedby="emailHelp" value= {dc} onChange={(e) => setDc(e.target.value)} disabled/>
+        <input type="text" class="form-control" id="dc1" aria-describedby="emailHelp" value= {dc} onChange={(e) => setDc(e.target.value)} disabled/>
       </div>
       <br/>
       <div>
-          <Button color="white" className="btn btn-link" onClick={toggle} style={{ marginBottom: '1rem',color:'#0066ff' }}><i className="fa fa-caret-down"> View Sample Calculation</i></Button>
+          <Button color="white" class="btn btn-link" onClick={toggle} style={{ marginBottom: '1rem',color:'#0066ff' }}><i className="fa fa-caret-down"> View Sample Calculation</i></Button>
           <Collapse isOpen={isOpen}>
             <Card>
               <CardBody id="samplecalc">
@@ -129,56 +119,55 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
         </div>
 
     <br/>
-    <div className="form-check">
-      <input className="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
-      <label className="form-check-label" for="defaultCheck1">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
+      <label class="form-check-label" for="defaultCheck1">
       Include employer's contribution in the CTC
       </label>
     </div>
 
-    <div className="form-check form-check-inline" >
-      <input className="form-check-input" type="checkbox" value="" id="inlineCheckbox1"/>
-      <label className="form-check-label" for="inlineCheckbox1">
+    <div class="form-check form-check-inline" >
+      <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox1"/>
+      <label class="form-check-label" for="inlineCheckbox1">
         Override PF contribution rate at employee level
       </label>
     </div>
     <br/>
     <h6>PF Configuration when LOP Applied</h6>
     <br/>
-    <div className="form-check">
-      <input className="form-check-input" type="checkbox" value="" id="prorate1"/>
-      <label className="form-check-label" for="defaultCheck1">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="prorate1"/>
+      <label class="form-check-label" for="defaultCheck1">
         <h6>Pro-rate Restricted PF wage</h6>
         PF contribution will be pro-rated based on the number of days worked by the employee.
       </label>
     </div>
     <br/>
-    <div className="form-check">
-      <input className="form-check-input" type="checkbox" value="" id="lop1" checked/>
-      <label className="form-check-label" for="defaultCheck1">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="lop1" checked/>
+      <label class="form-check-label" for="defaultCheck1">
         <h6>Consider all applicable PF components if PF wage is less than 15k after Loss of Pay</h6>
         PF wage will be computed using the salary earned in that particular month (based on LOP) rather than
         the actual amount mentioned in the salary structure.
 
         <div style={{marginLeft:"-5px",marginTop:"5px"}}>
 
-    <button type="button" className="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModal">
         <i className="fa fa-eye">  View Sample Calculation
       </i>
     </button>
 
 
-    <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div className="modal-dialog modal-xl">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id="exampleModalLabel">Sample LOP based EPF Calculation</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Sample LOP based EPF Calculation</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div className="modal-body">
+          <div class="modal-body">
         <h6>Let's assume the salary split-up considered for EPF is as shown below with PF wage restricted to ₹ 15,000</h6>
         <table id="table">
-          <tbody>
       <tr>
         <th>SALARY COMPONENTS</th>
         <th>EARNINGS as mentioned in the CTC</th>
@@ -201,18 +190,17 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
         <td>₹ 3,000</td>
         <td>₹ 2,000</td>
       </tr>
-      </tbody>
     </table>
           </div>
-        <div className="container">
-            <div className="row">
-            <div className="col-md-6" style={{backgroundColor:"lavender"}}>
+        <div class="container">
+            <div class="row">
+            <div class="col-md-6" style={{backgroundColor:"lavender"}}>
             <h5 style={{fontSize:"12px"}}>THE OPTION IS NOT ENABLED</h5>
             <h6>EPF = 12% of 12000 = ₹ 1,440</h6>
             <h5 style={{fontSize:"10px"}}>(Basic in CTC {'>'} ₹ 15,000)</h5>
             <h5 style={{fontSize:"15px"}}>Here, Basic is 18k (as given in the salary split-up), which is more than the (Always)restricted PF wage of 15k. Hence, only the Basic component is considered for EPF Computation.</h5>
             </div>
-            <div className="col-md-6" style={{backgroundColor:"#FAECEA"}}>
+            <div class="col-md-6" style={{backgroundColor:"#FAECEA"}}>
             <h5 id="enable" style={{fontSize:"12px"}}>THE OPTION IS ENABLED</h5>
             <h6>EPF = 12% of 15000 = ₹ 1,800</h6>
             <h5 style={{fontSize:"10px"}}>(Basic + Transport Allowance + Telephone Allowance {'>'} ₹ 15,000)</h5>
@@ -221,8 +209,8 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
             </div>
         </div>
 
-          <div className="modal-footer">
-            <button type="button" className="btn btn-outline-secondary" data-bs-dismiss="modal" style={{marginRight:"980px"}}>Okay, got it!</button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style={{marginRight:"980px"}}>Okay, got it!</button>
           </div>
         </div>
       </div>
@@ -232,8 +220,8 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
       </label>
     </div>
     <br/>
-    <button type="submit" className="btn btn-link"> <i className="fa fa-check"> Enable</i></button>
-    <button type="button" className="btn btn-link"> <i className="fa fa-times"> Cancel</i></button><br/><br/>
+    <button type="submit" class="btn btn-link"> <i className="fa fa-check"> Enable</i></button>
+    <button type="button" class="btn btn-link"> <i className="fa fa-times"> Cancel</i></button><br/><br/>
     </form>
 
     <h3 style={{marginLeft:"1%"}}>Employees' State Insurance (ESI)</h3>
@@ -243,31 +231,31 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
     </div>
 
     <div className="App3">
-    <div className="container1">
+    <div class="container1">
 
-    <form >
-    <div className="form-group col-md-4">
+    <form onSubmit={handleSubmit}>
+    <div class="form-group col-md-4">
     <label for="esi2">ESI Number</label>
-    <input type="text" className="form-control"  value= {esinum} onChange={(e) => setEsinum(e.target.value)} id="esi2" aria-describedby="emailHelp" placeholder="00-00-000000-000-0000"/>
+    <input type="text" class="form-control"  value= {esinum} onChange={(e) => setEsinum(e.target.value)} id="esi2" aria-describedby="emailHelp" placeholder="00-00-000000-000-0000"/>
     </div>
     <br/>
 
-    <div className="form-group col-md-4">
+    <div class="form-group col-md-4">
         <label for="dc2">Deduction Cycle</label>  <i className="fa fa-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Provident Fund (PF) contributions for each month should be deposited to the Employee Provident Fund Organisation (EPFO) within the 15th of the following month"></i>
-        <input type="text" className="form-control"  value= {dc1} onChange={(e) => setDc1(e.target.value)} id="dc2" aria-describedby="emailHelp" value="Monthly" disabled/>
+        <input type="text" class="form-control"  value= {dc1} onChange={(e) => setDc1(e.target.value)} id="dc2" aria-describedby="emailHelp" value="Monthly" disabled/>
       </div>
       <br/>
 
-      <div className="form-check">
-      <input className="form-check-input" type="checkbox" value="" id="ec2"/>
-      <label className="form-check-label" for="defaultCheck1">
+      <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="ec2"/>
+      <label class="form-check-label" for="defaultCheck1">
         Include employer's contribution in the CTC
       </label>
     </div>
     <br/>
 
-    <button type="submit" className="btn btn-link"> <i className="fa fa-check"> Enable</i></button>
-    <button type="button" className="btn btn-link"> <i className="fa fa-times"> Cancel</i></button>
+    <button type="submit" class="btn btn-link"> <i className="fa fa-check"> Enable</i></button>
+    <button type="button" class="btn btn-link"> <i className="fa fa-times"> Cancel</i></button>
     </form>
 
     </div>
@@ -280,22 +268,22 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
     <br/>
 
     <CardBody id="samplecalc1">
-      <form >
-        <div className="form-group col-md-4">
+      <form onSubmit={handleSubmit}>
+        <div class="form-group col-md-4">
         <label for="wl">Work Location</label>
-        <input type="text" className="form-control" id="wl" value= {worl} onChange={(e) => setWorl(e.target.value)} aria-describedby="emailHelp" value="Head Office (Andhra Pradesh)" disabled/>
+        <input type="text" class="form-control" id="wl" value= {worl} onChange={(e) => setWorl(e.target.value)} aria-describedby="emailHelp" value="Head Office (Andhra Pradesh)" disabled/>
       </div>
       <br/>
 
-      <div className="form-group col-md-4">
+      <div class="form-group col-md-4">
         <label for="pt1">PT Number</label>
-        <input type="text" className="form-control" id="pt1" value= {ptnum} onChange={(e) => setPtnum(e.target.value)} aria-describedby="emailHelp" placeholder="Enter PT Number"/>
+        <input type="text" class="form-control" id="pt1" value= {ptnum} onChange={(e) => setPtnum(e.target.value)} aria-describedby="emailHelp" placeholder="Enter PT Number"/>
       </div>
       <br/>
 
-      <div className="form-group col-md-4">
+      <div class="form-group col-md-4">
         <label for="dc3">Deduction Cycle</label>  <i className="fa fa-info" data-tip="Provident Fund (PF) contributions for each month should be deposited to the Employee Provident Fund Organisation (EPFO) within the 15th of the following month" data-for='toolTip1' data-place='top'></i>
-        <input type="text" className="form-control" id="dc3" value= {dc2} onChange={(e) => setDc2(e.target.value)} aria-describedby="emailHelp" value="Monthly" disabled/>
+        <input type="text" class="form-control" id="dc3" value= {dc2} onChange={(e) => setDc2(e.target.value)} aria-describedby="emailHelp" value="Monthly" disabled/>
       </div>
       <br/>
 
@@ -304,9 +292,9 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
           <Collapse isOpen={isOpen}>
             <Card>
               <CardBody id="samplecalc2">
-              <div className="container2"> 
+              <div class="container2"> 
 
-      <table className="table table-condensed">
+      <table class="table table-condensed">
         <thead>
           <tr>
             <th>START RANGE (₹)</th>
@@ -316,36 +304,36 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
         </thead>
         <tbody>
           <tr>
-            <td><div className="form-group col-md-5">
-        <input type="number" className="form-control" id="ts1" value= {onenum} onChange={(e) => setOnenum(e.target.value)} value="1" disabled/>
+            <td><div class="form-group col-md-5">
+        <input type="number" class="form-control" id="ts1" value= {onenum} onChange={(e) => setOnenum(e.target.value)} value="1" disabled/>
       </div></td>
-            <td><div className="form-group col-md-5">
-        <input type="number" className="form-control" id="ts2" value= {twnum} onChange={(e) => setTwnum(e.target.value)} placeholder="15,000" />
+            <td><div class="form-group col-md-5">
+        <input type="number" class="form-control" id="ts2" value= {twnum} onChange={(e) => setTwnum(e.target.value)} placeholder="15,000" />
       </div></td>
-            <td><div className="form-group col-md-5">
-        <input type="number" className="form-control" id="ts3" value= {thrnum} onChange={(e) => setThrnum(e.target.value)} placeholder="0" />
-      </div></td>
-          </tr>
-          <tr>
-            <td><div className="form-group col-md-5">
-        <input type="number" className="form-control" id="ts4" value= {frnum} onChange={(e) => setFrnum(e.target.value)} placeholder="15,001"/>
-      </div></td>
-            <td><div className="form-group col-md-5">
-        <input type="number" className="form-control" id="ts5" value= {finum} onChange={(e) => setFinum(e.target.value)} placeholder="20,000"/>
-      </div></td>
-            <td><div className="form-group col-md-5">
-        <input type="number" className="form-control" id="ts6" value= {sinum} onChange={(e) => setSinum(e.target.value)} placeholder="150"/>
+            <td><div class="form-group col-md-5">
+        <input type="number" class="form-control" id="ts3" value= {thrnum} onChange={(e) => setThrnum(e.target.value)} placeholder="0" />
       </div></td>
           </tr>
           <tr>
-            <td><div className="form-group col-md-5">
-        <input type="number" className="form-control" id="ts7" value={senum} onChange={(e) => setSenum(e.target.value)} placeholder="20001"/>
+            <td><div class="form-group col-md-5">
+        <input type="number" class="form-control" id="ts4" value= {frnum} onChange={(e) => setFrnum(e.target.value)} placeholder="15,001"/>
       </div></td>
-            <td><div className="form-group col-md-5">
-        <input type="number" className="form-control" id="ts8" value= {einum} onChange={(e) => setEinum(e.target.value)} placeholder="999999999"/>
+            <td><div class="form-group col-md-5">
+        <input type="number" class="form-control" id="ts5" value= {finum} onChange={(e) => setFinum(e.target.value)} placeholder="20,000"/>
       </div></td>
-            <td><div className="form-group col-md-5">
-        <input type="number" className="form-control" id="ts9" value= {ninum} onChange={(e) => setNinum(e.target.value)} placeholder="200"/>
+            <td><div class="form-group col-md-5">
+        <input type="number" class="form-control" id="ts6" value= {sinum} onChange={(e) => setSinum(e.target.value)} placeholder="150"/>
+      </div></td>
+          </tr>
+          <tr>
+            <td><div class="form-group col-md-5">
+        <input type="number" class="form-control" id="ts7" value={senum} onChange={(e) => setSenum(e.target.value)} placeholder="20001"/>
+      </div></td>
+            <td><div class="form-group col-md-5">
+        <input type="number" class="form-control" id="ts8" value= {einum} onChange={(e) => setEinum(e.target.value)} placeholder="999999999"/>
+      </div></td>
+            <td><div class="form-group col-md-5">
+        <input type="number" class="form-control" id="ts9" value= {ninum} onChange={(e) => setNinum(e.target.value)} placeholder="200"/>
       </div></td>
           </tr>
         </tbody>
@@ -360,20 +348,19 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
 
       <br/>
 
-    <button type="submit" className="btn btn-link"> <i className="fa fa-check"> Save</i></button>
-    <button type="button" className="btn btn-link"> <i className="fa fa-times"> Cancel</i></button>
+    <button type="submit" class="btn btn-link"> <i className="fa fa-check"> Save</i></button>
+    <button type="button" class="btn btn-link"> <i className="fa fa-times"> Cancel</i></button>
     </form>
     </CardBody><br/><br/>
 
     <h6 style={{marginLeft:"28%"}}>You can edit your statutory components anytime by navigating to Settings {'>'} Statutory Components.</h6>
 
 
-    <br /><br />
-    <button className="btn btn-primary" onClick={()=>handleSubmit()}>Save & Continue</button>
+        
+        
   </div>
-  <br /><br /><br />
 </div>
 
   );
 }
-export default Statutory;
+export default Basic;

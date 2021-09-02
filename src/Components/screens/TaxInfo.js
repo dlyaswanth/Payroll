@@ -63,12 +63,12 @@ class Taxinfo extends React.Component {
               taxpaymentfrequency : this.state.fields.paymentfreq
             })
         };
-        fetch('https://payroll-fastify.herokuapp.com/api/Company/'+companyid, requestOptions)
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+companyid, requestOptions)
             .then(console.log(companyid))
             .then(response => response.json())
             .then(data=>{
-              if (data.error)
-              toast.error(data.error,{autoClose:2500})
+              if (!data)
+                toast.error(data.error,{autoClose:2500})
               else
               {
                   toast.success(data.message,{autoClose:2500})
@@ -82,7 +82,7 @@ class Taxinfo extends React.Component {
           fields["tan"] = "";
           fields["aocode"] = "";
           this.setState({fields:fields});
-          alert("Form saved");
+          //alert("Form saved");
           
       }
       

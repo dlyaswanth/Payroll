@@ -70,21 +70,19 @@ export default function PaySchedule() {
               workHours: data.hoursWork
       })
   };
-  fetch('https://payroll-fastify.herokuapp.com/api/Company/'+localStorage.getItem('companyId'), requestOptions)
+  fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('companyId'), requestOptions)
       .then(console.log(localStorage.getItem('companyId')))
       .then(response => response.json())
       .then (data => {
         console.log(data)
-      })
-      .then(data=>{
-        if (data.error)
-        toast.error(data.error,{autoClose:2500})
+        if (!data)
+        toast.error("ERROR",{autoClose:2500})
         else
         {
             toast.success(data.message,{autoClose:2500})
             history.push('/statutory')
         }
-    })
+      })
     //api integration
 
     
