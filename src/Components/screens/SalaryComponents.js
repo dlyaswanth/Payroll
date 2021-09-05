@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import SideBar from "./SideBar";
 import Demo from './Reimbursements';
-import {useHistory} from 'react-router-dom'
+// import {useHistory} from 'react-router-dom'
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 function SalaryComponents()
 {
-    let history=useHistory();
+    // let history=useHistory();
     const [options,setOptions]=useState([])
     var finalValues=[]
     const [newopt,setNewopt]=useState('')
@@ -48,10 +48,11 @@ function SalaryComponents()
                    earningsDocArray:finalValues
             })
         };
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('companyId'), requestOptions)
-            .then(console.log(localStorage.getItem('companyId')))
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+            .then(console.log(localStorage.getItem('company_id')))
             .then(response => response.json())
             .then(data=>{
+                console.log(finalValues);
                 if (!data)
                 toast.error("ERROR",{autoClose:2500})
                 else
@@ -59,7 +60,9 @@ function SalaryComponents()
                     toast.success(data.message,{autoClose:2500})
                     //history.push('/login');
                 }
+                
             })
+            
             //api integration
 
     }
@@ -87,7 +90,10 @@ function SalaryComponents()
     }
     function proceed()
     {
-        history.push('/login')
+        // history.push('/login')
+        window.open("/login","_self")
+        localStorage.clear();
+
     }
     return(
         <div >

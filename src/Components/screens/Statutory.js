@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 import React, { useState } from 'react';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 import SideBar from "./SideBar";
 function Statutory() {
-  let history=useHistory();
+  // let history=useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const [epfnum, setEpfnum] = useState('');
   const [empcont1, setEmpcont1] =useState('12% of Actual PF Wage');
@@ -44,8 +44,8 @@ function Statutory() {
       proftax: statutory.ptnum
     })
 };
-fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('companyId'), requestOptions)
-    .then(console.log(localStorage.getItem('companyId')))
+fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+    .then(console.log(localStorage.getItem('company_id')))
     .then(response => response.json())
     .then(data=>{
       if (data.error)
@@ -53,7 +53,8 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
       else
       {
           toast.success(data.message,{autoClose:2500})
-          history.push('/salary');
+          window.open("/salary","_self");
+          // history.push('/salary');
       }
   })
   }

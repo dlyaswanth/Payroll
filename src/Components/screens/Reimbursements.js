@@ -33,8 +33,8 @@ function Demo()
               logArray: ["Your Company has joined in Payroll"]
             })
         };
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('companyId'), requestOptions)
-            .then(console.log(localStorage.getItem('companyId')))
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+            .then(console.log(localStorage.getItem('company_id')))
             .then(response => response.json())
             .then(data=>{
                 if (!data)

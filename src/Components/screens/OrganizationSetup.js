@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { Form,Row,Col,Container } from 'react-bootstrap';
-import {history} from './History';
+// import {history} from './History';
 import History from './History';
 import SideBar from "./SideBar";
 import {ToastContainer,toast} from 'react-toastify'; 
@@ -56,7 +56,7 @@ class OrganizationSetup extends React.Component {
                   companyType : this.state.fields.industry
           })
       };
-      fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('companyId'), requestOptions)
+      fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
           .then(console.log(companyid))
           .then(response => response.json())
           .then(data=>{
@@ -65,7 +65,8 @@ class OrganizationSetup extends React.Component {
             else
             {
                 toast.success(data.message,{autoClose:2500})
-                history.push('/taxinfo');
+                window.open("/taxinfo","_self")
+                // history.push('/taxinfo');
             }
         })
 

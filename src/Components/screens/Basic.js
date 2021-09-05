@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-duplicate-props */
 import '../../App.css';
 import SideBar from "./SideBar";
 import React, { useState } from 'react';
@@ -42,8 +43,8 @@ function Basic() {
       proftax: statutory.ptnum
     })
 };
-fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('companyId'), requestOptions)
-    .then(console.log(localStorage.getItem('companyId')))
+fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+    .then(console.log(localStorage.getItem('company_id')))
     .then(response => response.json())
 
   }

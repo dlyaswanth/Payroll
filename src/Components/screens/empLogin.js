@@ -3,9 +3,9 @@ import React, { useState } from "react";
 // import { useHistory } from "react-router-dom";
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
-import CryptoJS from 'crypto-js';
+// import CryptoJS from 'crypto-js';
 export let value =false;
-function Loginpage()
+function EmpLoginpage()
 {
     // let history = useHistory();
     const requestOptions = {
@@ -16,22 +16,19 @@ function Loginpage()
     const[password,setPassword] = useState('')
     function login(){
         toast.info('Please Wait !',{autoClose:2500})
-        fetch('https://payroll-fastify.herokuapp.com/api/companyEmail/'+name, requestOptions)
+        fetch('https://payroll-fastify.herokuapp.com/api/employeeEmail/'+name, requestOptions)
         .then(response => response.json())
         .then(data => {
-            var bytes = CryptoJS.AES.decrypt(data.password, 'my-secret-key@123');
-            var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-          //log decrypted Data
-           console.log('decrypted Data -')
-            console.log(decryptedData);
+        
 
-          if(password === decryptedData){
+          if(password === data.password){
             toast.success(data.message,{autoClose:2500})
             value=true;
-            window.open("/home","_self")
+            window.open("/emphome","_self")
             data.password=undefined;
-            localStorage.setItem('company',JSON.stringify(data))
-            localStorage.setItem('company_id',data._id);
+            localStorage.setItem('employee',JSON.stringify(data));
+            localStorage.setItem('employee_id',data._id);
+            localStorage.setItem('emp_company_id',data.companyId);
           }
           else{
             toast.error(data.error,{autoClose:2500})
@@ -43,7 +40,7 @@ function Loginpage()
         <div className="d-flex justify-content-center align-items-center" style={{height:"500px"}}>
             <ToastContainer />
             <div className="container text-center row border border-secondary p-5 mt-5" style={{width:"30%",height:"70%"}}>
-              <h1 className="col-12 mb-4">Login</h1>
+              <h1 className="col-12 mb-4">Employee Login</h1>
               <div className="col-12">
               <div className="input-group mb-3">
                 <span className="input-group-text" id="basic-addon1"><i className="far fa-envelope"></i></span>
@@ -59,4 +56,4 @@ function Loginpage()
         </div>
     )
 }
-export default Loginpage;
+export default EmpLoginpage;

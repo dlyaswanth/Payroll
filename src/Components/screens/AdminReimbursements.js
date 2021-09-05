@@ -1,10 +1,94 @@
-import { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AdminNavbar from '../Navbar/AdminNavbar';
 import Logout from './Logout';
 function AdminReimbursements()
 {
     const [name,setName]=useState('')
+    const [appliedReimbursment,setAppliedReimbursment]= useState([])
+    
+
+    
+    useEffect(  ()=>{
+        //getting company's applied reimbursment
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+        
+        fetch('https://payroll-fastify.herokuapp.com/api/companyReimbursment/'+localStorage.getItem("company_id"), requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setAppliedReimbursment(data);
+                console.log(appliedReimbursment);
+            })
+            
+
+    },[])
+    function approve(reimbursmentId){
+        console.log(reimbursmentId)
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                status : "Approved",
+            })
+        };
+            
+            fetch('https://payroll-fastify.herokuapp.com/api/reimbursment/'+reimbursmentId, requestOptions)
+            .then(response => response.json())
+            .then(data => { 
+                setAppliedReimbursment(data.reimbursment);
+                console.log(data);
+            })
+    }
+
+    function decline(reimbursmentId){
+        console.log(reimbursmentId)
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                status : "Declined",
+            })
+        };
+            
+            fetch('https://payroll-fastify.herokuapp.com/api/reimbursment/'+reimbursmentId, requestOptions)
+            .then(response => response.json())
+            .then(data => { 
+                setAppliedReimbursment(data.reimbursment);
+                console.log(data);
+            })
+    }
+
+   function check(item){
+       if(item.status === "Pending"){
+           return(
+
+                <div id="button" className="text-center col-6 col-sm-2">
+                    <button className="btn btn-success " onClick={()=>approve(item._id)}>Approve</button>
+                    <button className="ms-3 btn btn-danger" onClick={()=>decline(item._id)}>Decline</button>
+                </div>
+           )
+       }
+       else if(item.status === "Approved"){
+        return(
+                <div id="button" className="text-center col-6 col-sm-2">
+                    <button className="btn btn-success text-white w-50" disabled onClick={()=>approve(item._id)}>Approved</button>
+                </div>
+       )
+       }
+       else if(item.status === "Declined"){
+        return(
+            <div id="button" className="text-center col-6 col-sm-2">
+                <button className=" btn btn-danger text-white w-50" disabled onClick={()=>decline(item._id)}>Declined</button>
+            </div>
+            )
+       }
+                
+   }
+
     function Search(emp_name)
     {
         console.log(emp_name);
@@ -55,7 +139,7 @@ function AdminReimbursements()
                 <div className="container-fluid">
                     <b className="navbar-brand" style={{marginLeft:"50px"}}>All Claims</b>
                     <div className="d-flex">
-                        <button className="btn btn-primary">Add Claim</button>&nbsp;&nbsp;&nbsp;
+                        
                         <button className="btn btn-outline-secondary"><i className="fas fa-filter"></i>&nbsp;Filter</button>
                     </div>
                 </div>
@@ -63,29 +147,38 @@ function AdminReimbursements()
             <br />
             <div className="card container employee">
                 <div className="row" style={{marginTop:"5px",marginBottom:"5px"}}>
-                    <div className="col-6 col-sm-2"><b>Claim Number</b></div>
-                    <div className="col-6 col-sm-2"><b>Employee Name</b></div>
-                    <div className="col-6 col-sm-2"><b>Submitted Date</b></div>
-                    <div className="col-6 col-sm-2"><b>Status</b></div>
-                    <div className="col-6 col-sm-2"><b>Claim Amount</b></div>
-                    <div className="col-6 col-sm-2"><b>Approved Amount</b></div>
+                    <div className="text-center col-6 col-sm-2"><b>Employee Name</b></div>
+                    <div className="text-center col-6 col-sm-2"><b>Employee Email</b></div>
+                    <div className="text-center col-6 col-sm-2"><b>Type</b></div>
+                    <div className="text-center col-6 col-sm-1"><b>Submitted Date</b></div>
+                    <div className="text-center col-6 col-sm-1"><b>Status</b></div>
+                    <div className="text-center col-6 col-sm-2"><b>Claim Amount</b></div>
+                    <div className="text-center col-6 col-sm-2"><b>Approve/Decline</b></div>
+                   
                 </div>
             </div>
-            <div className="row employee" style={{marginTop:"5px",marginBottom:"5px"}}>
-            <div className="col-6 col-sm-2"><p>CLAIM-0001</p></div>
-                <div className="col-6 col-sm-2"><p>User 01</p></div>
-                <div className="col-6 col-sm-2"><p>02/02/2021</p></div>
-                <div className="col-6 col-sm-2"><p style={{color:"orange"}}>Pending</p></div>
-                <div className="col-6 col-sm-2"><p>₹ 1,000.00</p></div>
-                <div className="col-6 col-sm-2"><p>₹ 0.00</p></div>
-                <div className="w-100 d-none d-md-block"></div>
-                <div className="col-6 col-sm-2"><p>CLAIM-0002</p></div>
-                <div className="col-6 col-sm-2"><p>User 02</p></div>
-                <div className="col-6 col-sm-2"><p>21/03/2021</p></div>
-                <div className="col-6 col-sm-2"><p style={{color:"lightgreen"}}>Approved</p></div>
-                <div className="col-6 col-sm-2"><p>₹ 1,000.00</p></div>
-                <div className="col-6 col-sm-2"><p>₹ 1,000.00</p></div>
-            </div>
+            {
+                appliedReimbursment.map(item=>{
+                    return(
+                        <div key={item._id} className="row employee" style={{marginTop:"5px",marginBottom:"5px"}}>
+                            <div className="text-center col-6 col-sm-2"><p>{item.employeeName}</p></div>
+                            <div className="text-center col-6 col-sm-2"><p>{item.employeeEmail}</p></div>
+                            <div className="text-center col-6 col-sm-2"><p>{item.type}</p></div>
+                            <div className="text-center col-6 col-sm-1"><p>{item.date}</p></div>
+                            <div className="text-center col-6 col-sm-1"><p style={{color:"orange"}}>{item.status}</p></div>
+                            <div className="text-center col-6 col-sm-2"><p>₹ {item.amount}</p></div>
+                            {check(item)}
+                    
+                                      
+                            
+                                    
+                            <div className="w-100 d-none d-md-block"></div>
+                            
+                        </div>
+                    )
+                })
+            }
+            
             
         </div>
     )

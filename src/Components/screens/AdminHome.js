@@ -1,16 +1,38 @@
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import AdminNavbar from '../Navbar/AdminNavbar';
 import Logout from './Logout';
+import Loader from './Loader';
+
 function AdminHome()
 {
     const [name,setName]=useState('')
+    const [companyDetails,setCompanyDetails] = useState({})
+
+    useEffect( ()=>{
+        // Update the document title using the browser API
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+            
+            fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("company_id"), requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setCompanyDetails(data);
+            })
+
+    },[])
+
     function Search(emp_name)
     {
         console.log(emp_name);
     }
+    
     return (
         <div id="main">
+            <Loader />
             <nav className="fixed-top navbar navbar-expand-lg navbar-light bg-light">
                 <div className="container-fluid">
                     <AdminNavbar className="navbar-brand"/>
@@ -54,7 +76,7 @@ function AdminHome()
             <div style={{marginTop:"110px",marginLeft:"50px"}}>
                 <h3>Welcome Codesters !</h3>
                 <div className="card-body">
-                <b>Process Pay run</b> <span>01/01/21 to 31/12/21</span>
+                <b>Process Pay run</b> <span>{companyDetails["payRollStartFrom"]} to 31/12/21</span>
                 <br /> <br />
                     <div className="card container" style={{height:"140px",width:"65%"}}>
                         <div className="row" style={{marginTop:"20px"}}>
@@ -62,10 +84,10 @@ function AdminHome()
                             <div className="col-6 col-sm-3"><b>Payment Date</b></div>
                             <div className="col-6 col-sm-3"><b>No of Employees</b></div>
                             <div className="w-100 d-none d-md-block"></div>
-                            <div className="col-6 col-sm-3 top">₹ 4,50,450.00</div>
-                            <div className="col-6 col-sm-3 top">02/02/2021</div>
-                            <div className="col-6 col-sm-3 top">10</div>
-                            <button className="btn btn-primary view">View Details</button>
+                            <div className="col-6 col-sm-3 top">₹ {companyDetails["employeeNetPay"]}</div>
+                            <div className="col-6 col-sm-3 top">{companyDetails["payDate"]}</div>
+                            <div className="col-6 col-sm-3 top">{companyDetails["employeeCount"]}</div>
+                            <button className="btn btn-primary view"><Link to="/employee" className="text-white" style={{textDecoration:"none"}}>View Details</Link></button>
                         </div>
                     </div>
                 </div>
@@ -76,18 +98,18 @@ function AdminHome()
                         <div className="row" style={{marginTop:"20px"}}>
                             <div className="col-6 col-sm-3"><b>EPF</b></div>
                             <div className="col-6 col-sm-3"><b>ESI</b></div>
-                            <div className="col-6 col-sm-3"><b>TDS Deduction</b></div>
+                            {/* <div className="col-6 col-sm-3"><b>TDS Deduction</b></div> */}
                             <div className="col-6 col-sm-3"><b>Active Employees</b></div>
                             <div className="w-100 d-none d-md-block"></div>
-                            <div className="col-6 col-sm-3 top">-</div>
-                            <div className="col-6 col-sm-3 top">-</div>
-                            <div className="col-6 col-sm-3 top">-</div>
-                            <div className="col-6 col-sm-3 top">20</div>
+                            <div className="col-6 col-sm-3 top">{companyDetails["epfnumber"]}</div>
+                            <div className="col-6 col-sm-3 top">{companyDetails["empstateinsurance"]}</div>
+                            {/* <div className="col-6 col-sm-3 top">{companyDetails["employeeCount"]}</div> */}
+                            <div className="col-6 col-sm-3 top">{companyDetails["employeeCount"]}</div>
                             <div className="w-100 d-none d-md-block"></div>
                             <div className="col-6 col-sm-3 pointer top">View Details</div>
                             <div className="col-6 col-sm-3 pointer top">View Details</div>
-                            <div className="col-6 col-sm-3 pointer top">View Details</div>
-                            <div className="col-6 col-sm-3 pointer top">View Employees</div>
+                            {/* <div className="col-6 col-sm-3 pointer top">View Details</div> */}
+                            <div className="col-6 col-sm-3 pointer top"><Link to="/employee">View Employees</Link></div>
                         </div>
                     </div>
                 </div>

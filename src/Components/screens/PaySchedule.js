@@ -70,8 +70,8 @@ export default function PaySchedule() {
               workHours: data.hoursWork
       })
   };
-  fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('companyId'), requestOptions)
-      .then(console.log(localStorage.getItem('companyId')))
+  fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+      .then(console.log(localStorage.getItem('company_id')))
       .then(response => response.json())
       .then (data => {
         console.log(data)
@@ -80,7 +80,8 @@ export default function PaySchedule() {
         else
         {
             toast.success(data.message,{autoClose:2500})
-            history.push('/statutory')
+            window.open("/statutory","_self")
+            // history.push('/statutory')
         }
       })
     //api integration

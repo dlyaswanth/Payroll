@@ -1,12 +1,13 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 function Logout(){
-    let history = useHistory();
+    // let history = useHistory();
 
     function logout(){
         localStorage.clear()
-        history.push("/login");
+        window.open("/login","_self")
+        // history.push("/login");
     }
 
     return (

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button} from 'react-bootstrap';
 import { Form,Row,Col,Container } from 'react-bootstrap';
 import SideBar from "./SideBar";
-import {history} from './History';
+// import {history} from './History';
 import History from './History';
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
@@ -49,7 +49,7 @@ class Taxinfo extends React.Component {
       console.log(this.state.fields)
 
       if (this.validateForm()) {
-        const companyid= localStorage.getItem('companyId');
+        const companyid= localStorage.getItem('company_id');
         e.preventDefault();
         console.log(this.state.fields)
         if (this.validateForm()) {
@@ -72,7 +72,9 @@ class Taxinfo extends React.Component {
               else
               {
                   toast.success(data.message,{autoClose:2500})
-                  history.push('/payschedule')
+                  window.open("/payschedule","_self")
+
+                  // history.push('/payschedule')
               }
           })
 

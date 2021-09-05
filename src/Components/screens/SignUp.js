@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable jsx-a11y/alt-text */
   
 import React, { useState } from "react";
 //import { makeStyles } from "@material-ui/core";
@@ -10,9 +9,10 @@ import CallIcon from "@material-ui/icons/Call";
 import EmailIcon from "@material-ui/icons/Email";
 import HttpsIcon from "@material-ui/icons/Https";
 import LanguageIcon from "@material-ui/icons/Language";
-import {useHistory} from 'react-router-dom' 
+// import {useHistory} from 'react-router-dom' 
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import CryptoJS from 'crypto-js';
 import {
 //   createTheme,
   makeStyles,
@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SignUpForm = () => {
-  let history=useHistory();
+  // let history=useHistory();
 //   var FontAwesome = require("react-fontawesome");
   const classes = useStyles();
   // create state variables for each input
@@ -96,6 +96,10 @@ const SignUpForm = () => {
 
   // When the button is clicked
   const btnHandler = () => {
+    var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(password), 'my-secret-key@123').toString();
+      //log encrypted data
+      console.log('Encrypt Data -')
+      console.log(ciphertext);
       // Simple POST request with a JSON body using fetch
       const requestOptions = {
           method: 'POST',
@@ -103,7 +107,7 @@ const SignUpForm = () => {
           body: JSON.stringify({ 
                   company : companyName,
                   companyEmail : email,
-                  password : password,
+                  password : ciphertext,
                   location : location,
                   address : "",
                   companyType : "",
@@ -124,7 +128,11 @@ const SignUpForm = () => {
                   epfnumber : "",
                   empcontributionrate : "",
                   empstateinsurance : "",
-                  proftax : "",
+                  proftax : "",  
+
+                  //Employee
+                  employeeNetPay : 0,
+                  employeeCount : 0,
 
                   //earnings and reimbursment
                   earningsDocArray : [],
@@ -136,30 +144,20 @@ const SignUpForm = () => {
           .then(response => response.json())
           .then(data => {
             if(data){
-              localStorage.setItem('companyId', data._id);
-              console.log(data._id);
-              history.push('/organizationsetup');
+              localStorage.setItem('company_id', data.company._id);
+              console.log(data.company._id);
+              window.open("/organizationsetup","_self")
+              // history.push('/organizationsetup');
             }
             else{
               toast.error("ERROR",{autoClose:2500})
             }
           })
-        //   .then(data=>{
-        //     console.log(data);
-            
-        //     // if (data.error)
-        //     // toast.error(data.error,{autoClose:2500})
-        //     // else
-        //     // {
-        //     //     toast.success(data.message,{autoClose:2500})
-        //     //     history.push('/organizationsetup');
-        //     // }
-        // })
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(companyName, email, email, password);
+    console.log(companyName, email, email);
   };
 
   return (
