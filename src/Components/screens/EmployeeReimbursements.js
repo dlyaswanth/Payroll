@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
+import { Flag } from '@material-ui/icons';
 import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {ToastContainer,toast} from 'react-toastify'; 
@@ -38,10 +39,56 @@ function EmployeeReimbursements()
                     setAppliedReimbursment(data);
                     console.log(appliedReimbursment);
                 })
-        
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
+    //delete function
+       function deleteEmployee(id){
+        console.log(id);
+        const requestOptions = {
+            method: 'DELETE'
+        };   
+            fetch('https://payroll-fastify.herokuapp.com/api/reimbursment/'+id, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setAppliedReimbursment(data.reimbursment);  
+                var today= new Date();
+                today=today.toString()
+                today = today.substring(4,today.length-30);
+                addLog(data.deletedreimbursment.employeeName+"|"+data.deletedreimbursment.employeeEmail+"|Reimbursment Deleted|"+today);
+                toast.success('Reimbursment Deleted',{autoClose:2500}) 
+                // console.log(data.allEmployee);
+            })
 
+        console.log("deleted");
+
+    }
+    //end
+    //log function
+    function addLog(message){
+    
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('emp_company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
+        .then(response => response.json())
+        .then(data =>{
+            var currentLog = data.logArray;
+            currentLog.push(message);
+
+            const requestOptions = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    logArray:currentLog
+                })
+            };
+            
+            fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('emp_company_id'), requestOptions)
+            .then(response => response.json())
+            .then(res=>{
+                console.log(res);
+            })
+        })
+    }
+    //end
     function fetchOption(item){
         console.log(item);
     }
@@ -56,7 +103,9 @@ function EmployeeReimbursements()
             toast.error("enter the valid amount",{autoClose:2000})
             return
         }
-
+        //Date parsing
+        var today = new Date();
+        today = String(today.getDate()).padStart(2, '0') + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + today.getFullYear();
         
         const requestOptions = {
             method: 'POST',
@@ -69,7 +118,7 @@ function EmployeeReimbursements()
                 type : selectedReimbursment.type,
                 status : "Pending",
                 amount : amount,
-                date: new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear()
+                date: today
             })
         };
             
@@ -78,13 +127,18 @@ function EmployeeReimbursements()
             .then(data => {
                 setAppliedReimbursment(data);
                 console.log(data);
+                var today= new Date();
+                today=today.toString()
+                today = today.substring(4,today.length-30);
+                console.log(today);
+                addLog(JSON.parse(localStorage.getItem('employee')).employeeName+"|"+
+                    JSON.parse(localStorage.getItem('employee')).employeeEmail+"|Reimbursement Claimed|"+today);
+                console.log(data);
             })
     };
 
     function handleChange(e) {
-            // console.log(JSON.parse(e.target.value));
             setSelectedReimbursment(JSON.parse(e.target.value));
-            // console.log(selectedReimbursment)
     }
     return (
         <div id="main">
@@ -187,22 +241,31 @@ function EmployeeReimbursements()
                 <div className="row" style={{marginTop:"5px",marginBottom:"5px"}}>
                     <div className="col-6 col-sm-3"><b>Claimed Type</b></div>
                     <div className="col-6 col-sm-3"><b>Submitted Date</b></div>
-                    <div className="col-6 col-sm-3"><b>Status</b></div>
-                    <div className="col-6 col-sm-3"><b>Claimed Amount</b></div>
-                   
+                    <div className="col-6 col-sm-2"><b>Status</b></div>
+                    <div className="col-6 col-sm-2"><b>Claimed Amount</b></div>
+                    <div className="col-6 col-sm-1 text-center"><b>Actions</b></div>
                 </div>
             </div>
             {
                 appliedReimbursment.map(item=>{
+                        // var Flag;
+                        // if(item.status=="Approved"){
+                        //  Flag="false"
+                        // }
                     return(
 
                         <div key={item._id} className="row employee" style={{marginTop:"5px",marginBottom:"5px"}}>
                             
                             <div className="col-6 col-sm-3"><p>{item.type}</p></div>
                             <div className="col-6 col-sm-3"><p>{item.date}</p></div>
-                            <div className="col-6 col-sm-3"><p style={{color:"orange"}}>{item.status}</p></div>
-                            <div className="col-6 col-sm-3"><p>₹ {item.amount}</p></div>
-                            
+                            <div className="col-6 col-sm-2"><p style={{color:"orange"}}>{item.status}</p></div>
+                            <div className="col-6 col-sm-2"><p>₹ {item.amount}</p></div>
+                            <button className=" col-6 col-sm-1 text-danger text-center" onClick={()=>deleteEmployee(item["_id"])} style={{cursor:"pointer",padding:"0px",border:"none",background:"none",marginTop:"-15px"}}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                        <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                        </svg>
+                            </button>
                         </div>
                     )
                 }

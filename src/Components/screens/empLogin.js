@@ -52,6 +52,7 @@ function EmpLoginpage()
               </div>
                 <div className="text-center"><button className="btn btn-primary mb-3" onClick={() => login()}>Login</button></div>
               </div>
+              <p>Login as Admin <a href="/login">Click Here</a></p>
             </div>
         </div>
     )

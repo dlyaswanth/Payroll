@@ -55,6 +55,7 @@ function Loginpage()
               </div>
                 <div className="text-center"><button className="btn btn-primary mb-3" onClick={() => login()}>Login</button></div>
               </div>
+              <p>Login as User<a href="/emplogin">Click Here</a></p>
             </div>
         </div>
     )

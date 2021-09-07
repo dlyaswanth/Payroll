@@ -6,6 +6,7 @@ import AdminNavbar from '../Navbar/AdminNavbar';
 import Logout from './Logout';
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import { CSVLink } from "react-csv";
 import Loader from './Loader';
 
 function AdminEmployee()
@@ -27,8 +28,13 @@ function AdminEmployee()
     const [updatepassword,setupdatePassword]=useState('')
     const [updatemail,setupdateMail]=useState('')
     
-    const [currentDetails,setCurrentDetails] = useState({})
-    
+    const [earnings,setEarnings] = useState(0)
+    const headers = [
+        { label: "Employee Name", key: "employeeName" },
+        { label: "Work Email", key: "employeeEmail" },
+        { label: "Role", key: "role" },
+        { label: "Cost to Company", key: "salary" },
+      ];
     const [empDetails,setEmpDetails] = useState([])
     const[id,setId] = useState('')
 
@@ -46,6 +52,7 @@ function AdminEmployee()
                     console.log(empDetails);
                 })
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     
 
@@ -64,7 +71,12 @@ function AdminEmployee()
             fetch('https://payroll-fastify.herokuapp.com/api/employee/'+id, requestOptions)
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 setEmpDetails(data.allEmployee);  
+                var today= new Date();
+                today=today.toString()
+                today = today.substring(4,today.length-30);
+                addLog(data.deletedEmployee.employeeName+'|'+data.deletedEmployee.employeeEmail+'|Employee Deleted|'+today);
                 toast.success('Employee Deleted',{autoClose:2500}) 
                 // console.log(data.allEmployee);
             })
@@ -72,6 +84,8 @@ function AdminEmployee()
         console.log("deleted");
 
     }
+
+   
     function getDetails(id){
         setId(id)
         const requestOptions = {
@@ -88,21 +102,34 @@ function AdminEmployee()
                 setupdateRole(data.role)
                 setupdatePassword(data.password)
                 setupdateMail(data.employeeEmail)
-                setCurrentDetails(data)
+                // setEarnings(data)
                 // setEmpDetails(data.employee);
                 // console.log(empDetails);
             })
 
     }
+    function calculateEarnings(data){
+        console.log(data);
+        var amt = 0;
+        data.forEach(element => {
+            //console.log(element.amount);
+            amt += Number(element.amount);
+        });
+        console.log(amt);
+        setEarnings(amt);
+    }
     const updateEmp = () =>{
         
-        
-        var diff = updatebasicPay - currentDetails.basicPay;
-        var updatedSalary = currentDetails.salary + diff;
-
-        console.log(diff);
-        console.log(updatedSalary)
-
+        calculateEarnings(JSON.parse(localStorage.getItem('company')).earningsDocArray);
+        var updatedDeduction=0;
+        if(JSON.parse(localStorage.getItem('company')).empcontributionrate === "Percent"){
+             updatedDeduction= (updatebasicPay*12)/100;
+        }
+        else{
+            updatedDeduction= ((updatebasicPay*12)/100)-1250;
+        }
+        var updatedSalary = updatebasicPay + earnings - updatedDeduction;
+        console.log(updatebasicPay,earnings,updatedDeduction,updatedSalary);
         //update route
         const requestOptions = {
             method: 'PUT',
@@ -115,6 +142,7 @@ function AdminEmployee()
                 employeeAddress:updateaddress,
                 basicPay:updatebasicPay,
                 role:updaterole,
+                deductions:updatedDeduction,
                 salary:updatedSalary
             })
         };
@@ -123,20 +151,53 @@ function AdminEmployee()
         .then(response => response.json())
         .then(data => {
         if(!data.error){
-            //console.log(data);
+            console.log(data);
             setEmpDetails(data.allEmployee)
+            var today= new Date();
+            today=today.toString()
+            today = today.substring(4,today.length-30);
+            addLog(data.updatedEmployee.employeeName+"|"+data.updatedEmployee.employeeEmail+"|Employee Details Updated|"+today);
             toast.success('Employee Updated Successfully',{autoClose:2500})
         }
         else{
             toast.error("ERROR",{autoClose:2500})
         }
         })
-        
-
-
     }
-    
+    //Log details Function
+    function addLog(message){
+        // console.log(message);
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
+        .then(response => response.json())
+        .then(data =>{
+            var currentLog = data.logArray;
+            currentLog.push(message);
+
+            const requestOptions = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    logArray:currentLog
+                })
+            };
+            
+            fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+            .then(response => response.json())
+            .then(res=>{
+                console.log(res);
+            })
+        })
+    }
+    //end
     const AddEmp = () =>{
+        var deduction=0;
+        if(JSON.parse(localStorage.getItem('company')).empcontributionrate === "Percent"){
+            deduction=(basicPay*12)/100;
+            // console.log(deduction);
+        }
+        else{
+            deduction=((basicPay*12)/100)-1250;
+        }
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -147,8 +208,10 @@ function AdminEmployee()
                 password:password,
                 employeeAddress:address,
                 basicPay:basicPay,
+                deductions:deduction,
                 role:role,
-                salary: 0 
+                salary: 0,
+                approvedReimbursment:0
             })
         };
         console.log(empname,address,basicPay,role,password,mail);
@@ -159,7 +222,13 @@ function AdminEmployee()
         if(!data.error){
             console.log(data);
             setEmpDetails(data.allEmployee)
+            var today= new Date();
+            today=today.toString()
+            today = today.substring(4,today.length-30);
+            console.log(today);
+            addLog(data.employee.employeeName+"|"+data.employee.employeeEmail+"|Employee Created|"+today);
             toast.success('Employee Added Successfully',{autoClose:2500})
+
         }
         else{
             toast.error("ERROR",{autoClose:2500})
@@ -220,6 +289,17 @@ function AdminEmployee()
                         <button className="btn btn-outline-secondary">View</button>
                         &nbsp;&nbsp;
                         <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addemp">Add Employee</button>
+                        &nbsp;&nbsp;
+                        <button className="btn btn-primary">
+                        <CSVLink
+                            data={empDetails}
+                            headers={headers}
+                            filename="Employee_details.csv"
+                            style={{ color: "white", textDecoration: "none" }}
+                        >
+                            Export CSV
+                        </CSVLink>
+                        </button>
                     </div>
                 </div>
             </nav>

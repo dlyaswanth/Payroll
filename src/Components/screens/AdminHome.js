@@ -22,7 +22,7 @@ function AdminHome()
                 console.log(data);
                 setCompanyDetails(data);
             })
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     function Search(emp_name)
@@ -76,7 +76,7 @@ function AdminHome()
             <div style={{marginTop:"110px",marginLeft:"50px"}}>
                 <h3>Welcome Codesters !</h3>
                 <div className="card-body">
-                <b>Process Pay run</b> <span>{companyDetails["payRollStartFrom"]} to 31/12/21</span>
+                <b>Process Pay run</b> <span>{companyDetails["payRollStartFrom"]} to 31-12-2021</span>
                 <br /> <br />
                     <div className="card container" style={{height:"140px",width:"65%"}}>
                         <div className="row" style={{marginTop:"20px"}}>

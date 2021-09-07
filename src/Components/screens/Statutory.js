@@ -10,7 +10,7 @@ function Statutory() {
   const [isOpen, setIsOpen] = useState(false);
   const [epfnum, setEpfnum] = useState('');
   const [empcont1, setEmpcont1] =useState('12% of Actual PF Wage');
-  const [empcont2, setEmpcont2] =useState('12% of Actual PF Wage');
+  // const [empcont2, setEmpcont2] =useState('12% of Actual PF Wage');
   const [dc, setDc] =useState('Monthly');
   const [dc1, setDc1] =useState('Monthly');
   const [dc2, setDc2] =useState('Monthly');
@@ -29,7 +29,7 @@ function Statutory() {
 
   const handleSubmit = () => {
     // e.preventDefault();
-    const statutory = {epfnum,empcont1,empcont2,dc,dc1,dc2,esinum,worl,ptnum,
+    const statutory = {epfnum,empcont1,dc,dc1,dc2,esinum,worl,ptnum,
     onenum,twnum,thrnum,frnum,finum,sinum,senum,einum,ninum}
     console.log(statutory);
   //  console.log(epfnum);
@@ -86,13 +86,13 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
       <div className="form-group col-md-4">
         <label for="ecr1">Employer Contribution Rate</label>
         <select className="form-select"  value= {empcont1} onChange={(e) => setEmpcont1(e.target.value)}>
-      <option>12% of Actual PF Wage</option>
-      <option>Restrict Contribution to ₹15,000 of PF Wage</option>
+      <option value={'Percent'}>12% of Actual PF Wage</option>
+      <option value={'Fixed'}>Restrict Contribution to ₹15,000 of PF Wage</option>
     </select>
       </div>
       <br/>
 
-      <div className="form-group col-md-4">
+      {/* <div className="form-group col-md-4">
         <label for="ecr2">Employee Contribution Rate</label>
         <select className="form-select"  value= {empcont2} onChange={(e) => setEmpcont2(e.target.value)}>
       <option>12% of Actual PF Wage</option>
@@ -100,7 +100,7 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
     </select>
     </div>
 
-    <br/>
+    <br/> */}
 
         <div className="form-group col-md-4">
         <label for="dc1">Deduction Cycle</label>  <i className="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Provident Fund (PF) contributions for each month should be deposited to the Employee Provident Fund Organisation (EPFO) within the 15th of the following month"></i>

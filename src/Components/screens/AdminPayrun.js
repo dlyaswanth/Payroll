@@ -1,10 +1,72 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState , useEffect } from "react";
 import { Link } from "react-router-dom";
 import AdminNavbar from "../Navbar/AdminNavbar";
+import { CSVLink } from "react-csv";
 import Logout from './Logout';
 function AdminPayrun()
 {
     const [name,setName]=useState('')
+    const [empDetails,setEmpDetails] = useState([])
+    const [benefits,setBenefits] = useState(0)
+    const headers = [
+        { label: "Employee Name", key: "employeeName" },
+        { label: "Paid Days", key: "days" },
+        { label: "Gross Pay", key: "basicPay" },
+        { label: "Deductions", key: "deductions" },
+        { label: "Benefits", key: "approvedReimbursment" },   
+        { label: "Reimbursemnets", key: "salary" },
+        { label: "Net Pay", key: "salary" },
+      ];
+      var csvValues=[];
+      const [csv,setCsv]=useState([])
+    useEffect( ()=>{
+
+        async function init(){
+            const requestOptions = {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            };
+                
+            await fetch('https://payroll-fastify.herokuapp.com/api/companyEmployee/'+localStorage.getItem("company_id"), requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setEmpDetails(data.employee);
+                csvValues=data.employee;
+                console.log(empDetails);
+            })
+
+            calculateEarnings(JSON.parse(localStorage.getItem('company')).earningsDocArray);
+    
+        }
+        
+        init()
+        
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
+  
+    function calculateEarnings(data){
+        console.log(data);
+        var amt = 0;
+        data.forEach(element => {
+            //console.log(element.amount);
+            amt += Number(element.amount);
+        });
+        console.log(amt);
+        setBenefits(amt);
+        
+        // eslint-disable-next-line array-callback-return
+        csvValues.forEach((items)=>{
+            items["days"]=31;
+            items["benefits"]=amt;
+        })
+        console.log(csvValues)
+        setCsv(csvValues)
+        // setEmpDetails([...empDetails)
+    }
+
+    
     function Search(emp_name)
     {
         console.log(emp_name);
@@ -51,17 +113,22 @@ function AdminPayrun()
                     </div>
                 </div>
             </nav>
-            <div style={{marginTop:"120px",marginLeft:"120px"}}>
-                <button className="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#summary" aria-expanded="false" aria-controls="summary">Employee Summary</button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <button className="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#taxes" aria-expanded="false" aria-controls="taxes">Taxes & Deductions</button>
-                </div>
-            <div id="summary" className="collapse multi-collapse">
+        
+            <div id="summary">
                 <nav className="navbar navbar-expand-lg navbar-light" style={{marginTop:"90px"}} >
                 <div className="container-fluid">
                     <b className="navbar-brand" style={{marginLeft:"50px"}}>Active Employees</b>
                     <div className="d-flex">
-                        <button className="btn btn-primary">Import/Export</button>
+                        <button className="btn btn-primary">
+                        <CSVLink
+                            data={csv}
+                            headers={headers}
+                            filename="Employee_Payrun_details.csv"
+                            style={{ color: "white", textDecoration: "none" }}
+                        >
+                            Export CSV
+                        </CSVLink>
+                        </button>
                     </div>
                 </div>
                 </nav>
@@ -72,23 +139,32 @@ function AdminPayrun()
                         <div className="col"><b>Paid Days</b></div>
                         <div className="col"><b>Gross Pay</b></div>
                         <div className="col"><b>Deductions</b></div>
-                        <div className="col"><b>Taxes</b></div>
+                        {/* <div className="col"><b>Taxes</b></div> */}
                         <div className="col"><b>Benefits</b></div>
                         <div className="col"><b>Reimbursements</b></div>
                         <div className="col"><b>Net Pay</b></div>
                     </div>
                 </div>
-                <div className="row employee" style={{marginTop:"5px",marginBottom:"5px"}}>
-                    <div className="col"><p>User 01</p></div>
-                    <div className="col"><p>31</p></div>
-                    <div className="col"><p>₹ 1,20,250.00</p></div>
-                    <div className="col"><p>₹ 0.00</p></div>
-                    <div className="col"><p>₹ 200.00</p></div>
-                    <div className="col"><p>₹ 0.00</p></div>
-                    <div className="col"><p>₹ 0.00</p></div>
-                    <div className="col"><p>₹ 1,20,050.00</p></div>
-                    <div className="w-100 d-none d-md-block"></div>
-                </div>
+
+                {
+                    empDetails.map((item,index) =>{
+                        //getReimbursment(item._id)
+                        return(
+                            <div key={index} className="row employee" style={{marginTop:"5px",marginBottom:"5px"}}>
+                                <div className="col"><p>{item.employeeName}</p></div>
+                                <div className="col"><p>31</p></div>
+                                <div className="col"><p>₹ {item.basicPay}</p></div>
+                                {/* <div className="col"><p>₹ 0.00</p></div> */}
+                                <div className="col"><p>₹ {item.deductions}</p></div>
+                                <div className="col"><p>₹ {benefits}</p></div>
+                                <div className="col"><p>₹ {item.approvedReimbursment}</p></div>
+                                <div className="col"><p>₹ {item.salary}</p></div>
+                                <div className="w-100 d-none d-md-block"></div>
+                            </div>
+                        )
+                    })
+                }
+                
             </div>
         </div>
     )

@@ -21,17 +21,8 @@ function AdminNavbar()
                 <Link to="/home" >Home</Link>
                 <Link to="/employee" >Employee</Link>
                 <Link to="/payrun" >Pay run</Link>
-                <a  data-bs-toggle="collapse" href="#collapse" role="button" aria-expanded="false" aria-controls="collapse">
-                    Approval
-                </a>
-                <div className="collapse" id="collapse">
-                    <div className="card card-body" style={{backgroundColor:"#03045e"}}>
-                        <ul>
-                        <li className="small"><Link to="/reimbursements" className="small">Reimbursements</Link></li>
-                            <li className="small"><Link to="/salary-revision" className="small">Salary Revision</Link></li>
-                        </ul>
-                    </div>
-                </div>
+                <Link to="/reimbursements">Reimbursements</Link>
+                
                 <Link to="/reports" >Reports</Link>
                 <Link to="/support" >Contact Support</Link>
             </div>

@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-no-duplicate-props */
+import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import UserNavbar from '../Navbar/UserNavbar';
 import { PieChart } from 'react-minimal-pie-chart';
@@ -10,6 +11,12 @@ function UserHome()
         { title: 'Take Home', value: 60, color:'#32CD32',month:'JANUARY 2019' },
         { title: 'Taxes & Deductions', value: 40, color:'#FF6347',month:'JANUARY 2019' }
       ];
+      const[empDetails,setempDetails] = useState({})
+      useEffect( ()=>{
+        setempDetails(JSON.parse(localStorage.getItem('employee')))
+        console.log(empDetails);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+},[])
     return (
         <div id="main">
            <nav className="fixed-top navbar navbar-expand-lg navbar-light bg-light">
@@ -49,8 +56,8 @@ function UserHome()
             </nav>
                 <div style={{marginTop:"80px",marginLeft:"100px"}}>
                     <div className="container-fluid">
-                        <h1>Welcome Meera Kishnan</h1>
-                        <p className="fs-5 fw-light my-3">Senior Engineer at Zyka Corp</p>
+                        <h1>Welcome {empDetails.employeeName}</h1>
+                        <p className="fs-5 fw-light my-3">{empDetails.role} at Zyka Corp</p>
                     </div>
                     <div className="container-fluid my-5">
                         <div class="row">
@@ -126,15 +133,13 @@ function UserHome()
                                     <div className="card-body" id="reim2">
                                             <div className="card container" id="reim2" style={{backgroundColor:"#eff5f5"}}>
                                                 <div className="row m-5" style={{marginTop:"7%"}}>
-                                                    <div className="col-6 col-sm-12" >Unclaimed Amount</div>
-                                                    
-                                                    <div className="col-6 col-sm-12" > <h4><b> ₹ 12,500.00</b></h4></div>
-                                                    <div className="col-6 col-sm-12">You have an Unpaid Amount of ₹ 5,000.00</div>
+                                                    <div className="col-6 col-sm-12" >Claimed Amount</div>
+                                                    <div className="col-6 col-sm-12" > <h4><b> ₹ {empDetails.approvedReimbursment}</b></h4></div>
                                                 </div>
                                             </div>
                                             <br/>
 
-                                            <div className="container" id="reim3">
+                                            {/* <div className="container" id="reim3">
                                                 <p>CLAIMS FOR JANUARY 2019</p>
                                                 <div className="row m-3" id="reim3">
                                                 <div className="col-md-3">
@@ -142,13 +147,13 @@ function UserHome()
                                                 </div>
                                                 <div className="col-md-3">
                                                 <div className="b1" style={{borderLeft:"6px solid green"}}><p className="ms-2" >Approved</p> <span style={{marginLeft:"4%"}}><b>₹ 19,480.00</b></span>  </div>
-                                            </div>
-                                        </div>
-                                        </div>
+                                                </div></div> </div> */}
+                                        
+                                        
                                         <br/>
 
-                                     <button className="btn btn-primary">View More Details -{'>'}</button>
-
+                                     <Link to="/employeereimbursements"><button className="btn btn-primary">View More Details -{'>'}</button>
+                                     </Link>
                                     </div>    
                                 </div>             
                             </div>

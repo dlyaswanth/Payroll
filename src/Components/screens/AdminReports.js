@@ -1,10 +1,46 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AdminNavbar from '../Navbar/AdminNavbar';
+import { CSVLink} from "react-csv";
 import Logout from './Logout';
 function AdminReports()
 {
     const [name,setName]=useState('')
+    const [logs,setlogs]=useState([])
+    const [csv,setCsv]=useState([])
+    const headers = [
+        { label: "Employee Name", key: "Employee_Name" },
+        { label: "Work Email", key: "Work_Email" },
+        { label: "Log Date & Time", key: "logs" },
+        { label: "Description", key: "des" },
+      ];
+    useEffect(()=>{
+        //getting company's applied reimbursment
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+        
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("company_id"), requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setlogs(data.logArray.reverse());
+                // console.log(logs);
+            })
+            var flgele=[]
+            logs.forEach(element => {   
+                var temp = element.split('|');
+                // console.log(temp);
+                var ele={}
+                ele['Employee_Name']=temp[0]   
+                ele['Work_Email']=temp[1]
+                ele['logs']=temp[3]
+                ele['des']=temp[2]
+                flgele.push(ele);
+            });
+            setCsv(flgele)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     function Search(emp_name)
     {
         console.log(emp_name);
@@ -56,7 +92,16 @@ function AdminReports()
                 <div className="container-fluid">
                 <b className="navbar-brand" style={{marginLeft:"50px"}}></b>
                     <div className="d-flex">
-                        <button className="btn btn-primary">Export PDF/CSV</button>
+                    <button className="btn btn-primary">
+                        <CSVLink
+                            data={csv}
+                            headers={headers}
+                            filename="Employee_logs.csv"
+                            style={{ color: "white", textDecoration: "none" }}
+                        >
+                            Export CSV
+                        </CSVLink>
+                        </button>
                     </div>
                 </div>
             </nav>
@@ -65,17 +110,27 @@ function AdminReports()
                 <div className="row" style={{marginTop:"5px",marginBottom:"5px"}}>
                     <div className="col-6 col-sm-3"><b>Employee Name</b></div>
                     <div className="col-6 col-sm-3"><b>Work Email</b></div>
-                    <div className="col-6 col-sm-3"><b>Activity Details</b></div>
+                    <div className="col-6 col-sm-3"><b>Log Date & Time</b></div>
                     <div className="col-6 col-sm-3"><b>Description</b></div>
                 </div>
             </div>
-            <div className="row employee" style={{marginTop:"5px",marginBottom:"5px"}}>
-                <div className="col-6 col-sm-3"><p>User 01</p></div>
-                <div className="col-6 col-sm-3"><p>user01@codingmart.com</p></div>
-                <div className="col-6 col-sm-3"><p>Pay Slip</p></div>
-                <div className="col-6 col-sm-3"><p>User 01 details updated</p></div>
-                <div className="w-100 d-none d-md-block"></div>
-            </div>
+            
+            {
+                logs.map((items,index)=>{
+                    var item=items.split('|');
+                    return (
+                        <div key={index} className="row employee" style={{marginTop:"5px",marginBottom:"5px"}}>    
+                        <div className="col-6 col-sm-3"><p>{item[0]}</p></div>
+                        <div className="col-6 col-sm-3"><p>{item[1]}</p></div>
+                        <div className="col-6 col-sm-3"><p>{item[3]}</p></div>
+                        <div className="col-6 col-sm-3"><p>{item[2]}</p></div>
+            
+                        <div className="w-100 d-none d-md-block"></div>
+                        </div>
+                  )
+                })
+            }
+        
         </div>
     )
 }
