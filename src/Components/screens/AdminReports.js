@@ -1,7 +1,7 @@
 import { useState,useEffect } from 'react';
 import AdminHeader from '../Navbar/AdminHeader'
 import { CSVLink} from "react-csv";
-
+import Loader from './Loader';
 function AdminReports()
 {
 
@@ -90,6 +90,10 @@ function AdminReports()
             </div>
             
             {
+                logs.length === 0
+                ?
+                <Loader />
+                :
                 logs.map((item,index)=>{
                     return (
                                 <div key={index} className="row employee" style={{marginTop:"5px",marginBottom:"5px"}}>    
@@ -102,20 +106,6 @@ function AdminReports()
                                 </div>
                           )
                 })
-                // logs.map((items,index)=>{
-                //     // var item=items.split('|');
-                //     var item=items.log.split('|');
-                //     return (
-                //         <div key={index} className="row employee" style={{marginTop:"5px",marginBottom:"5px"}}>    
-                //         <div className="col-6 col-sm-3"><p>{item[0]}</p></div>
-                //         <div className="col-6 col-sm-3"><p>{item[1]}</p></div>
-                //         <div className="col-6 col-sm-3"><p>{item[3]}</p></div>
-                //         <div className="col-6 col-sm-3"><p>{item[2]}</p></div>
-            
-                //         <div className="w-100 d-none d-md-block"></div>
-                //         </div>
-                //   )
-                // })
             }
         
         </div>

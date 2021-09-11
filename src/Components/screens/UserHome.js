@@ -121,8 +121,8 @@ function UserHome()
 
                                         <br/>
 
-                                     <button className="btn btn-primary">View Pay Slip -{'>'}</button>
-
+                                     <Link to="/empsalary"><button className="btn btn-primary">View Pay Slip -{'>'}</button>
+                                     </Link>
                                     </div>    
                                 </div>     
                                 

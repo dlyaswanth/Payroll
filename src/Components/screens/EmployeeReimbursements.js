@@ -7,6 +7,7 @@ import {ToastContainer,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserNavbar from '../Navbar/UserNavbar'
 import Logout from './Logout';
+import Loader from './Loader'
 function EmployeeReimbursements()
 {
     const [reimbursment,setReimbursment]= useState([])
@@ -276,6 +277,10 @@ function EmployeeReimbursements()
                 </div>
             </div>
             {
+                appliedReimbursment.length === 0
+                ?
+                <Loader />
+                :
                 appliedReimbursment.map(item=>{
                         // var Flag;
                         // if(item.status=="Approved"){

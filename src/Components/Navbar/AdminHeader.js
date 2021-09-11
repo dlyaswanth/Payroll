@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AdminNavbar from "./AdminNavbar";
@@ -464,16 +466,14 @@ function AdminHeader() {
           >
             <ul className="navbar-nav">
               <li>
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  placeholder="Search Employee"
+                <button
+                  className="btn btn-outline-success"placeholder="Search Employee"
                   //aria-label="Search"
                   // className="btn-close"
                   // data-bs-dismiss="modal"
                   onClick={() => handleShow()}
                   // onChange={() => handleShow()}
-                />
+                >Search Employee</button>
               </li>
               <li>
                 {/* &nbsp;
@@ -540,7 +540,7 @@ function AdminHeader() {
       </nav>
       <Modal size="lg" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
+          <Modal.Title style={{width:"100%"}}>
             <input
               className="form-control me-2"
               type="search"
@@ -552,12 +552,13 @@ function AdminHeader() {
               //onClear={(event) => searchFilterFunction("")}
               onClear={(text) => searchFilterFunction("")}
               value={search}
+              style={{marginLeft:"25%",width:"50%",marginRight:"25%"}}
             />
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>{renderSearchResults()}</Modal.Body>
         <Modal.Footer>
-          <button variant="secondary" onClick={handleClose}>
+          <button className="btn btn-secondary" onClick={handleClose}>
             Close
           </button>
         </Modal.Footer>

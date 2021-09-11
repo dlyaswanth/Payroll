@@ -1,18 +1,14 @@
-import React , {useEffect, useRef} from 'react';
-import LoadingBar from 'react-top-loading-bar'
-// const Loader = () => <DisappearedLoading />;
-// export default Loader;
-
+import React  from 'react';
 const Loader = () => {
-    const ref = useRef(null);
-
-    useEffect(()=>{
-        ref.current.complete()
-    })
-
+  
     return (
-        <div>
-            <LoadingBar color="#979797" ref={ref}/>
+         <div className="container10" style={{marginTop:"50px"}}>
+            <div className="box10">
+                <span className="span"></span>
+                <span className="span"></span>
+                <span className="span"></span>
+                <span className="span"></span>
+            </div>
         </div>
     )  
 };

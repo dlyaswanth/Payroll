@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CryptoJS from "crypto-js";
-
+import {Link} from 'react-router-dom'
 import {
   makeStyles,
 } from "@material-ui/core/styles";
@@ -182,7 +182,7 @@ const SignUpForm = () => {
               width="30"
               height="30"
             />
-            &nbsp;&nbsp; Codingmart Payroll
+             &nbsp;&nbsp;Codingmart Payroll
           </h1>
 
           <p>
@@ -287,7 +287,7 @@ const SignUpForm = () => {
                 className={classes.margin}
                 id="input-with-icon-textfield"
                 placeholder="Contact Number"
-                type="number"
+                type="tel"
                 autoComplete="off"
                 InputProps={{
                   startAdornment: (
@@ -359,7 +359,7 @@ const SignUpForm = () => {
             </div>
           </div>
           <label htmlFor="agree" className="mt-4">
-            Already have an account? <a href="/login">Sign in</a>
+            Already have an account? <Link to="/login">Sign in</Link>
           </label>
         </form>
       </div>

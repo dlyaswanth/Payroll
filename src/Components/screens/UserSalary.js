@@ -11,8 +11,8 @@ export default function App() {
     
     <div id="main">
       <EmployeeNavbar />
-    
-      <div className="pagination p-4 mt-5">
+    <div  style={{marginTop:"80px"}}>
+    <div className="pagination p-4 mt-5" >
         <button onClick={() => setPagination(1)} className="btn btn-dark">
           Salary Structure
         </button>
@@ -36,6 +36,7 @@ export default function App() {
       {pagination === 1 && <SalaryStructure hideStat={true} />}
       {pagination === 2 && <Payslip />}
       {pagination === 3 && <AnnualEarnings alighTable={true} />}
+    </div>
     </div>
   );
 }

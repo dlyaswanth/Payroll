@@ -2,7 +2,7 @@
 import { useState,useEffect } from 'react';
 
 import AdminHeader from '../Navbar/AdminHeader';
-
+import Loader from './Loader';
     
 function AdminReimbursements()
 {
@@ -162,6 +162,10 @@ function AdminReimbursements()
                 </div>
             </div>
             {
+                appliedReimbursment.length === 0 
+                ?
+                <Loader />
+                :
                 appliedReimbursment.map(item=>{
                     return(
                         <div key={item._id} className="row employee" style={{marginTop:"5px",marginBottom:"5px"}}>

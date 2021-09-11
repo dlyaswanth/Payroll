@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 import CryptoJS from 'crypto-js';
+import {Link} from 'react-router-dom'
 export let value =false;
 function Loginpage()
 {
@@ -40,22 +41,22 @@ function Loginpage()
         //console.log(name,password)
     }
     return (
-        <div className="d-flex justify-content-center align-items-center" style={{height:"500px"}}>
+        <div className="d-flex justify-content-center align-items-center " style={{height:"500px"}}>
             <ToastContainer />
-            <div className="container text-center row border border-secondary p-5 mt-5" style={{width:"30%",height:"70%"}}>
+            <div className="container text-center row border border-secondary p-5 mt-5 logininnercard" style={{width:"30%",height:"80%"}}>
               <h1 className="col-12 mb-4">Login</h1>
               <div className="col-12">
-              <div className="input-group mb-3">
+              <div className="input-group mb-3 logincard">
                 <span className="input-group-text" id="basic-addon1"><i className="far fa-envelope"></i></span>
                 <input className="form-control" type="text" placeholder="Email" aria-label="Search" onChange={(event)=>setName(event.target.value)}/>
               </div>
-              <div className="input-group mb-3">
+              <div className="input-group mb-3 logincard">
                 <span className="input-group-text" id="basic-addon1"><i className="fas fa-unlock-alt"></i></span>
                 <input className="form-control" type="password" placeholder="Password" aria-label="Search" onChange={(event)=>setPassword(event.target.value)}/>
               </div>
                 <div className="text-center"><button className="btn btn-primary mb-3" onClick={() => login()}>Login</button></div>
               </div>
-              <p>Login as User <a href="/emplogin">Click Here</a></p>
+              <p>Login as User <Link to="/emplogin">Click Here</Link></p>
             </div>
         </div>
     )

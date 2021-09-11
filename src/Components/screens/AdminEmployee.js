@@ -243,7 +243,6 @@ function AdminEmployee()
     return (
         <div id="main">
             <ToastContainer />
-            <Loader />
             <AdminHeader/>
             <nav className="navbar navbar-expand-lg navbar-light" style={{marginTop:"90px"}}>
                 <div className="container-fluid">
@@ -324,6 +323,10 @@ function AdminEmployee()
             </div>
 
             {
+                empDetails.length === 0
+                ?
+                <Loader />
+                :
                 empDetails.map(items=>{
                     return (
                         <div key={items["_id"]}>

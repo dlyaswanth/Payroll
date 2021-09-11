@@ -65,7 +65,11 @@
 }
 .card 
 {
-  background-color: lightgray;
+  background-color: #f1f1f1;
+  border-radius: 20px;
+background: #f1f1f1;
+box-shadow:  20px 20px 60px #cdcdcd,
+             -20px -20px 60px #ffffff;
 }
 .container
 {
@@ -297,4 +301,75 @@ color: green;
   100% {
     transform: rotate(360deg);
   }
+}
+.container10{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.box10{
+  position: relative;
+  width: 40px;
+  height: 40px;
+  animation: asheffects 2s ease infinite;
+}
+@keyframes asheffects{
+  0%{
+  width: 40px;
+  height: 40px;
+  }
+  90%{
+  width: 70px;
+  height: 70px;
+  }
+  100%{
+    transform:rotate(360deg);
+  }
+}
+.span{
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: dodgerblue
+}
+.span:nth-child(2){
+  right: 0px;
+}
+.span:nth-child(3){
+  right: 0px;
+  bottom: 0px;
+}
+.span:nth-child(4){
+  left: 0px;
+  bottom: 0px;
+}
+.loginoutercard
+{
+  max-width: 50%;
+  margin-top: 5%;
+  margin-left: 25%;
+  margin-right: 25%;
+  background-color: #f1f1f1;
+  
+ 
+}
+.logininnercard
+{
+  width: 40%  !important;
+  margin-left: 25%;
+  margin-right: 25%;
+  border-radius: 25px;
+  margin-top:10% !important;
+background: #f1f1f1;
+box-shadow:  20px 20px 60px #cdcdcd,
+             -20px -20px 60px #ffffff;
+}
+input 
+{
+  max-width: 70%;
+}
+.logincard 
+{
+  margin-left: 50px;
 }

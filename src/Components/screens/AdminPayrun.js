@@ -4,6 +4,7 @@ import AdminHeader from '../Navbar/AdminHeader'
 import { CSVLink } from "react-csv";
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import Loader from './Loader';
 function AdminPayrun()
 {
     
@@ -242,9 +243,14 @@ function AdminPayrun()
                 </div>
 
                 {
-                    empDetails.map((item,index) =>{
-                        //getReimbursment(item._id)
-                        return(
+                   empDetails.length === 0
+                   ?
+                   <Loader/>
+                   :
+                   empDetails.map((item,index) =>{
+                    //getReimbursment(item._id)
+                    return(
+                        <div>
                             <div key={index} className="row employee" style={{marginTop:"5px",marginBottom:"5px"}}>
                                 <div className="col"><p>{item.employeeName}</p></div>
                                 <div className="col"><p>31</p></div>
@@ -255,10 +261,11 @@ function AdminPayrun()
                                 <div className="col"><p>₹ {item.approvedReimbursment}</p></div>
                                 <div className="col"><p>₹ {item.salary}</p></div>
                                 <div className="w-100 d-none d-md-block"></div>
-                                
                             </div>
-                        )
-                    })
+                        </div>
+                    )
+                })
+                    
                 }
                 
             </div>
