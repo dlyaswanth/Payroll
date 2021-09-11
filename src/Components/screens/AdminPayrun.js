@@ -119,11 +119,24 @@ function AdminPayrun()
                     })
                 };
                 
-                fetch('http://localhost:8080/api/payslip', requestOptions)
+                fetch('https://payroll-fastify.herokuapp.com/api/payslip', requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     if(!data.error){
                         console.log(data); 
+                        const requestOptions2 = {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ 
+                                approvedReimbursment : 0
+                            })
+                        };
+                        
+                        fetch('https://payroll-fastify.herokuapp.com/api/employee/'+item._id, requestOptions2)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                        })
                     }
                     else{
                         toast.error("Payment Failed! Contact Support Team!",{autoClose:2500})
@@ -135,18 +148,32 @@ function AdminPayrun()
         })
 
         paidArray = JSON.parse(localStorage.getItem('company')).paidArray;
+
+        //update payDate for next months
+        var updatePayDate = JSON.parse(localStorage.getItem('company')).payDate;
+        var splitDate = updatePayDate.split('-');
+
+        if(Number(splitDate[1]) >= 12){
+            updatePayDate = splitDate[0] + '-01-' + (Number(splitDate[2])+1);
+        }
+        else{
+            updatePayDate = splitDate[0] + '-' + (Number(splitDate[1])+1) + '-' + splitDate[2];
+        }
+        console.log(updatePayDate)
+    
         paidArray.push(dateOfPayment)
         const requestOptions2 = {
             method: 'PUT',      
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                paidArray : paidArray
+                paidArray : paidArray,
+                payDate : updatePayDate
             })
         };
             
     
         //updating in company table
-        fetch('http://localhost:8080/api/company/'+localStorage.getItem('company_id'), requestOptions2)
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions2)
         .then(response => response.json())
         .then(data => {
             // console.log("Hi",data);
@@ -170,10 +197,10 @@ function AdminPayrun()
             if(paidArray[paidArray.length-1] === dateOfPayment){
                 return(<button disabled className="btn btn-success me-3">Pay All</button>) 
             }
-            return (<button className="btn btn-outline-success me-3" onClick={()=>addPayslip()}>Pay all</button>)
+            return (<button className="btn btn-outline-success me-3" onClick={()=>window.confirm("Are you sure to proceed with payment?") && addPayslip()}>Pay all</button>)
         }
         else{
-            return(<button disabled className="btn btn-outline-success me-3">Pay All</button>) 
+            return(<button disabled className="btn btn-success me-3">Pay All</button>) 
         }
 
     }

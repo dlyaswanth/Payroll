@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 
 
 function Payslip() {
@@ -12,18 +13,7 @@ function Payslip() {
 
 
   useEffect(()=>{
-    const requestOptions2 = {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      };
-      
-      fetch('http://localhost:8080/api/employeePayslip/'+localStorage.getItem("employee_id"), requestOptions2)
-      .then(response => response.json())
-      .then(data => {
-          setpayslip(data[0]);
-          console.log(data[0])
-          console.log(data[0].employeeName,data[0].reimbursment)
-      })
+    
   },[])
 
     function getData(){
@@ -55,27 +45,46 @@ function Payslip() {
       
     }
 
-    const [inputMonth,setInputMonth] = useState('')
 
   function dateConversion(){
     var date = new Date(month)
-    var selectedMonth;
     console.log("date")
-    selectedMonth = date.toLocaleString('default',{month:'long'})
-    selectedMonth = (selectedMonth + ' ' + date.getFullYear())
+    var curr = (date.toLocaleString('default',{month:'long'}))
+    var selectedMonth = curr + ' ' + date.getFullYear()
 
-    setInputMonth(selectedMonth)
+    console.log(selectedMonth)
 
-    if(selectedMonth === payslip.payDate){
-      getData()
-      setreimbursment(payslip.reimbursment)
-    }
+    const requestOptions2 = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      };
+      
+      fetch('https://payroll-fastify.herokuapp.com/api/employeePayslip/'+localStorage.getItem("employee_id")+'/'+selectedMonth, requestOptions2)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+          if(data.length !== 0){
+            setpayslip(data[0]);
+            setreimbursment(data[0].reimbursment)
+            console.log(data)
+          }
+          else{
+            setcompany([])
+            setempDetails([])
+            setreimbursment([])
+            setpayslip([])
+            toast.error('No Payslip Found for Selected Month',{autoClose:2000})
+            return
+          }
+    })
 
+    getData()
 
   }
 
   function renderData(){
-    if(inputMonth){
+    console.log(payslip,company,employee,reimbursment)
+    if(payslip.length !== 0 && company.length !== 0 && employee.length !== 0){
       console.log("data")
       return (
         <>
@@ -92,7 +101,7 @@ function Payslip() {
             <div className="payslip-details">
             
               <h5>Payslip</h5>
-              <h6>For the month of {inputMonth}</h6>
+              <h6>For the month of {payslip.payDate}</h6>
             </div>
           </div>
 
@@ -234,6 +243,7 @@ function Payslip() {
 
   return (
     <div className="payslip container p-4 d-flex flex-column" style={{marginLeft:"10%"}}>
+      <ToastContainer />
       <div className="filter d-flex mb-4">
         <div className="icon">
           <i className="fas text-info fa-filter" />
