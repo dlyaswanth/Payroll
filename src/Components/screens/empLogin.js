@@ -20,21 +20,28 @@ function EmpLoginpage()
         fetch('https://payroll-fastify.herokuapp.com/api/employeeEmail/'+name, requestOptions)
         .then(response => response.json())
         .then(data => {
-          var bytes = CryptoJS.AES.decrypt(data.password, 'my-secret-key@123');
-          var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-          
-          if(password === decryptedData){
-            toast.success(data.message,{autoClose:2500})
-            value=true;
-            window.open("/emphome","_self")
-            data.password=undefined;
-            localStorage.setItem('employee',JSON.stringify(data));
-            localStorage.setItem('employee_id',data._id);
-            localStorage.setItem('emp_company_id',data.companyId);
+          if (data)
+          {
+              var bytes = CryptoJS.AES.decrypt(data.password, 'my-secret-key@123');
+              var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+              if(password === decryptedData){
+                toast.success(data.message,{autoClose:2500})
+                value=true;
+                window.open("/emphome","_self")
+                data.password=undefined;
+                localStorage.setItem('employee',JSON.stringify(data));
+                localStorage.setItem('employee_id',data._id);
+                localStorage.setItem('emp_company_id',data.companyId);
+              }
+              else{
+                toast.error(data.error,{autoClose:2500})
+              }
           }
-          else{
-            toast.error(data.error,{autoClose:2500})
-          }
+          else
+          {
+            toast.error("Try again",{autoClose:2500})
+          }   
         });
         //console.log(name,password)
     }
