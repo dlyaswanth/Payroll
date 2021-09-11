@@ -20,7 +20,9 @@ function Loginpage()
         fetch('https://payroll-fastify.herokuapp.com/api/companyEmail/'+name, requestOptions)
         .then(response => response.json())
         .then(data => {
-            var bytes = CryptoJS.AES.decrypt(data.password, 'my-secret-key@123');
+          if (data)
+          {
+              var bytes = CryptoJS.AES.decrypt(data.password, 'my-secret-key@123');
             var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
           //log decrypted Data
            console.log('decrypted Data -')
@@ -37,6 +39,11 @@ function Loginpage()
           else{
             toast.error(data.error,{autoClose:2500})
           }
+          }
+          else
+          {
+            toast.error("Try again",{autoClose:2500})
+          }   
         });
         //console.log(name,password)
     }
