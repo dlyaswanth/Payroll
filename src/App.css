@@ -233,3 +233,68 @@ color: green;
   justify-content: center;
   align-items: center;  
 }
+.errorMsg {
+  color: #cc0000;
+  margin-bottom: 12px;
+}
+
+.skip {
+  text-decoration: none;
+}
+.zp-signup-form-container {
+  -webkit-flex-basis: 50%;
+  -ms-flex-preferred-size: 50%;
+  flex-basis: 50%;
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+}
+.zp-signup-form {
+  width: 75%;
+  margin: auto;
+  text-align: center;
+  padding: 25px 29px;
+  border-top: 2px solid #f55d49;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 4px 11px 0 #e4e4e4;
+  box-shadow: 0 4px 11px 0 #e4e4e4;
+  background: #fff;
+}
+.form-group {
+  position: relative;
+  margin: 10px 0;
+  align-content: center;
+  justify-content: center;
+}
+.text-danger {
+  color: "red";
+}
+.zp-form-submit {
+  color: #fff;
+  background: #f55d49;
+  padding: 12px 45px;
+  border: none;
+  border-radius: 500px;
+  outline: none;
+  font-size: 16px;
+  width: 40%;
+  align-content: center;
+  cursor: pointer;
+}
+.Spinner {
+  margin-left: 8000;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 5px solid #eee;
+  border-left-color: #00bcd4;
+  animation: spin 1.2s linear infinite;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

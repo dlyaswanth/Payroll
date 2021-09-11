@@ -8,7 +8,40 @@ function Demo()
     const [name,setName]=useState('')
     const [type,setType]=useState('')
     const [rupee,setRupee]=useState('')
+    const [optionalType,setOptionalType] = useState('')
     var newopt1={};
+
+    const definedReimbursment = [
+        {
+            name : '',
+            type: 'Select'
+        },
+        {
+            name : "Fuel Reimbursment",
+            type : "Fuel Reimbursment"
+        },
+        {
+            name : "Driver Reimbursment",
+            type : "Driver Reimbursment"
+        },
+        {
+            name : "Telephone Reimbursment",
+            type : "Telephone Reimbursment"
+        },
+        {
+            name : "Vehicle Maintenance Reimbursment",
+            type : "Vehicle Maintenance Reimbursment"
+        },
+        {
+            name : "Leave Travel Allowance",
+            type : "Leave Travel Allowance"
+        },
+        {
+            name : '',
+            type: 'Other'
+        }
+    ]
+
     function checkhandler(options)
     {
         options["opted"]=!options["opted"]
@@ -54,25 +87,48 @@ function Demo()
         setName("");
         setType("");
         setRupee("");
+        var select_box = document.getElementById("myselectbox");
+        select_box.selectedIndex = 0;
+    }
+
+    function handleChange(e) {
+        var curr = JSON.parse(e.target.value)
+        console.log(JSON.parse(e.target.value).type)
+        setName(curr.name);
+        setType(curr.type)
+        setOptionalType(curr.type)
+    }
+
+    function displayType(){
+        
+        if(type === "Other"){
+            return(
+                <div>
+                    <label>Set Reimbursement Type (Optional): </label>
+                    <br/>
+                    <div className="input-group mb-3">
+                        <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={optionalType} onChange={(event)=>setOptionalType(event.target.value)}  />
+                    </div>
+                </div>
+            )
+        }
+        return(
+            <p></p>
+        )
     }
 
     function add()
     {   
         newopt1["name"]=name
-        newopt1["type"]=type
+        newopt1["type"]=optionalType
         newopt1["amount"]=rupee
         newopt1["opted"]=false
         setOptions([...options,newopt1])
         console.log(finalValues);
         console.log(name,type,rupee);
         reset();
-        // newopt1[0]=newopt
-        // newopt1[1]=name
-        // newopt1[2]=type
-        // setOptions([...options,newopt1])
-        // console.log(finalValues);
-        // console.log(ctype,rupee,pay);
     }
+
     return(
         <div >
            <ToastContainer />
@@ -120,15 +176,32 @@ function Demo()
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>reset()}></button>
                     </div>
                     <div className="modal-body">
+                    <label>Reimbursement Type : </label>
+                        <br/>
+                        <div className="input-group mb-3">
+                            {/* <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={type} onChange={(event)=>setType(event.target.value)}  /> */}
+                            <select id="myselectbox" className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={handleChange}>
+                                {
+                                    
+                                    definedReimbursment.map((item,index)=>{
+                                        
+                                        return (
+                                           
+                                            <option key={index} value={JSON.stringify(item)}>{item.type}</option>
+                                              
+                                        )
+                                    })
+                                }
+                            
+                            </select>
+                        </div>
+                        {
+                            displayType()
+                        }
                         <label>Reimbursement Name : </label>
                         <br/>
                         <div className="input-group mb-3">
                             <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={name} onChange={(event)=>setName(event.target.value)}  autoFocus/>
-                        </div>
-                        <label>Reimbursement Type : </label>
-                        <br/>
-                        <div className="input-group mb-3">
-                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={type} onChange={(event)=>setType(event.target.value)}  />
                         </div>
                         <label>Enter Amount : </label><br/>
                         <br/>
@@ -144,7 +217,7 @@ function Demo()
                         </ul>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-outline-success" onClick={()=>add()} >Add New</button>
+                        <button type="button" className="btn btn-outline-success" onClick={()=>add()} data-bs-dismiss="modal" >Add New</button>
                         <button type="button" className="btn btn-oultine-secondary" data-bs-dismiss="modal" onClick={()=>reset()}>Close</button>
                     </div>
                     </div>

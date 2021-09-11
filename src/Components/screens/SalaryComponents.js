@@ -4,6 +4,7 @@ import Demo from './Reimbursements';
 // import {useHistory} from 'react-router-dom'
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import Earnings from './Earnings';
 function SalaryComponents()
 {
     // let history=useHistory();
@@ -15,6 +16,8 @@ function SalaryComponents()
     const [type,setType]=useState('')
    // const [ctype,setCtype]=useState('')
     const [rupee,setRupee]=useState('')
+    const [optionalType,setOptionalType]=useState('')
+    
     var newopt1={};
     function checkhandler(options)
     {
@@ -67,6 +70,14 @@ function SalaryComponents()
 
     }
     function reset(){
+        var select_box = document.getElementById("myselectbox");
+        select_box.selectedIndex = 0;
+        if(document.getElementById("flexRadioDefault1").checked){
+            document.getElementById("flexRadioDefault1").checked=false
+        }
+        if(document.getElementById("flexRadioDefault2").checked){
+            document.getElementById("flexRadioDefault2").checked=false
+        }
         setNewopt("");
         setName("");
         setType("");
@@ -77,11 +88,12 @@ function SalaryComponents()
 
     function add()
     {   
-        newopt1["type"]=newopt
+        newopt1["type"]=optionalType
         newopt1["name"]=name
         newopt1["payType"]=type
         newopt1["opted"]=false
         newopt1["amount"]=rupee
+        newopt1["displayName"]=pay
         setOptions([...options,newopt1])
         console.log(finalValues);
         console.log(type,rupee,pay);
@@ -95,6 +107,35 @@ function SalaryComponents()
         localStorage.clear();
 
     }
+
+    function handleChange(e) {
+        var curr = JSON.parse(e.target.value)
+        console.log(JSON.parse(e.target.value).type)
+        setName(curr.name);
+        setPay(curr.name)
+        setNewopt(curr.type)
+        setOptionalType(curr.type)
+    }
+
+    function displayType(){
+        
+        if(newopt === "Other"){
+            return(
+                <div>
+                    <label>Set Earning Type (Optional): </label>
+                    <br/>
+                    <div className="input-group mb-3">
+                        <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={optionalType} onChange={(event)=>setOptionalType(event.target.value)}  />
+                    </div>
+                </div>
+            )
+        }
+        return(
+            <p></p>
+        )
+    }
+
+    
     return(
         <div >
             <SideBar />
@@ -120,15 +161,15 @@ function SalaryComponents()
             
             
             {
-                options.map(items=>{
+                options.map((items,index)=>{
                     return (
                         <>
                         <br />
-                            <div className="col-6 col-sm-4">
-                            <input type="checkbox" value={items["type"]} name={items["type"]}  style={{cursor:"pointer"}} onChange={()=>checkhandler(items)}/>
-                            <span style={{color:"dodgerblue",cursor:"pointer"}}>&nbsp;{items["type"]}</span>
+                            <div key={index} className="col-6 col-sm-4">
+                            <input type="checkbox" value={items["name"]} name={items["name"]}  style={{cursor:"pointer"}} onChange={()=>checkhandler(items)}/>
+                            <span style={{color:"dodgerblue",cursor:"pointer"}}>&nbsp;{items["displayName"]}</span>
                             </div>
-                            <div className="col-6 col-sm-4">{items["name"]}</div>
+                            <div className="col-6 col-sm-4">{items["type"]}</div>
                             <div className="col-6 col-sm-4">{items["payType"]}</div>
                             <div className="w-100 d-none d-md-block"></div>
                         </>
@@ -157,8 +198,25 @@ function SalaryComponents()
                         <label>Earning Type : </label>
                         <br/>
                         <div className="input-group mb-3">
-                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={newopt} onChange={(event)=>setNewopt(event.target.value)}  autoFocus/>
+                            {/* <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" value={newopt} onChange={(event)=>setNewopt(event.target.value)}  autoFocus/> */}
+                            <select id="myselectbox" className="form-control" placeholder="Earning Type" aria-label="Username" aria-describedby="basic-addon1" onChange={handleChange}>
+                                {
+                                    
+                                    Earnings.map((item,index)=>{
+                                        
+                                        return (
+                                           
+                                                <option key={index} value={JSON.stringify(item)}>{item.type}</option>
+                                              
+                                        )
+                                    })
+                                }
+                            
+                            </select>
                         </div>
+                        {
+                            displayType()
+                        }
                         <label>Earning Name : </label>
                         <br/>
                         <div className="input-group mb-3">
@@ -211,7 +269,7 @@ function SalaryComponents()
                         </ul>
                     </div>
                     <div className="modal-footer">
-                        <button type="submit" className="btn btn-outline-success"onClick={()=>add()} >Add New</button>
+                        <button type="submit" className="btn btn-outline-success" data-bs-dismiss="modal" onClick={()=>add()} >Add New</button>
                         <button type="button" className="btn btn-oultine-secondary" data-bs-dismiss="modal" onClick={()=>reset()}>Close</button>
                     </div>
                     </div>

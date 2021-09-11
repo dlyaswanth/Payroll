@@ -41,7 +41,7 @@ class OrganizationSetup extends React.Component {
     }
 
     submitorganisationSetupForm(e) {
-      const companyid= localStorage.getItem('companyId');
+      const companyid= localStorage.getItem('company_id');
       e.preventDefault();
       console.log(this.state.fields)
       if (this.validateForm()) {

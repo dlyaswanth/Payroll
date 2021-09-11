@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState , useEffect } from "react";
-import { Link } from "react-router-dom";
-import AdminNavbar from "../Navbar/AdminNavbar";
+import AdminHeader from '../Navbar/AdminHeader'
 import { CSVLink } from "react-csv";
-import Logout from './Logout';
+import {ToastContainer,toast} from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 function AdminPayrun()
 {
-    const [name,setName]=useState('')
+    
     const [empDetails,setEmpDetails] = useState([])
     const [benefits,setBenefits] = useState(0)
+
     const headers = [
         { label: "Employee Name", key: "employeeName" },
         { label: "Paid Days", key: "days" },
@@ -20,11 +21,12 @@ function AdminPayrun()
       ];
       var csvValues=[];
       const [csv,setCsv]=useState([])
+
     useEffect( ()=>{
 
         async function init(){
             const requestOptions = {
-                method: 'GET',
+                method: 'GET',      
                 headers: { 'Content-Type': 'application/json' },
             };
                 
@@ -56,7 +58,7 @@ function AdminPayrun()
         console.log(amt);
         setBenefits(amt);
         
-        // eslint-disable-next-line array-callback-return
+        
         csvValues.forEach((items)=>{
             items["days"]=31;
             items["benefits"]=amt;
@@ -66,59 +68,125 @@ function AdminPayrun()
         // setEmpDetails([...empDetails)
     }
 
+    //for adding pay date in MMM/YYYY format
+    var today = new Date()
+    var month = today.toLocaleString('default',{month:'long'})
+    var currMonth = String(today.getMonth()+1).padStart(2, '0')
+
+    var dateOfPayment = month + " " + today.getFullYear() 
+
+    var paidArray = [] 
+
+    //Add into PayslipTable
+    function addPayslip(){
+
+        empDetails.forEach(item =>{
+           //getting reimbursments by employee
+            const requestOptions1 = {
+                method: 'GET',      
+                headers: { 'Content-Type': 'application/json' },
+            };
+                
+            fetch('https://payroll-fastify.herokuapp.com/api/employeeReimbursment/'+item._id, requestOptions1)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+
+                //filtering the reimbursments for a single month
+                var reimbursmentByMonth = []
+                data.forEach(item => {
+                    var reimbDate = item.date;
+                    reimbDate = reimbDate.slice(3,5)
+                    
+                    if(reimbDate === currMonth){
+                        reimbursmentByMonth.push(item)
+                    }
+                })
+
+                console.log(reimbursmentByMonth)
+
+                //posting to payslip table
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        companyId: item.companyId,
+                        employeeId: item._id,
+                        reimbursment: reimbursmentByMonth,
+                        employeeName: item.employeeName,
+                        payDate: dateOfPayment
+                        
+                    })
+                };
+                
+                fetch('http://localhost:8080/api/payslip', requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    if(!data.error){
+                        console.log(data); 
+                    }
+                    else{
+                        toast.error("Payment Failed! Contact Support Team!",{autoClose:2500})
+                        return
+                    }
+                })
     
-    function Search(emp_name)
-    {
-        console.log(emp_name);
+            })
+        })
+
+        paidArray = JSON.parse(localStorage.getItem('company')).paidArray;
+        paidArray.push(dateOfPayment)
+        const requestOptions2 = {
+            method: 'PUT',      
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                paidArray : paidArray
+            })
+        };
+            
+    
+        //updating in company table
+        fetch('http://localhost:8080/api/company/'+localStorage.getItem('company_id'), requestOptions2)
+        .then(response => response.json())
+        .then(data => {
+            // console.log("Hi",data);
+            localStorage.setItem('company',JSON.stringify(data.updatedCompany));
+        })
+        
+        toast.success('Payment Done Successfully',{autoClose:2500})
+        return
+        
+    } 
+
+    //Date Comparsion
+    function checkDate(){
+        
+        var today=new Date();
+        today = String(today.getDate()).padStart(2, '0') + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + today.getFullYear();
+        var paydate=JSON.parse(localStorage.getItem('company')).payDate;
+        
+        if(today===paydate){
+            paidArray = JSON.parse(localStorage.getItem('company')).paidArray;
+            if(paidArray[paidArray.length-1] === dateOfPayment){
+                return(<button disabled className="btn btn-success me-3">Pay All</button>) 
+            }
+            return (<button className="btn btn-outline-success me-3" onClick={()=>addPayslip()}>Pay all</button>)
+        }
+        else{
+            return(<button disabled className="btn btn-outline-success me-3">Pay All</button>) 
+        }
+
     }
     return (
         <div id="main">
-           <nav className="fixed-top navbar navbar-expand-lg navbar-light bg-light">
-                <div className="container-fluid">
-                    <AdminNavbar className="navbar-brand"/>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse right navbar-collapse" id="navbarNavDropdown">
-                        <ul className="navbar-nav">
-                            <li>
-                                <input className="form-control me-2" type="search" placeholder="Search Employee" aria-label="Search" onChange={(event)=>setName(event.target.value)}/>
-                            </li>
-                            <li>
-                                &nbsp;
-                                <button className="btn btn-outline-success"  onClick={()=>Search(name)}>Search</button>
-                            </li>
-                            <li className="company_name me-2">
-                                <button type="button" className="btn btn-outline-info" disabled aria-label="Close">
-                                    Codingmart
-                                </button>
-                                &nbsp;&nbsp;&nbsp;
-                                <div className="btn-group">
-                                    <button type="button" className="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Settings
-                                    </button>
-                                    <ul className="dropdown-menu">
-                                        <li className="settings"><Link className="dropdown-item settings" to="/">Organization Profile</Link></li>
-                                        <li><hr /></li>
-                                        <li className="settings"><Link className="dropdown-item settings" to="/">Work Location</Link></li>
-                                        <li><hr /></li>
-                                        <li className="settings"><Link className="dropdown-item settings" to="/">Pay Schedule</Link></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <Logout />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        
+            <ToastContainer/>
+            <AdminHeader/>
             <div id="summary">
                 <nav className="navbar navbar-expand-lg navbar-light" style={{marginTop:"90px"}} >
                 <div className="container-fluid">
                     <b className="navbar-brand" style={{marginLeft:"50px"}}>Active Employees</b>
                     <div className="d-flex">
+                        {checkDate()}
                         <button className="btn btn-primary">
                         <CSVLink
                             data={csv}
@@ -160,6 +228,7 @@ function AdminPayrun()
                                 <div className="col"><p>₹ {item.approvedReimbursment}</p></div>
                                 <div className="col"><p>₹ {item.salary}</p></div>
                                 <div className="w-100 d-none d-md-block"></div>
+                                
                             </div>
                         )
                     })

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // import { useHistory } from "react-router-dom";
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
-// import CryptoJS from 'crypto-js';
+import CryptoJS from 'crypto-js';
 export let value =false;
 function EmpLoginpage()
 {
@@ -19,9 +19,10 @@ function EmpLoginpage()
         fetch('https://payroll-fastify.herokuapp.com/api/employeeEmail/'+name, requestOptions)
         .then(response => response.json())
         .then(data => {
-        
-
-          if(password === data.password){
+          var bytes = CryptoJS.AES.decrypt(data.password, 'my-secret-key@123');
+          var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+          
+          if(password === decryptedData){
             toast.success(data.message,{autoClose:2500})
             value=true;
             window.open("/emphome","_self")

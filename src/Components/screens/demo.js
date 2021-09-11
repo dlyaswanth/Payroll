@@ -9,6 +9,7 @@ function Demo()
     const [type,setType]=useState('')
     const [rupee,setRupee]=useState('')
     var newopt1={};
+
     function checkhandler(options)
     {
         options[3]=!options[3]
@@ -119,7 +120,21 @@ function Demo()
                         <label>Reimbursement Type : </label>
                         <br/>
                         <div className="input-group mb-3">
-                            <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>setType(event.target.value)}  />
+                            {/* <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>setType(event.target.value)}  /> */}
+                            <select id="myselectbox" className="form-control" aria-label="Username" aria-describedby="basic-addon1" >
+                                {
+                                    
+                                    definedReimbursment.map((item,index)=>{
+                                        
+                                        return (
+                                           
+                                            <option key={index} value={JSON.stringify(item)}>{item.type}</option>
+                                              
+                                        )
+                                    })
+                                }
+                            
+                            </select>
                         </div>
                         <label>Enter Amount : </label><br/>
                         <br/>

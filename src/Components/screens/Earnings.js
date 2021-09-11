@@ -1,35 +1,60 @@
 /* eslint-disable import/no-anonymous-default-export */
 export default [
     {
-      name: 'Basic',
-      money: 190501
+      name : '',
+      type: 'Select'
     },
     {
-      name: 'Basic Arrear',
-      money: 4000
+      name: 'Basic',
+      type: 'Basic'
     },
     {
       name: 'House Rent Allowance',
-      money: 54752
+      type: 'House Rent Allowance'
     },
     {
       name: 'Fixed Allowance',
-      money: 48854
+      type: 'Fixed Allowance'
     },
     {
       name: 'Conveyence Allowance',
-      money: 660
+      type: 'Conveyence Allowance'
     },
     {
       name: 'Transport Allowance',
-      money: 4800
+      type: 'Transport Allowance'
     },
     {
       name: 'Travelling Allowance',
-      money: 660
+      type: 'Travelling Allowance'
     },
     {
       name: 'Children Education Allowance',
-      money: 660
+      type: 'Children Education Allowance'
+    },
+    {
+      name: 'Bonus',
+      type: 'Bonus'
+    },
+    {
+      name: 'Commission',
+      type: 'Commission'
+    },
+    {
+      name: 'Leave Encashment',
+      type: 'Leave Encashment'
+    },
+    {
+      name: 'Gratutity',
+      type: 'Gratutity'
+    },
+    {
+      name: 'Notice Pay',
+      type: 'Notice Pay'
+    },
+    {
+      name : '',
+      type: 'Other'
     }
+
   ];

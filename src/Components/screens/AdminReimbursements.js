@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState,useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import AdminNavbar from '../Navbar/AdminNavbar';
-import Logout from './Logout';
+
+import AdminHeader from '../Navbar/AdminHeader';
+
     
 function AdminReimbursements()
 {
-    const [name,setName]=useState('')
     const [appliedReimbursment,setAppliedReimbursment]= useState([])
     
 
@@ -133,52 +132,13 @@ function AdminReimbursements()
                 
    }
 
-    function Search(emp_name)
-    {
-        console.log(emp_name);
-    }
+    // function Search(emp_name)
+    // {
+    //     console.log(emp_name);
+    // }
     return (
         <div id="main">
-            <nav className="fixed-top navbar navbar-expand-lg navbar-light bg-light">
-                <div className="container-fluid">
-                    <AdminNavbar className="navbar-brand"/>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse right navbar-collapse" id="navbarNavDropdown">
-                        <ul className="navbar-nav">
-                            <li>
-                                <input className="form-control me-2" type="search" placeholder="Search Employee" aria-label="Search" onChange={(event)=>setName(event.target.value)}/>
-                            </li>
-                            <li>
-                                &nbsp;
-                                <button className="btn btn-outline-success"  onClick={()=>Search(name)}>Search</button>
-                            </li>
-                            <li className="company_name me-2">
-                                <button type="button" className="btn btn-outline-info" disabled aria-label="Close">
-                                    Codingmart
-                                </button>
-                                &nbsp;&nbsp;&nbsp;
-                                <div className="btn-group">
-                                    <button type="button" className="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Settings
-                                    </button>
-                                    <ul className="dropdown-menu">
-                                        <li className="settings"><Link className="dropdown-item settings" to="/">Organization Profile</Link></li>
-                                        <li className="settings"><hr /></li>
-                                        <li><Link className="dropdown-item settings" to="/">Work Location</Link></li>
-                                        <li><hr /></li>
-                                        <li className="settings"><Link className="dropdown-item settings" to="/">Pay Schedule</Link></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <Logout />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+           <AdminHeader/>
             <nav className="navbar navbar-expand-lg navbar-light" style={{marginTop:"90px"}}>
                 <div className="container-fluid">
                     <b className="navbar-brand" style={{marginLeft:"50px"}}>All Claims</b>
