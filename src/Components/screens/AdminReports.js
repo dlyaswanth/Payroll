@@ -30,27 +30,21 @@ function AdminReports()
             .then(response => response.json())
             .then(data => {
                 // setlogs(data.logArray);
-                data.logArray=data.logArray.reverse();
-                for(let item in data.logArray){
-                    // .split('|')
-                    // data.logArray[item]
-                    // console.log(array);
-                    var arr=data.logArray[item].split('|');
-                    // console.log(arr);
-                    var obj={
-                        name:arr[0],
-                        email:arr[1],
-                        dt:arr[3],
-                        description:arr[2]
+                if(!data.error){
+                    data.logArray=data.logArray.reverse();
+                    for(let item in data.logArray){
+                        var arr=data.logArray[item].split('|');
+                        var obj={
+                            name:arr[0],
+                            email:arr[1],
+                            dt:arr[3],
+                            description:arr[2]
+                        }
+                        array.push(obj);  
                     }
-                    // console.log(obj);
-                    array.push(obj);
-                    
+                    setlogs(array);
                 }
-                setlogs(array);
-                // console.log(logs);
             })
-            // console.log(array);
             
             
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -100,7 +94,7 @@ function AdminReports()
                 </div>
                 <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},8000)}</div>
                 <div className="text-center" style={{marginTop:"40px"}}><b>{records}</b></div>
-            </div>
+                </div>
                 :
                 logs.map((item,index)=>{
                     return (

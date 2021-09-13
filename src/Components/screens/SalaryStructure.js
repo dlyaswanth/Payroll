@@ -8,14 +8,34 @@ export default function SalaryStructure() {
 
   var totEarning = 0;
   var deductions = JSON.parse(localStorage.getItem('employee')).deductions;
-  var reimbursmentAmount = JSON.parse(localStorage.getItem('employee')).approvedReimbursment;
+  var reimbursmentAmount = 0;
   var total,newded,reimb,ttamt;
   var yearCTC;
+  var reimbursmentByMonth = []
 
   //fn
   function calculteEarning(){
     earnings.forEach((earning) => { 
       totEarning+= Number(earning.amount) 
+    })
+
+    var today = new Date()
+    var currMonth = String(today.getMonth()+1).padStart(2, '0')
+
+    reimbursments.forEach(item => {
+      var reimbDate = item.date;
+      reimbDate = reimbDate.slice(3,5)
+      
+      if(reimbDate === currMonth && item.status === "Approved"){
+          reimbursmentByMonth.push(item)
+      }
+    })
+
+    
+    reimbursmentByMonth.forEach(reimbursment =>{
+      if(reimbursment.status === "Approved"){
+        reimbursmentAmount += Number(reimbursment.amount)
+      }
     })
     //console.log("in func",totamount);
     total = totEarning + deductions + reimbursmentAmount
@@ -23,9 +43,9 @@ export default function SalaryStructure() {
     reimb = (reimbursmentAmount/ total)*100
     ttamt = (totEarning/total)*100
 
-    dataMock.push({ title: 'Earnings', value: ttamt, color:'cyan'},
-                  { title: 'Reimbursments', value: reimb, color:'purple'},
-                  { title: 'Taxes & Deductions', value: newded, color:'yellow'})
+    dataMock.push({ title: 'Earnings', value: ttamt, color:'#FC9E4F'},
+                  { title: 'Reimbursments', value: reimb, color:'#FF521B'},
+                  { title: 'Taxes & Deductions', value: newded, color:'#EDD382'})
 
     //console.log(total,newded,reimb,ttamt);
     yearCTC = (Number(JSON.parse(localStorage.getItem('employee')).basicPay)+totEarning)*12
@@ -43,8 +63,10 @@ export default function SalaryStructure() {
     fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("emp_company_id"), requestOptions1)
         .then(response => response.json())
         .then(data => {
-           setEarnings(data.earningsDocArray);
-           })
+          if(!data.error){
+            setEarnings(data.earningsDocArray);
+          }
+        })
     //fetching reimbursment od the employee
     const requestOptions2 = {
             method: 'GET',
@@ -53,15 +75,17 @@ export default function SalaryStructure() {
     fetch('https://payroll-fastify.herokuapp.com/api/employeeReimbursment/'+localStorage.getItem("employee_id"), requestOptions2)
         .then(response => response.json())
         .then(data => {
-           setReimbursments(data);
-           })
+          if(!data.error){
+            setReimbursments(data);
+          }
+        })
         
         },[])
 
     
 
   function dataLength(){
-    if(reimbursments.length>=1){
+    if(reimbursmentByMonth.length>=1){
       return(
           <h4>Reimburstments</h4>
 
@@ -134,7 +158,7 @@ export default function SalaryStructure() {
 
         {
           
-        reimbursments.map(reimbursment => {
+          reimbursmentByMonth.map((reimbursment,index) => {
          
             if(reimbursment.status==="Approved"){
               return (
@@ -145,7 +169,7 @@ export default function SalaryStructure() {
               );
             }
             return(
-              <span></span>
+              <span key={index}></span>
             );
             
         })
@@ -160,7 +184,7 @@ export default function SalaryStructure() {
             </div>
         <hr />
         <div className="d-flex justify-content-end" >
-          <h6>Monthly CTC : ₹ {INR(JSON.parse(localStorage.getItem('employee')).salary)}.00</h6>
+          <h6>Monthly CTC : ₹ {INR(JSON.parse(localStorage.getItem('employee')).salary + reimbursmentAmount)}.00</h6>
         </div>
         <hr className="mb-5"/>
       </div>

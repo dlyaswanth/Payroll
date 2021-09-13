@@ -57,21 +57,26 @@ function Demo()
     function onSave(){
         console.log(finalValues);
 
+        var today= new Date();
+        today=today.toString()
+        today = today.substring(4,today.length-30);
+        var log = '-|-|Your Company has joined Payroll|'+today
          //api integration
          const requestOptions = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
               reimbursmentArray:finalValues,
-              logArray: ["Your Company has joined in Payroll"]
+              logArray: [log]
             })
         };
         fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
             .then(console.log(localStorage.getItem('company_id')))
             .then(response => response.json())
             .then(data=>{
-                if (!data)
-                toast.error("error",{autoClose:2500})
+                if (data.error){
+                    toast.error("Setup error! Contact admin!",{autoClose:2500})
+                }
                 else
                 {
                     toast.success(data.message,{autoClose:2500})

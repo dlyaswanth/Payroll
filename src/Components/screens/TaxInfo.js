@@ -67,8 +67,8 @@ class Taxinfo extends React.Component {
             .then(console.log(companyid))
             .then(response => response.json())
             .then(data=>{
-              if (!data)
-                toast.error(data.error,{autoClose:2500})
+              if (data.error)
+                toast.error("Setup Error! Contact admin!",{autoClose:2500})
               else
               {
                   toast.success(data.message,{autoClose:2500})
@@ -176,7 +176,7 @@ class Taxinfo extends React.Component {
 
                             <Form.Group as={Col} controlId="formGridIndustry">
                             <Form.Label>Tax Payment Frequency</Form.Label>
-                            <Form.Control type="text" value="Monthly" name="paymentfreq"  />
+                            <Form.Control type="text" defaultValue="Monthly" name="paymentfreq"  />
                             </Form.Group>
                         </Row>
                       

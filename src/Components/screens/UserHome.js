@@ -7,7 +7,7 @@ import EmployeeNavbar from '../Navbar/EmployeeNavbar';
 function UserHome()
 {
     const dataMock = [
-        { title: 'Take Home', value: 88, color:'#32CD32'},
+        { title: 'Take Home', value: 88, color:'#32DE8A'},
         { title: 'Taxes & Deductions', value: 12, color:'#FF6347'}
       ];
       const[empDetails,setempDetails] = useState({})
@@ -28,22 +28,28 @@ function UserHome()
         fetch('https://payroll-fastify.herokuapp.com/api/employee/'+localStorage.getItem("employee_id"), requestOptions)
             .then(response => response.json())
             .then(data => {
-               setempDetails(data);
-               
-               fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("emp_company_id"),{method:'GET',headers:{'Content-Type':'application/json'}})
-               .then(response => response.json())
-               .then(data => {
-                   setCompany(data);
-                   setEarningArray(data.earningsDocArray)
-                //    console.log(company);
-               })
+                if(!data.error){
+                    setempDetails(data);
+                    
+                    fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("emp_company_id"),{method:'GET',headers:{'Content-Type':'application/json'}})
+                    .then(response => response.json())
+                    .then(data => {
+                        if(!data.error){
+                            setCompany(data);
+                            setEarningArray(data.earningsDocArray)
+                            //    console.log(company);
+                        }
+                    })
+                }
             })
 
             fetch('https://payroll-fastify.herokuapp.com/api/employeeReimbursment/'+localStorage.getItem("employee_id"),{method:'GET',headers:{'Content-Type':'application/json'}})
             .then(response => response.json())
             .then(data => {
-                 setReimbursment(data)
-                 console.log(reimbursment);  
+                if(!data.error){
+                    setReimbursment(data)
+                    console.log(reimbursment);
+                }  
                                    
             })
         
@@ -111,7 +117,7 @@ function UserHome()
 
                                                 </div>
                                                 <div className="col-6">
-                                                <div className="b1 my-3 " style={{borderLeft:"6px solid",borderColor:"#32CD32"}}><p className="ms-2" >Take Home</p> <span style={{marginLeft:"4%"}}><b>₹ {empDetails.salary}</b></span>  </div>
+                                                <div className="b1 my-3 " style={{borderLeft:"6px solid",borderColor:"#32DE8A"}}><p className="ms-2" >Take Home</p> <span style={{marginLeft:"4%"}}><b>₹ {empDetails.salary}</b></span>  </div>
                                                 <div className="b1 my-3" style={{borderLeft:"6px solid",borderColor:"#FF6347"}}><p className="ms-2">Taxes {'&'} Deductions</p> <span style={{marginLeft:"4%"}}><b>₹ {empDetails.deductions  }</b></span>  </div>
                                                 <div className="b1 my-3" style={{borderLeft:"6px solid",borderColor:"#D3D3D3"}}><p className="ms-2">Gross Pay</p> <span style={{marginLeft:"4%"}}><b>₹ {earningsAmount+Number(empDetails.basicPay)}</b></span> </div>
                                                 </div>
@@ -151,11 +157,11 @@ function UserHome()
                                                           
                                                         }      
                                                          <div className="col" >Claimed Amount</div>
-                                                            <div className="col" > <h4><b> ₹ {reimbursmentAmount}</b></h4></div>
+                                                            <div className="col mt-2" > <h4><b> ₹ {reimbursmentAmount}</b></h4></div>
                                                     </div>
                                                     <div className="col-6">
-                                                        <div className="col" >Approved Amount</div>
-                                                        <div className="col" > <h4><b> ₹ {empDetails.approvedReimbursment}</b></h4></div>
+                                                        <div className="col" >Approved Amount for this month</div>
+                                                        <div className="col mt-3" > <h4><b> ₹ {empDetails.approvedReimbursment}</b></h4></div>
                                                     </div>
                                                 </div>
                                             </div>

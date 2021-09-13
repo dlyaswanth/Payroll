@@ -5,10 +5,6 @@ export default [
       type: 'Select'
     },
     {
-      name: 'Basic',
-      type: 'Basic'
-    },
-    {
       name: 'House Rent Allowance',
       type: 'House Rent Allowance'
     },

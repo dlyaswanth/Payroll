@@ -9,7 +9,7 @@ function Statutory() {
   // let history=useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const [epfnum, setEpfnum] = useState('');
-  const [empcont1, setEmpcont1] =useState('12% of Actual PF Wage');
+  const [empcont1, setEmpcont1] =useState('Percent');
   // const [empcont2, setEmpcont2] =useState('12% of Actual PF Wage');
   const [dc, setDc] =useState('Monthly');
   const [dc1, setDc1] =useState('Monthly');
@@ -49,7 +49,7 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
     .then(response => response.json())
     .then(data=>{
       if (data.error)
-      toast.error(data.error,{autoClose:2500})
+        toast.error("Setup Error! Contact admin!",{autoClose:2500})
       else
       {
           toast.success(data.message,{autoClose:2500})
@@ -61,11 +61,11 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <div className="container">
+    <div className="container-fluid">
       <SideBar />
       <ToastContainer />
-    <div style={{marginLeft:"28%",marginTop:"8%"}}>
-          <h3 style={{marginLeft:"28%"}}>Configure PF, ESI, and Professional Tax </h3>
+    <div style={{marginLeft:"1%",marginTop:"8%"}}>
+          <h2 style={{marginLeft:"28%"}}>Configure PF, ESI, and Professional Tax </h2>
           <h6 style={{marginLeft:"28%"}}>These benefits and taxes are recommended by the government for your employees. Enable the components</h6>
           <h6 style={{marginLeft:"28%"}}>that are applicable to your organisation.</h6> <br/>
 
@@ -74,17 +74,17 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
           <h6 style={{marginLeft:"28%"}}>a retirement benefit plan for all salaried employees.</h6>  
 
           <div id="App2">
-          <div className="container1">
+          <div className="container1" style={{marginTop:"6%"}}>
 
-          <form > 
-            <div className="form-group col-md-4">
-        <label for="epfnum1">EPF Number</label>
+          <form> 
+            <div className="form-group col-md-8">
+        <label htmlFor="epfnum1">EPF Number</label>
         <input type="text" className="form-control" id="epfnum1" value= {epfnum} onChange={(e) => setEpfnum(e.target.value)} aria-describedby="emailHelp" placeholder="AA/AAA/0000000/000"/>
       </div>
       <br/>
 
-      <div className="form-group col-md-4">
-        <label for="ecr1">Employer Contribution Rate</label>
+      <div className="form-group col-md-6">
+        <label htmlFor="ecr1">Employer Contribution Rate</label>
         <select className="form-select"  value= {empcont1} onChange={(e) => setEmpcont1(e.target.value)}>
       <option value={'Percent'}>12% of Actual PF Wage</option>
       <option value={'Fixed'}>Restrict Contribution to ₹15,000 of PF Wage</option>
@@ -102,8 +102,8 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
 
     <br/> */}
 
-        <div className="form-group col-md-4">
-        <label for="dc1">Deduction Cycle</label>  <i className="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Provident Fund (PF) contributions for each month should be deposited to the Employee Provident Fund Organisation (EPFO) within the 15th of the following month"></i>
+        <div className="form-group col-md-8">
+        <label htmlFor="dc1">Deduction Cycle</label>  <i className="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Provident Fund (PF) contributions for each month should be deposited to the Employee Provident Fund Organisation (EPFO) within the 15th of the following month"></i>
         <input type="text" className="form-control" id="dc1" aria-describedby="emailHelp" value= {dc} onChange={(e) => setDc(e.target.value)} disabled/>
       </div>
       <br/>
@@ -132,14 +132,14 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
     <br/>
     <div className="form-check">
       <input className="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
-      <label className="form-check-label" for="defaultCheck1">
+      <label className="form-check-label" htmlFor="defaultCheck1">
       Include employer's contribution in the CTC
       </label>
     </div>
 
     <div className="form-check form-check-inline" >
       <input className="form-check-input" type="checkbox" value="" id="inlineCheckbox1"/>
-      <label className="form-check-label" for="inlineCheckbox1">
+      <label className="form-check-label" htmlFor="inlineCheckbox1">
         Override PF contribution rate at employee level
       </label>
     </div>
@@ -148,15 +148,15 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
     <br/>
     <div className="form-check">
       <input className="form-check-input" type="checkbox" value="" id="prorate1"/>
-      <label className="form-check-label" for="defaultCheck1">
+      <label className="form-check-label" htmlFor="defaultCheck1">
         <h6>Pro-rate Restricted PF wage</h6>
         PF contribution will be pro-rated based on the number of days worked by the employee.
       </label>
     </div>
     <br/>
     <div className="form-check">
-      <input className="form-check-input" type="checkbox" value="" id="lop1" checked/>
-      <label className="form-check-label" for="defaultCheck1">
+      <input className="form-check-input" type="checkbox" value="" id="lop1" defaultChecked/>
+      <label className="form-check-label" htmlFor="defaultCheck1">
         <h6>Consider all applicable PF components if PF wage is less than 15k after Loss of Pay</h6>
         PF wage will be computed using the salary earned in that particular month (based on LOP) rather than
         the actual amount mentioned in the salary structure.
@@ -235,7 +235,7 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
     <br/>
     <button type="submit" className="btn btn-link"> <i className="fa fa-check"> Enable</i></button>
     <button type="button" className="btn btn-link"> <i className="fa fa-times"> Cancel</i></button><br/><br/>
-    </form>
+    </form> <br/>
 
     <h3 style={{marginLeft:"1%"}}>Employees' State Insurance (ESI)</h3>
     <h6 style={{marginLeft:"1%"}}>Organisations having 10 or more employees must register for Employee State Insurance (ESI). This scheme</h6>
@@ -243,25 +243,25 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
     </div>
     </div>
 
-    <div className="App3">
+    <div className="App3" style={{marginTop:"-5%",marginLeft:"30%"}}>
     <div className="container1">
 
     <form >
-    <div className="form-group col-md-4">
-    <label for="esi2">ESI Number</label>
-    <input type="text" className="form-control"  value= {esinum} onChange={(e) => setEsinum(e.target.value)} id="esi2" aria-describedby="emailHelp" placeholder="00-00-000000-000-0000"/>
+    <div className="form-group col-md-8">
+    <label htmlFor="esi2">ESI Number</label>
+    <input type="text" className="form-control" onChange={(e) => setEsinum(e.target.value)} id="esi2" aria-describedby="emailHelp" placeholder="00-00-000000-000-0000"/>
     </div>
     <br/>
 
-    <div className="form-group col-md-4">
-        <label for="dc2">Deduction Cycle</label>  <i className="fa fa-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Provident Fund (PF) contributions for each month should be deposited to the Employee Provident Fund Organisation (EPFO) within the 15th of the following month"></i>
-        <input type="text" className="form-control"  value= {dc1} onChange={(e) => setDc1(e.target.value)} id="dc2" aria-describedby="emailHelp" value="Monthly" disabled/>
+    <div className="form-group col-md-8">
+        <label htmlFor="dc2">Deduction Cycle</label>  <i className="fa fa-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Provident Fund (PF) contributions for each month should be deposited to the Employee Provident Fund Organisation (EPFO) within the 15th of the following month"></i>
+        <input type="text" className="form-control" onChange={(e) => setDc1(e.target.value)} id="dc2" aria-describedby="emailHelp" value="Monthly" disabled/>
       </div>
       <br/>
 
       <div className="form-check">
       <input className="form-check-input" type="checkbox" value="" id="ec2"/>
-      <label className="form-check-label" for="defaultCheck1">
+      <label className="form-check-label" htmlFor="defaultCheck1">
         Include employer's contribution in the CTC
       </label>
     </div>
@@ -272,30 +272,30 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
     </form>
 
     </div>
-    </div><br/><br/>
+    </div>
 
-    <h3 style={{marginLeft:"30%"}}>Professional Tax (PT)</h3>
-    <h6 style={{marginLeft:"30%"}}>This tax is levied on an employee’s income by the State Government. Tax slabs differ in each state.</h6>
+    <h3 style={{marginLeft:"28%"}}>Professional Tax (PT)</h3>
+    <h6 style={{marginLeft:"28%"}}>This tax is levied on an employee’s income by the State Government. Tax slabs differ in each state.</h6>
     <br/>
-    <h6 style={{marginLeft:"30%"}}>Note: Professional Tax has been enabled for your organisation by default based on your organisation's location and you cannot display it.</h6>
+    <h6 style={{marginLeft:"28%"}}>Note: Professional Tax has been enabled for your organisation by default based on your organisation's location and you cannot display it.</h6>
     <br/>
 
-    <CardBody id="samplecalc1">
+    <CardBody id="samplecalc1" style={{marginTop:"-2%",marginLeft:"27%"}}>
       <form >
-        <div className="form-group col-md-4">
-        <label for="wl">Work Location</label>
+        <div className="form-group col-md-8">
+        <label htmlFor="wl">Work Location</label>
         <input type="text" className="form-control" id="wl" value= {worl} onChange={(e) => setWorl(e.target.value)} aria-describedby="emailHelp" value="Head Office (Andhra Pradesh)" disabled/>
       </div>
       <br/>
 
-      <div className="form-group col-md-4">
-        <label for="pt1">PT Number</label>
-        <input type="text" className="form-control" id="pt1" value= {ptnum} onChange={(e) => setPtnum(e.target.value)} aria-describedby="emailHelp" placeholder="Enter PT Number"/>
+      <div className="form-group col-md-8">
+        <label htmlFor="pt1">PT Number</label>
+        <input type="text" className="form-control" id="pt1" onChange={(e) => setPtnum(e.target.value)} aria-describedby="emailHelp" placeholder="Enter PT Number"/>
       </div>
       <br/>
 
-      <div className="form-group col-md-4">
-        <label for="dc3">Deduction Cycle</label>  <i className="fa fa-info" data-tip="Provident Fund (PF) contributions for each month should be deposited to the Employee Provident Fund Organisation (EPFO) within the 15th of the following month" data-for='toolTip1' data-place='top'></i>
+      <div className="form-group col-md-8">
+        <label htmlFor="dc3">Deduction Cycle</label>  <i className="fa fa-info" data-tip="Provident Fund (PF) contributions for each month should be deposited to the Employee Provident Fund Organisation (EPFO) within the 15th of the following month" data-for='toolTip1' data-place='top'></i>
         <input type="text" className="form-control" id="dc3" value= {dc2} onChange={(e) => setDc2(e.target.value)} aria-describedby="emailHelp" value="Monthly" disabled/>
       </div>
       <br/>
@@ -370,7 +370,7 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem(
 
 
     <br /><br />
-    <button className="btn btn-primary" onClick={()=>handleSubmit()}>Save & Continue</button>
+    <button className="btn btn-primary" style={{marginLeft:"28%"}} onClick={()=>handleSubmit()}>Save & Continue</button>
   </div>
   <br /><br /><br />
 </div>

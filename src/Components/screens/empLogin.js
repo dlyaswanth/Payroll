@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-lone-blocks */
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 import {Link} from 'react-router-dom'
@@ -9,7 +9,7 @@ import CryptoJS from 'crypto-js';
 export let value =false;
 function EmpLoginpage()
 {
-    let history = useHistory();
+    // let history = useHistory();
     const requestOptions = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -25,7 +25,7 @@ function EmpLoginpage()
           {
             var bytes = CryptoJS.AES.decrypt(data.password, 'my-secret-key@123');
             var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-            
+
             if(password === decryptedData){
               toast.success(data.message,{autoClose:2500})
               value=true;

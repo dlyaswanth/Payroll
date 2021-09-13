@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-lone-blocks */
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import {ToastContainer,toast} from 'react-toastify'; 
@@ -24,26 +24,26 @@ function Loginpage()
           if (data.password !== undefined ){
             var bytes = CryptoJS.AES.decrypt(data.password, 'my-secret-key@123');
             var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-          //log decrypted Data
-           console.log('decrypted Data -')
-            console.log(decryptedData);
-          if(password === decryptedData){
-            toast.success(data.message,{autoClose:2500})
-            value=true;
-            // history.push('/home')
-             window.open("/home","_self")
-            data.password=undefined;
-            localStorage.setItem('company',JSON.stringify(data))
-            localStorage.setItem('company_id',data._id);
+            // //log decrypted Data
+            // console.log('decrypted Data -')
+            //   console.log(decryptedData);
+
+            if(password === decryptedData){
+              toast.success(data.message,{autoClose:2500})
+              value=true;
+              window.open("/home","_self")
+              data.password=undefined;
+              localStorage.setItem('company',JSON.stringify(data))
+              localStorage.setItem('company_id',data._id);
+            }
+            else{
+              toast.error(data.error,{autoClose:2500})
+            }
           }
-          else{
-            toast.error(data.error,{autoClose:2500})
-          }
-        }
-        else
-        {
-          toast.error("Email Not Found",{autoClose:2500})
-        }   
+          else
+          {
+            toast.error("Email Not Found",{autoClose:2500})
+          }   
         });
         //console.log(name,password)
     }

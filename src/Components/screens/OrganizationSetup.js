@@ -60,8 +60,8 @@ class OrganizationSetup extends React.Component {
           .then(console.log(companyid))
           .then(response => response.json())
           .then(data=>{
-            if (!data)
-              toast.error("error",{autoClose:2500})
+            if (data.error)
+              toast.error("Setup error! Contact admin!",{autoClose:2500})
             else
             {
                 toast.success(data.message,{autoClose:2500})
@@ -73,13 +73,6 @@ class OrganizationSetup extends React.Component {
           //api integration
 
 
-        // fetch('', { //backend url
-        //   method: 'POST',
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify(this.state.fields)
-        //   }).then(() => {
-        //   console.log('organisation setup added');
-        // })
           let fields = {};
           fields["orgname"] = "";
           fields["address"] = "";
@@ -184,13 +177,13 @@ class OrganizationSetup extends React.Component {
 
                            <Form.Group as={Col} controlId="formGridLocation">
                            <Form.Label>Buisness Location</Form.Label>
-                           <Form.Control type="text" placeholder="Enter location" name="buisness" value="India" />
+                           <Form.Control type="text" placeholder="Enter location" name="buisness" defaultValue="India" />
                            </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridIndustry">
                             <Form.Label>Industry</Form.Label>
                                <Form.Select  name="industry" onChange={this.handleChange} placeholder="Select an Industry">
-                               <option selected>Select an industry type...</option>
+                               <option value='Select'>Select an industry type...</option>
                                    <option value="Agriculture">Agriculture</option>
                                    <option value="Aerospace">Aerospace</option>
                                    <option value="Art & Design">Art & Design</option>
@@ -237,8 +230,7 @@ class OrganizationSetup extends React.Component {
                             <Form.Group as={Col} controlId="formGridState">
                                 <Form.Label>State</Form.Label>
                                     <Form.Select  name="state"  onChange={this.handleChange}>
-                                    <div className="errorMsg">{this.state.errors.state}</div>  
-                                     <option selected>Select a state...</option>
+                                     <option value='Select'>Select a state...</option>
                                         <option value="Tamil Nadu">Tamil Nadu</option>
                                         <option value="Kerala">Kerala</option>
                                         <option value="Karnataka">Karnataka</option>

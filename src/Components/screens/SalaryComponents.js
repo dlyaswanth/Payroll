@@ -56,8 +56,8 @@ function SalaryComponents()
             .then(response => response.json())
             .then(data=>{
                 console.log(finalValues);
-                if (!data)
-                toast.error("ERROR",{autoClose:2500})
+                if (data.error)
+                    toast.error("Setup error! Contact admin!",{autoClose:2500})
                 else
                 {
                     toast.success(data.message,{autoClose:2500})
@@ -163,16 +163,17 @@ function SalaryComponents()
             {
                 options.map((items,index)=>{
                     return (
-                        <>
-                        <br />
-                            <div key={index} className="col-6 col-sm-4">
+                       
+                        <div key={index} className="row">
+                            <br/>
+                            <div className="col-6 col-sm-4">
                             <input type="checkbox" value={items["name"]} name={items["name"]}  style={{cursor:"pointer"}} onChange={()=>checkhandler(items)}/>
                             <span style={{color:"dodgerblue",cursor:"pointer"}}>&nbsp;{items["displayName"]}</span>
                             </div>
                             <div className="col-6 col-sm-4">{items["type"]}</div>
                             <div className="col-6 col-sm-4">{items["payType"]}</div>
                             <div className="w-100 d-none d-md-block"></div>
-                        </>
+                        </div>
                     )
                 })
             }

@@ -34,7 +34,7 @@ import { Link } from "react-router-dom";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import LocalAtmIcon from "@material-ui/icons/LocalAtm";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-import ClearIcon from "@material-ui/icons/Clear";
+// import ClearIcon from "@material-ui/icons/Clear";
 
 function UserNavbar() {
   function openNav() {
@@ -70,7 +70,7 @@ function UserNavbar() {
               color: "white",
             }}
           >
-            <ClearIcon />
+          <i className="fas fa-bars"></i>
           </button>
         </h1>
 

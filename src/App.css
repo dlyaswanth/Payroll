@@ -65,9 +65,10 @@
 }
 .card 
 {
-  background-color: #f1f1f1;
-  border-radius: 20px;
+background-color: #f1f1f1;
+/* border-radius: 20px; */
 background: #f1f1f1;
+margin-bottom: 25px;
 box-shadow:  20px 20px 60px #cdcdcd,
              -20px -20px 60px #ffffff;
 }
@@ -128,7 +129,7 @@ box-shadow:  20px 20px 60px #cdcdcd,
   }
   .container1
   {
-  background-color:white;
+  background-color:whitesmoke;
   }
   #App2
   {
@@ -194,10 +195,7 @@ margin-right:400px;
 }
 th
 {
-height:70px;
-}
-th{
-  text-align:right;
+height:40px;
 }
 #enable
 {
@@ -372,4 +370,9 @@ input
 .logincard 
 {
   margin-left: 50px;
+}
+.searchinput
+{
+  width:80% !important;
+  margin-left: 100% !important;
 }

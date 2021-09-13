@@ -1,27 +1,24 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import AdminNavbar from "./AdminNavbar";
 import Logout from "../screens/Logout";
 import {ToastContainer,toast} from 'react-toastify'; 
 import CryptoJS from "crypto-js";
 import 'react-toastify/dist/ReactToastify.css';
 import { Form,Row,Col } from 'react-bootstrap';
-import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import {useHistory} from 'react-router-dom'
 
 import Modal from "react-bootstrap/Modal";
 let weekDay = [
-  { day: 'Monday', Check: false },
-  { day: 'Tuesday', Check: false },
-  { day: 'Wednesday', Check: false },
-  { day: 'Thursday', Check: false },
-  { day: 'Friday', Check: false },
-  { day: 'Saturday', Check: false },
-  { day: 'Sunday', Check: false }
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
 ];
+
+let weekDayArray = [  ];
 function AdminHeader() {
   
   const [oldPassword,setOldPassword]=useState('')
@@ -33,8 +30,8 @@ function AdminHeader() {
   const [employee, setEmployee] = useState([]);
   const [search, setSearch] = useState("");
   //oragnization profile
-     const[orgname,setOrgName]=useState('')
-      const[bussiness]=useState('India')
+     const[orgName,setOrgName]=useState('')
+      const[bussiness,setBussiness]=useState('India')
       const[industry,setIndustry]=useState('')
       const[address,setAddress]=useState('')
       const[city,setCity]=useState('')
@@ -42,107 +39,111 @@ function AdminHeader() {
       const[pincode,setPincode]=useState('')
       const[error,setError]=useState({})
 
-
+      const[workHours,setWorkHours]=useState(0)
+      const[payDate,setPayDate]=useState('')
+      const[payDateFrom,setPayDateFrom]=useState('')
+ 
       //payschedule data
 
-      const refer = useRef();
-      let history=useHistory();
       const {
         register,
-        handleSubmit,
         formState: { errors }
       } = useForm();
     
-      let setDate = '';
-      const onSubmit = data => {
-        let weekDays = [];
-        const updatedDay = weekDay.filter((day) => {
-          if (day.Check === true) weekDays.push(day.day);
-          console.log()
-        });
-        data.day = weekDays;
+
+      //-->payschedule
+  /////////////////////////////////////////////////////////////////////
+      var currPassword="";
+
+      function updateForm (e){
+
+        e.preventDefault();
+
+        console.log(workHours,payDate,payDateFrom,weekDayArray)
         if (
-          data.hoursWork === '' ||
-          data.payDate === '' ||
-          data.payDateFrom === ''
+          workHours === '' ||
+          payDate === '' ||
+          payDateFrom === ''
         ) {
-          alert('Fill all the Details');
+          toast.error('Fill all the Details',{autoClose:2000});
           return;
         }
-        const updateDate = data.payDate
+        const updateDate = payDate
           .split('-')
           .reverse()
           .join('-');
-        data.payDate = updateDate;
-        const updateDateFrom = data.payDateFrom
+        const updateDateFrom = payDateFrom
           .split('-')
           .reverse()
           .join('-');
-        data.payDateFrom = updateDateFrom;
-        setDate = data.payDateFrom;
-        console.log(data);
         
-        const update = () => {
-          return <h4>Submitted</h4>;
-        };
-    
-    
-        //api integration
+        console.log(workHours,updateDate,updateDateFrom,weekDayArray)
         const requestOptions = {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
-                  payDate : data.payDate,
-                  payRollStartFrom :data.payDateFrom,
-                  workdays : data.day,
-                  workHours: data.hoursWork
+                  payDate : updateDate,
+                  payRollStartFrom : updateDateFrom,
+                  workdays : weekDayArray,
+                  workHours: workHours
           })
-      };
-      fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
-          .then(console.log(localStorage.getItem('company_id')))
-          .then(response => response.json())
-          .then (data => {
-            console.log(data)
-            if (!data)
-            toast.error("ERROR",{autoClose:2500})
-            else
-            {
-                toast.success(data.message,{autoClose:2500})
-                window.open("/statutory","_self")
-                // history.push('/statutory')
-            }
-          })
-        //api integration
-    
+          };
+          fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+              .then(response => response.json())
+              .then (data => {
+                if (data.error){
+                  toast.error(data.error,{autoClose:2500})
+                }
+                else
+                {
+                    toast.success(data.message,{autoClose:2500})
+                    
+                }
+              })
         
-        update();
-        return data;
-      };
-
-      //-->payschedule
-  
-      var currPassword="";
-      function searchEmp()
-      {
-        const requestOptions1 = {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        };
     
-        fetch(
-          "https://payroll-fastify.herokuapp.com/api/companyEmployee/" +
-            localStorage.getItem("company_id"),
-          requestOptions1
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            setData(data.employee);
-            console.log("searchemployee", data.employee);
-          });
       }
+
+      function checkWeekDay(e){
+        
+        
+        if (weekDayArray.includes(e.target.value)) {
+          var index= weekDayArray.indexOf(e.target.value)
+          weekDayArray.splice(index, 1)
+          console.log("deleted");
+          console.log(weekDayArray);
+          return;
+        }
+        weekDayArray.push(e.target.value);
+        console.log(weekDayArray);
+
+
+        
+      }
+
+///////////////////////////////////////////////////////////////////////////
+
+
   useEffect(() => {
     // Update the document title using the browser API
-      searchEmp()
+    const requestOptions1 = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    fetch(
+      "https://payroll-fastify.herokuapp.com/api/companyEmployee/" +
+        localStorage.getItem("company_id"),
+      requestOptions1
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if(!data.error){
+          setData(data.employee);
+          console.log("searchemployee", data.employee);
+        }
+      });
+
       const requestOptions2 = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -151,15 +152,30 @@ function AdminHeader() {
         fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("company_id"), requestOptions2)
         .then(response => response.json())
         .then(data => {
+          if(!data.error){
             setCompDetails(data);
-            
+            setOrgName(data.company)
+            setBussiness(data.location)
+            setIndustry(data.companyType)
+            var splitAddress=data.address.split(',');
+            setPincode(splitAddress.pop());
+            setState(splitAddress.pop());
+            setCity(splitAddress.pop());
+            setAddress(splitAddress.join(","));
+            setWorkHours(data.workHours);
+            var dateFromDb = data.payDate.split('-')
+            setPayDate(dateFromDb.reverse().join('-'));
+            dateFromDb = data.payRollStartFrom.split('-')
+            setPayDateFrom(dateFromDb.reverse().join('-')) 
+          }
+          
         })
   }, []);
 
   const handleClose = () => {
     setShow(false);
   };
-  const handleShow = () => {setShow(true);searchEmp()};
+  const handleShow = () => setShow(true);
   // function Search(emp_name) {
   //   console.log("namw", emp_name);
   // }
@@ -219,7 +235,9 @@ function AdminHeader() {
             fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("company_id"), requestOptions)
             .then(response => response.json())
             .then(data => {
-                return data
+                if(!data.error){
+                  return data
+                }
             })
       }
 
@@ -315,6 +333,7 @@ function AdminHeader() {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ 
+                      company : orgName,
                       location : bussiness,
                       address :address+","+city+","+state+","+pincode,
                       companyType : industry
@@ -324,12 +343,13 @@ function AdminHeader() {
               .then(console.log(companyid))
               .then(response => response.json())
               .then(data=>{
-                if (!data)
-                  toast.error("error",{autoClose:2500})
+                if (data.error)
+                  toast.error(data.error,{autoClose:2500})
                 else
                 {
+                    localStorage.setItem('company',JSON.stringify(data.updatedCompany))
                     toast.success(data.message,{autoClose:2500})
-                    window.open("/taxinfo","_self")
+                   
                     // history.push('/taxinfo');
                 }
             })
@@ -345,7 +365,7 @@ function AdminHeader() {
             //   console.log('organisation setup added');
             // })
               // let fields = {};
-              // fields["orgname"] = "";
+              // fields["orgName"] = "";
               // fields["address"] = "";
               // fields["city"] = "";
               // fields["pincode"] = "";
@@ -365,14 +385,14 @@ function AdminHeader() {
         let errors = {};
         let formIsValid = true;
   
-        if (!orgname) {
+        if (!orgName) {
           formIsValid = false;
-          errors["orgname"] = "*Please enter your location.";
+          errors["orgName"] = "*Please enter your location.";
         }
-        if (orgname !== "undefined") {
-          if (!orgname.match(/^[a-zA-Z ]*$/)) {
+        if (orgName !== "undefined") {
+          if (!orgName.match(/^[a-zA-Z ]*$/)) {
             formIsValid = false;
-            errors["orgname"] = "*Please enter alphabet characters only.";
+            errors["orgName"] = "*Please enter alphabet characters only.";
           }
         }
   
@@ -426,9 +446,9 @@ function AdminHeader() {
     if (employee.length) {
       return (
         <div>
-          {employee.map((result) => {
+          {employee.map((result,index) => {
             return (
-              <div style={{ flexDirection: "column" }}>
+              <div key={index} style={{ flexDirection: "column" }}>
                 <h6>
                   <b>Employee Name</b>:&nbsp;{result.employeeName} &nbsp;{" "}
                   <b>Work Mail</b>:&nbsp;
@@ -453,7 +473,7 @@ function AdminHeader() {
             className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#navbarNavDropdown"
+            data-bs-target="#navbarNavDropdown10"
             aria-controls="navbarNavDropdown"
             aria-expanded="false"
             aria-label="Toggle navigation"
@@ -462,29 +482,31 @@ function AdminHeader() {
           </button>
 
           <div
-            className="collapse right navbar-collapse d-flex justify-content-end"
-            id="navbarNavDropdown"
+            className="collapse navbar-collapse"
+            id="navbarNavDropdown10"
           >
-            <ul className="navbar-nav">
+            <ul className="navbar-nav " width="100%">
               <li>
-                <button
-                  className="btn btn-outline-success"placeholder="Search Employee"
+                <input
+                  className="form-control me-2"
+                  type="search"
+                  placeholder="Search"
                   //aria-label="Search"
                   // className="btn-close"
                   // data-bs-dismiss="modal"
                   onClick={() => handleShow()}
                   // onChange={() => handleShow()}
-                >Search Employee</button>
+                />
               </li>
-              <li>
-                {/* &nbsp;
+              {/* <li>
+                 &nbsp;
                 <button
                   className="btn btn-outline-success"
                   onClick={() => Search(name)}
                 >
                   Search
-                </button> */}
-              </li>
+                </button>
+              </li> */}
               <li className="company_name me-2 ">
               
               <img alt=""
@@ -503,10 +525,8 @@ function AdminHeader() {
                     Settings
                   </button>
                   <ul className="dropdown-menu">
-                    <li className="settings">
                     <li data-bs-toggle="modal" data-bs-target="#organizationprofile" className="dropdown-item settings" style={{cursor:"pointer"}}>
                       Organization Profile
-                    </li>
                     </li>
                     
                     <li className="settings">
@@ -515,20 +535,13 @@ function AdminHeader() {
                     <li data-bs-toggle="modal" data-bs-target="#updatepassword" className="dropdown-item settings" style={{cursor:"pointer"}}>
                       Update Password
                     </li>
-                    <hr />
-                    <li>
-                      <Link className="dropdown-item settings" to="/">
-                        Work Location
-                      </Link>
-                    </li>
-                    <li>
+                    <li className="settings">
                       <hr />
                     </li>
-                    <li className="settings">
                     <li data-bs-toggle="modal" data-bs-target="#payschedule" className="dropdown-item settings" style={{cursor:"pointer"}}>
                       Pay Schedule
                     </li>
-                    </li>
+                    
                   </ul>
                 </div>
               </li>
@@ -541,25 +554,24 @@ function AdminHeader() {
       </nav>
       <Modal size="lg" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title style={{width:"100%"}}>
+          <Modal.Title>
             <input
-              className="form-control me-2"
+              className="form-control searchinput"
               type="search"
-              placeholder="Search Employee"
+              placeholder="Search"
               aria-label="Search"
               // className="btn-close"
               // data-bs-dismiss="modal"
               onChange={(event) => searchFilterFunction(event.target.value)}
               //onClear={(event) => searchFilterFunction("")}
-              onClear={(text) => searchFilterFunction("")}
+              // onClear={(text) => searchFilterFunction("")}
               value={search}
-              style={{marginLeft:"25%",width:"50%",marginRight:"25%"}}
             />
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>{renderSearchResults()}</Modal.Body>
         <Modal.Footer>
-          <button className="btn btn-secondary" onClick={handleClose}>
+          <button variant="secondary" className="btn btn-secondary" onClick={handleClose}>
             Close
           </button>
         </Modal.Footer>
@@ -656,28 +668,28 @@ function AdminHeader() {
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">Organization Profile</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>reset()}></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                     </div>
                     {/* update password */}
                     <div className="container-fluid">
-                        <Form method="post"  name="organisationSetupForm"  onSubmit= {submitorganisationSetupForm}>
+                          <Form method="post"  name="organisationSetupForm"  onSubmit= {submitorganisationSetupForm}>
                             <Form.Group className="mb-3" controlId="formOrgname">
                                 <Form.Label>Organisation Name</Form.Label>
-                                <Form.Control type="text" placeholder="Enter organisation name" name="orgname"  value={orgname} onChange={(e)=>setOrgName(e.target.value)}  />
-                                <div className="errorMsg">{error.orgname}</div>
+                                <Form.Control type="text" placeholder="Enter organisation name" name="orgName"  value={orgName} onChange={(e)=>setOrgName(e.target.value)}  />
+                                <div className="errorMsg">{error.orgName}</div>
                             </Form.Group>
               
                           <Row className="mb-3">
 
                               <Form.Group as={Col} controlId="formGridLocation">
                               <Form.Label>Buisness Location</Form.Label>
-                              <Form.Control type="text" placeholder="Enter location" name="buisness" value="India" />
+                              <Form.Control type="text" placeholder="Enter location" name="buisness" value="India" onChange={(e)=>setBussiness(e.target.value)} />
                               </Form.Group>
 
                                 <Form.Group as={Col} controlId="formGridIndustry">
                                 <Form.Label>Industry</Form.Label>
                                   <Form.Select  name="industry" value={industry} onChange={(e)=>setIndustry(e.target.value)} placeholder="Select an Industry">
-                                  <option selected>Select an industry type...</option>
+                                  <option value="selected">Select an industry type...</option>
                                       <option value="Agriculture">Agriculture</option>
                                       <option value="Aerospace">Aerospace</option>
                                       <option value="Art & Design">Art & Design</option>
@@ -724,8 +736,7 @@ function AdminHeader() {
                                 <Form.Group as={Col} controlId="formGridState">
                                     <Form.Label>State</Form.Label>
                                         <Form.Select  name="state"  value={state} onChange={(e)=>setState(e.target.value)}>
-                                        <div className="errorMsg">{error.state}</div>  
-                                        <option selected>Select a state...</option>
+                                        <option value="selected">Select a state...</option>
                                             <option value="Tamil Nadu">Tamil Nadu</option>
                                             <option value="Kerala">Kerala</option>
                                             <option value="Karnataka">Karnataka</option>
@@ -742,8 +753,8 @@ function AdminHeader() {
                                 </Form.Group>
                             </Row>     
                             <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={()=>reset()}>Close</button>
-                            <button type="submit" className="btn btn-primary"  >Update</button>
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+                            <button type="submit" className="btn btn-primary"  data-bs-dismiss="modal" >Update</button>
                         </div>
                         </Form>
                     </div>
@@ -761,35 +772,39 @@ function AdminHeader() {
                     {/* update password */}
                     <form
                       className="form-group m-1 p-2 px-6"
-                      onSubmit={handleSubmit(onSubmit)}
+                      onSubmit={updateForm}
                     >
                       
                       <label className="mt-4 mb-2" htmlFor="workWeek">
                         Select Work Week <span className="text-danger ">*</span>
                       </label>
+                      
                       {weekDay.map((day, i) => {
-                        return (
-                          <>
-                            <br />
-                            <input
-                              className="form-check-input"
-                              key={day.day}
-                              type="checkbox"
-                              htmlFor="day"
-                              onChange={() => {
-                                weekDay[i].Check = !weekDay[i].Check;
-                              }}
-                              name={{ day }}
-                              value={{ day }}
-                            />
-                            <label className="form-check-label" for="day">
-                              {' '}
-                              &nbsp; {day.day}
-                            </label>
-                          </>
-                        );
+                        
+                          return (
+                            <div key={i} className="d-flex">
+                              <br />
+                              <input
+                                className="form-check-input"
+                                
+                                type="checkbox"
+                                
+                                htmlFor="day"
+                                onChange={
+                                  (e) => checkWeekDay(e)
+                              }
+                                name={ day }
+                                value={ day }
+                              />
+                              <label className="form-check-label" htmlFor="day">
+                                {' '}
+                                &nbsp; {day}
+                              </label>
+                            </div>
+                          );
+                        
+                        
                       })}
-                      <br />
                       <br />
                       <label htmlFor="hoursWork">
                         Working Hours <span className="text-danger ">*</span>{' '}
@@ -800,6 +815,8 @@ function AdminHeader() {
                         type="hours"
                         placeholder="Enter Week Hours"
                         name="hoursWork"
+                        value = {workHours}
+                        onChange={ (e) => setWorkHours(e.target.value) }
                       />
                       {errors.hoursWork && (
                         <p className="text-danger">*Working Hours is required.</p>
@@ -813,6 +830,8 @@ function AdminHeader() {
                         {...register('payDate', { required: true })}
                         type="date"
                         name="payDate"
+                        value = {payDate}
+                        onChange={ (e) => setPayDate(e.target.value) }
                       />
                       {errors.payDate && <p className="text-danger">*Pay Date is required.</p>}
                       <br />
@@ -824,27 +843,17 @@ function AdminHeader() {
                         {...register('payDateFrom', { required: true })}
                         type="date"
                         name="payDateFrom"
+                        value = {payDateFrom}
+                        onChange={ (e) => setPayDateFrom(e.target.value) }
                       />
                       {errors.payDateFrom && (
                         <p className="text-danger">*Pay Date From is required.</p>
                       )}
                       <br />
-                      {/* <span className="bg-secondary text-light p-1 rounded ">
-                        Salary for the month of {setDate}
-                      </span> */}
-                      {/* <br />
-                      <br /> */}
-                      {/* <button
-                        className="form-control btn btn2 btn-primary"
-                        type="submit"
-                        value="Save & Continue →"
-                      >
-                        Save & Continue →
-                      </button> */}
 
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={()=>reset()}>Close</button>
-                            <button type="submit" className="btn btn-primary"  >Update</button>
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" >Update</button>
                         </div>
                     </form>
                     

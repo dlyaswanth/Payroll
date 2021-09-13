@@ -23,8 +23,10 @@ export default function AnnualEarnings() {
     fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("emp_company_id"), requestOptions1)
         .then(response => response.json())
         .then(data => {
-           setEarnings(data.earningsDocArray);
-           })
+          if(!data.error){
+            setEarnings(data.earningsDocArray);
+          }
+        })
     },[])
 
     function calculteEarning(){

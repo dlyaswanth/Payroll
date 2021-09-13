@@ -21,7 +21,7 @@ import EmpLoginpage from './Components/screens/empLogin';
 import UserHome from './Components/screens/UserHome'
 import UserSalary from './Components/screens/UserSalary';
 import {value} from './Components/screens/Login'
-// import Coursecard from './Components/Coursecard';
+
 function App() {
   // const [state,setState]=useState(false)
   function renderList()

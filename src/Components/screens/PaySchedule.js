@@ -75,8 +75,8 @@ export default function PaySchedule() {
       .then(response => response.json())
       .then (data => {
         console.log(data)
-        if (!data)
-        toast.error("ERROR",{autoClose:2500})
+        if (data.error)
+          toast.error("Setup Error! Contact admin!",{autoClose:2500})
         else
         {
             toast.success(data.message,{autoClose:2500})
@@ -112,11 +112,10 @@ export default function PaySchedule() {
         </label>
         {weekDay.map((day, i) => {
           return (
-            <>
-              <br />
+            <div key={day.day}>
               <input
                 className="form-check-input"
-                key={day.day}
+                
                 type="checkbox"
                 htmlFor="day"
                 onChange={() => {
@@ -125,11 +124,11 @@ export default function PaySchedule() {
                 name={{ day }}
                 value={{ day }}
               />
-              <label className="form-check-label" for="day">
+              <label className="form-check-label" htmlFor="day">
                 {' '}
                 &nbsp; {day.day}
               </label>
-            </>
+            </div>
           );
         })}
         <br />

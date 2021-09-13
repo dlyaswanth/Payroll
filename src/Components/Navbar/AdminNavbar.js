@@ -7,7 +7,7 @@ import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 import PaymentIcon from "@material-ui/icons/Payment";
 import InsertChartOutlinedOutlinedIcon from "@material-ui/icons/InsertChartOutlinedOutlined";
-import ClearIcon from "@material-ui/icons/Clear";
+// import ClearIcon from "@material-ui/icons/Clear";
 
 
 function AdminNavbar() {
@@ -44,7 +44,7 @@ function AdminNavbar() {
               color: "white",
             }}
           >
-            <ClearIcon />
+           <i className="fas fa-bars"></i>
           </button>
         </h1>
 

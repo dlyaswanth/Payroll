@@ -19,8 +19,10 @@ function AdminHome()
             fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("company_id"), requestOptions)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                setCompanyDetails(data);
+                if(!data.error){
+                    console.log(data);
+                    setCompanyDetails(data);
+                }
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
@@ -50,7 +52,7 @@ function AdminHome()
                                         <div className="col-6 col-sm-3"><b>Payment Date</b></div>
                                         <div className="col-6 col-sm-3"><b>No of Employees</b></div>
                                         <div className="w-100 d-none d-md-block"></div>
-                                        <div className="col-6 col-sm-3 top">₹ {companyDetails["employeeNetPay"]}</div>
+                                        <div className="col-6 col-sm-3 top">₹ {Number(companyDetails["employeeNetPay"])}</div>
                                         <div className="col-6 col-sm-3 top">{companyDetails["payDate"]}</div>
                                         <div className="col-6 col-sm-3 top">{companyDetails["employeeCount"]}</div>
                                         <button className="btn btn-primary view"><Link to="/employee" className="text-white" style={{textDecoration:"none"}}>View Details</Link></button>
