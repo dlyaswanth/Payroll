@@ -20,12 +20,13 @@ import EmployeeReimbursements from './Components/screens/EmployeeReimbursements'
 import EmpLoginpage from './Components/screens/empLogin';
 import UserHome from './Components/screens/UserHome'
 import UserSalary from './Components/screens/UserSalary';
+import {value} from './Components/screens/Login'
 // import Coursecard from './Components/Coursecard';
 function App() {
   // const [state,setState]=useState(false)
   function renderList()
   {
-    if (localStorage.getItem('company_id'))
+    if (localStorage.getItem('company_id') || value === true)
     {
       // setState(true)
       return (
@@ -48,7 +49,7 @@ function App() {
         </div>
       )
     }
-    else if(localStorage.getItem('employee_id')){
+    else if(localStorage.getItem('employee_id') || value === true ){
       return(
         <div>
           <Route path="/emphome"><UserHome /></Route>

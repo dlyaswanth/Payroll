@@ -7,8 +7,8 @@ import Loader from './Loader';
 function AdminReimbursements()
 {
     const [appliedReimbursment,setAppliedReimbursment]= useState([])
-    
-
+    const [records,setRecords]=useState('')
+    const[hidden,setHidden]=useState(false)
     
     useEffect(  ()=>{
         //getting company's applied reimbursment
@@ -164,7 +164,13 @@ function AdminReimbursements()
             {
                 appliedReimbursment.length === 0 
                 ?
-                <Loader />
+                <div>
+                <div hidden={hidden}>
+                    <Loader/>
+                </div>
+                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},8000)}</div>
+                <div className="text-center" style={{marginTop:"40px"}}><b>{records}</b></div>
+                </div>
                 :
                 appliedReimbursment.map(item=>{
                     return(

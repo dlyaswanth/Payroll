@@ -1,3 +1,4 @@
+/* eslint-disable no-sequences */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState,useEffect } from 'react';
@@ -20,13 +21,13 @@ function AdminEmployee()
     const [mail,setMail]=useState('')
     //values for updating employees
     const [updatename,setupdateName]=useState('')
-
     const [updateaddress,setupdateAddress]=useState('')
     const [updatebasicPay,setupdateBasicPay]=useState('')
     const [updaterole,setupdateRole]=useState('')
     const [updatepassword,setupdatePassword]=useState('')
     const [updatemail,setupdateMail]=useState('')
-    
+    const [records,setRecords]=useState('')
+    const[hidden,setHidden]=useState(false)
     const [earnings,setEarnings] = useState(0)
     const headers = [
         { label: "Employee Name", key: "employeeName" },
@@ -325,7 +326,13 @@ function AdminEmployee()
             {
                 empDetails.length === 0
                 ?
-                <Loader />
+                <div>
+                    <div hidden={hidden}>
+                        <Loader/>
+                    </div>
+                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},8000)}</div>
+                <div className="text-center" style={{marginTop:"40px"}}><b>{records}</b></div>
+                </div>
                 :
                 empDetails.map(items=>{
                     return (

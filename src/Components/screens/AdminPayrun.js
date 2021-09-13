@@ -10,7 +10,8 @@ function AdminPayrun()
     
     const [empDetails,setEmpDetails] = useState([])
     const [benefits,setBenefits] = useState(0)
-
+    const [records,setRecords]=useState('')
+    const[hidden,setHidden]=useState(false)
     const headers = [
         { label: "Employee Name", key: "employeeName" },
         { label: "Paid Days", key: "days" },
@@ -245,7 +246,13 @@ function AdminPayrun()
                 {
                    empDetails.length === 0
                    ?
-                   <Loader/>
+                   <div>
+                        <div hidden={hidden}>
+                            <Loader/>
+                        </div>
+                        <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},8000)}</div>
+                        <div className="text-center" style={{marginTop:"40px"}}><b>{records}</b></div>
+                    </div>
                    :
                    empDetails.map((item,index) =>{
                     //getReimbursment(item._id)

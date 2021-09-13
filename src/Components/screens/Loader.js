@@ -1,6 +1,5 @@
 import React  from 'react';
 const Loader = () => {
-  
     return (
          <div className="container10" style={{marginTop:"50px"}}>
             <div className="box10">

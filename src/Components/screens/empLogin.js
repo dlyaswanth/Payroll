@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-lone-blocks */
 import React, { useState } from "react";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {ToastContainer,toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 import {Link} from 'react-router-dom'
@@ -8,7 +9,7 @@ import CryptoJS from 'crypto-js';
 export let value =false;
 function EmpLoginpage()
 {
-    // let history = useHistory();
+    let history = useHistory();
     const requestOptions = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -20,23 +21,24 @@ function EmpLoginpage()
         fetch('https://payroll-fastify.herokuapp.com/api/employeeEmail/'+name, requestOptions)
         .then(response => response.json())
         .then(data => {
-          if (data)
+          if (data.password !== undefined)
           {
-              var bytes = CryptoJS.AES.decrypt(data.password, 'my-secret-key@123');
-              var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-
-              if(password === decryptedData){
-                toast.success(data.message,{autoClose:2500})
-                value=true;
-                window.open("/emphome","_self")
-                data.password=undefined;
-                localStorage.setItem('employee',JSON.stringify(data));
-                localStorage.setItem('employee_id',data._id);
-                localStorage.setItem('emp_company_id',data.companyId);
-              }
-              else{
-                toast.error(data.error,{autoClose:2500})
-              }
+            var bytes = CryptoJS.AES.decrypt(data.password, 'my-secret-key@123');
+            var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+            
+            if(password === decryptedData){
+              toast.success(data.message,{autoClose:2500})
+              value=true;
+              //history.push('/emphome')
+              window.open("/emphome","_self")
+              data.password=undefined;
+              localStorage.setItem('employee',JSON.stringify(data));
+              localStorage.setItem('employee_id',data._id);
+              localStorage.setItem('emp_company_id',data.companyId);
+            }
+            else{
+              toast.error(data.error,{autoClose:2500})
+            }
           }
           else
           {
@@ -46,7 +48,7 @@ function EmpLoginpage()
         //console.log(name,password)
     }
     return (
-        <div className="d-flex justify-content-center align-items-center login" style={{height:"500px"}}>
+        <div className="d-flex justify-content-center align-items-center login" style={{height:"600px"}}>
             <ToastContainer />
             <div className="container text-center row border border-secondary p-5 mt-5 logininnercard" style={{width:"30%",height:"80%"}}>
               <h1 className="col-12 mb-4">Employee Login</h1>

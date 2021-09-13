@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 //import { makeStyles } from "@material-ui/core";
 import "../../App.css";
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     padding: theme.spacing(9),
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
     width: "100 * 2",
     height: "100",
     "& .MuiTextField-root": {
@@ -83,8 +84,8 @@ const SignUpForm = () => {
   const [location, setLocation] = useState("");
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState(" ");
-  const [ setIsValid] = useState(false);
-  const [setIsloading] = useState(false);
+  const [isValid,setIsValid] = useState(false);
+  const [loading,setIsloading] = useState(false);
   const checkboxHandler = () => {
     // if agree === true, it will be set to false
     // if agree === false, it will be set to true

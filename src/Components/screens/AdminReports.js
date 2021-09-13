@@ -6,6 +6,8 @@ function AdminReports()
 {
 
     const [logs,setlogs]=useState([])
+    const [records,setRecords]=useState('')
+    const[hidden,setHidden]=useState(false)
     const headers=[
         { label: "Name", key: "name" },
         { label: "Email", key: "email" },
@@ -92,7 +94,13 @@ function AdminReports()
             {
                 logs.length === 0
                 ?
-                <Loader />
+                <div>
+                <div hidden={hidden}>
+                    <Loader/>
+                </div>
+                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},8000)}</div>
+                <div className="text-center" style={{marginTop:"40px"}}><b>{records}</b></div>
+            </div>
                 :
                 logs.map((item,index)=>{
                     return (

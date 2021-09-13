@@ -14,6 +14,8 @@ function EmployeeReimbursements()
     const [amount,setAmount]= useState();
     const [selectedReimbursment,setSelectedReimbursment]= useState({})
     const [appliedReimbursment,setAppliedReimbursment]= useState([])
+    const [records,setRecords]=useState('')
+    const[hidden,setHidden]=useState(false)
     useEffect( ()=>{
         // getting company reimbursment list
         const requestOptions1 = {
@@ -279,7 +281,13 @@ function EmployeeReimbursements()
             {
                 appliedReimbursment.length === 0
                 ?
-                <Loader />
+                <div>
+                <div hidden={hidden}>
+                    <Loader/>
+                </div>
+                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},8000)}</div>
+                <div className="text-center" style={{marginTop:"40px"}}><b>{records}</b></div>
+            </div>
                 :
                 appliedReimbursment.map(item=>{
                         // var Flag;
