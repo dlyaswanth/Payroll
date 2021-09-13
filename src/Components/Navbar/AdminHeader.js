@@ -122,26 +122,27 @@ function AdminHeader() {
       //-->payschedule
   
       var currPassword="";
-
-
+      function searchEmp()
+      {
+        const requestOptions1 = {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        };
+    
+        fetch(
+          "https://payroll-fastify.herokuapp.com/api/companyEmployee/" +
+            localStorage.getItem("company_id"),
+          requestOptions1
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setData(data.employee);
+            console.log("searchemployee", data.employee);
+          });
+      }
   useEffect(() => {
     // Update the document title using the browser API
-    const requestOptions1 = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    fetch(
-      "https://payroll-fastify.herokuapp.com/api/companyEmployee/" +
-        localStorage.getItem("company_id"),
-      requestOptions1
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data.employee);
-        console.log("searchemployee", data.employee);
-      });
-
+      searchEmp()
       const requestOptions2 = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -158,7 +159,7 @@ function AdminHeader() {
   const handleClose = () => {
     setShow(false);
   };
-  const handleShow = () => setShow(true);
+  const handleShow = () => {setShow(true);searchEmp()};
   // function Search(emp_name) {
   //   console.log("namw", emp_name);
   // }
