@@ -26,7 +26,7 @@ function AdminReports()
             headers: { 'Content-Type': 'application/json' },
         };
         
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("company_id"), requestOptions)
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem("company_id"), requestOptions)
             .then(response => response.json())
             .then(data => {
                 // setlogs(data.logArray);
@@ -92,7 +92,7 @@ function AdminReports()
                 <div hidden={hidden}>
                     <Loader/>
                 </div>
-                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},8000)}</div>
+                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},2000)}</div>
                 <div className="text-center" style={{marginTop:"40px"}}><b>{records}</b></div>
                 </div>
                 :

@@ -5,7 +5,7 @@ function Logout() {
   // let history = useHistory();
 
   function logout() {
-    localStorage.clear();
+    sessionStorage.clear();
     window.open("/login", "_self");
     // history.push("/login");
   }

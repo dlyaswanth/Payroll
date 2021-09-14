@@ -33,7 +33,7 @@ function AdminPayrun()
                 headers: { 'Content-Type': 'application/json' },
             };
                 
-            await fetch('https://payroll-fastify.herokuapp.com/api/companyEmployee/'+localStorage.getItem("company_id"), requestOptions)
+            await fetch('https://payroll-fastify.herokuapp.com/api/companyEmployee/'+sessionStorage.getItem("company_id"), requestOptions)
             .then(response => response.json())
             .then(data => {
                 if(!data.error){
@@ -43,7 +43,7 @@ function AdminPayrun()
                 }
             })
 
-            calculateEarnings(JSON.parse(localStorage.getItem('company')).earningsDocArray);
+            calculateEarnings(JSON.parse(sessionStorage.getItem('company')).earningsDocArray);
     
         }
         
@@ -76,7 +76,7 @@ function AdminPayrun()
     //adding to log array
     function addLog(message){
     
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
         .then(response => response.json())
         .then(data =>{
             if(!data.error){
@@ -91,7 +91,7 @@ function AdminPayrun()
                     })
                 };
                 
-                fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+                fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), requestOptions)
                 .then(response => response.json())
                 .then(res=>{
                     console.log(res);
@@ -114,7 +114,7 @@ function AdminPayrun()
 
         var updatedNetPay;
 
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
         .then(response => response.json())
         .then(data =>{
             if(!data.error){
@@ -195,10 +195,10 @@ function AdminPayrun()
             })
         })
 
-        paidArray = JSON.parse(localStorage.getItem('company')).paidArray;
+        paidArray = JSON.parse(sessionStorage.getItem('company')).paidArray;
 
         //update payDate for next months
-        var updatePayDate = JSON.parse(localStorage.getItem('company')).payDate;
+        var updatePayDate = JSON.parse(sessionStorage.getItem('company')).payDate;
         var splitDate = updatePayDate.split('-');
 
         if(Number(splitDate[1]) >= 12){
@@ -222,16 +222,16 @@ function AdminPayrun()
             
     
         //updating in company table
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions2)
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), requestOptions2)
         .then(response => response.json())
         .then(data => {
             // console.log("Hi",data);
             if(!data.error){
-                localStorage.setItem('company',JSON.stringify(data.updatedCompany));
+                sessionStorage.setItem('company',JSON.stringify(data.updatedCompany));
                 var today= new Date();
                 today=today.toString()
                 today = today.substring(4,today.length-30);
-                addLog(JSON.parse(localStorage.getItem('company')).company+"|"+JSON.parse(localStorage.getItem('company')).companyEmail+"|Salary Credited to all Employees|"+today);
+                addLog(JSON.parse(sessionStorage.getItem('company')).company+"|"+JSON.parse(sessionStorage.getItem('company')).companyEmail+"|Salary Credited to all Employees|"+today);
             }
         })
 
@@ -247,10 +247,10 @@ function AdminPayrun()
         
         var today=new Date();
         today = String(today.getDate()).padStart(2, '0') + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + today.getFullYear();
-        var paydate=JSON.parse(localStorage.getItem('company')).payDate;
+        var paydate=JSON.parse(sessionStorage.getItem('company')).payDate;
         
         if(today===paydate){
-            paidArray = JSON.parse(localStorage.getItem('company')).paidArray;
+            paidArray = JSON.parse(sessionStorage.getItem('company')).paidArray;
             if(paidArray[paidArray.length-1] === dateOfPayment){
                 return(<button disabled className="btn btn-success me-3">Pay All</button>) 
             }
@@ -305,7 +305,7 @@ function AdminPayrun()
                         <div hidden={hidden}>
                             <Loader/>
                         </div>
-                        <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},5000)}</div>
+                        <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},2000)}</div>
                         <div className="text-center" style={{marginTop:"40px"}}><b>{records}</b></div>
                     </div>
                    :

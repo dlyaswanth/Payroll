@@ -32,9 +32,9 @@ function EmpLoginpage()
               //history.push('/emphome')
               window.open("/emphome","_self")
               data.password=undefined;
-              localStorage.setItem('employee',JSON.stringify(data));
-              localStorage.setItem('employee_id',data._id);
-              localStorage.setItem('emp_company_id',data.companyId);
+              sessionStorage.setItem('employee',JSON.stringify(data));
+              sessionStorage.setItem('employee_id',data._id);
+              sessionStorage.setItem('emp_company_id',data.companyId);
             }
             else{
               toast.error(data.error,{autoClose:2500})

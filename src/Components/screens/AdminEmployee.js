@@ -45,7 +45,7 @@ function AdminEmployee()
                 headers: { 'Content-Type': 'application/json' },
             };
                 
-                fetch('https://payroll-fastify.herokuapp.com/api/companyEmployee/'+localStorage.getItem("company_id"), requestOptions)
+                fetch('https://payroll-fastify.herokuapp.com/api/companyEmployee/'+sessionStorage.getItem("company_id"), requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     if(!data.error){
@@ -132,9 +132,9 @@ function AdminEmployee()
     }
     const updateEmp = () =>{
         var ciphertext1 = CryptoJS.AES.encrypt(JSON.stringify(updatepassword), 'my-secret-key@123').toString();
-        calculateEarnings(JSON.parse(localStorage.getItem('company')).earningsDocArray);
+        calculateEarnings(JSON.parse(sessionStorage.getItem('company')).earningsDocArray);
         var updatedDeduction=0;
-        if(JSON.parse(localStorage.getItem('company')).empcontributionrate === "Percent"){
+        if(JSON.parse(sessionStorage.getItem('company')).empcontributionrate === "Percent"){
              updatedDeduction= (updatebasicPay*12)/100;
         }
         else{
@@ -147,7 +147,7 @@ function AdminEmployee()
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                companyId: localStorage.getItem("company_id"),
+                companyId: sessionStorage.getItem("company_id"),
                 employeeName:updatename,
                 employeeEmail:updatemail, 
                 password:ciphertext1,
@@ -179,7 +179,7 @@ function AdminEmployee()
     //Log details Function
     function addLog(message){
         // console.log(message);
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
         .then(response => response.json())
         .then(data =>{
             if(!data.error){
@@ -194,7 +194,7 @@ function AdminEmployee()
                     })
                 };
                 
-                fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+                fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), requestOptions)
                 .then(response => response.json())
                 .then(res=>{
                     console.log(res);
@@ -207,7 +207,7 @@ function AdminEmployee()
         var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(password), 'my-secret-key@123').toString();
         
         var deduction=0;
-        if(JSON.parse(localStorage.getItem('company')).empcontributionrate === "Percent"){
+        if(JSON.parse(sessionStorage.getItem('company')).empcontributionrate === "Percent"){
             deduction=(basicPay*12)/100;
             // console.log(deduction);
         }
@@ -218,7 +218,7 @@ function AdminEmployee()
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                companyId: localStorage.getItem("company_id"),
+                companyId: sessionStorage.getItem("company_id"),
                 employeeName:empname,
                 employeeEmail:mail, 
                 password:ciphertext,
@@ -229,7 +229,7 @@ function AdminEmployee()
                 salary: 0,
                 approvedReimbursment:0,
                 accNumber:'',
-                companyName: JSON.parse(localStorage.getItem("company")).company,
+                companyName: JSON.parse(sessionStorage.getItem("company")).company,
                 dateOfBirth:''
             })
         };
@@ -345,7 +345,7 @@ function AdminEmployee()
                     <div hidden={hidden}>
                         <Loader/>
                     </div>
-                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},5000)}</div>
+                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},2000)}</div>
                 <div className="text-center" style={{marginTop:"40px"}}><b>{records}</b></div>
                 </div>
                 :

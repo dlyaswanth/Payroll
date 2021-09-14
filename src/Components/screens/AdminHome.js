@@ -16,7 +16,7 @@ function AdminHome()
             headers: { 'Content-Type': 'application/json' },
         };
             
-            fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("company_id"), requestOptions)
+            fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem("company_id"), requestOptions)
             .then(response => response.json())
             .then(data => {
                 if(!data.error){

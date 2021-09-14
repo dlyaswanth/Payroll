@@ -88,7 +88,7 @@ function AdminHeader() {
                   workHours: workHours
           })
           };
-          fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+          fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), requestOptions)
               .then(response => response.json())
               .then (data => {
                 if (data.error){
@@ -133,7 +133,7 @@ function AdminHeader() {
 
     fetch(
       "https://payroll-fastify.herokuapp.com/api/companyEmployee/" +
-        localStorage.getItem("company_id"),
+        sessionStorage.getItem("company_id"),
       requestOptions1
     )
       .then((response) => response.json())
@@ -149,7 +149,7 @@ function AdminHeader() {
         headers: { 'Content-Type': 'application/json' },
     };
         
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("company_id"), requestOptions2)
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem("company_id"), requestOptions2)
         .then(response => response.json())
         .then(data => {
           if(!data.error){
@@ -232,7 +232,7 @@ function AdminHeader() {
             })
         };
             
-            fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("company_id"), requestOptions)
+            fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem("company_id"), requestOptions)
             .then(response => response.json())
             .then(data => {
                 if(!data.error){
@@ -323,7 +323,7 @@ function AdminHeader() {
         // }
     
        function submitorganisationSetupForm(e) {
-          const companyid= localStorage.getItem('company_id');
+          const companyid= sessionStorage.getItem('company_id');
           e.preventDefault();
          // console.log(this.state.fields)
           if (validateForm()) {
@@ -339,7 +339,7 @@ function AdminHeader() {
                       companyType : industry
               })
           };
-          fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+          fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), requestOptions)
               .then(console.log(companyid))
               .then(response => response.json())
               .then(data=>{
@@ -347,7 +347,7 @@ function AdminHeader() {
                   toast.error(data.error,{autoClose:2500})
                 else
                 {
-                    localStorage.setItem('company',JSON.stringify(data.updatedCompany))
+                    sessionStorage.setItem('company',JSON.stringify(data.updatedCompany))
                     toast.success(data.message,{autoClose:2500})
                    
                     // history.push('/taxinfo');

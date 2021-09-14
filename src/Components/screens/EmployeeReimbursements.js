@@ -22,7 +22,7 @@ function EmployeeReimbursements()
             headers: { 'Content-Type': 'application/json' },
         };
             
-            fetch('https://payroll-fastify.herokuapp.com/api/companyReimbursmentList/'+localStorage.getItem("emp_company_id"), requestOptions1)
+            fetch('https://payroll-fastify.herokuapp.com/api/companyReimbursmentList/'+sessionStorage.getItem("emp_company_id"), requestOptions1)
             .then(response => response.json())
             .then(data => {
                 if(!data.error){
@@ -36,7 +36,7 @@ function EmployeeReimbursements()
                 headers: { 'Content-Type': 'application/json' },
             };
                 
-                fetch('https://payroll-fastify.herokuapp.com/api/employeeReimbursment/'+localStorage.getItem("employee_id"), requestOptions2)
+                fetch('https://payroll-fastify.herokuapp.com/api/employeeReimbursment/'+sessionStorage.getItem("employee_id"), requestOptions2)
                 .then(response => response.json())
                 .then(data => {
                     if(!data.error){
@@ -77,7 +77,7 @@ function EmployeeReimbursements()
     //log function
     function addLog(message){
     
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('emp_company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('emp_company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
         .then(response => response.json())
         .then(data =>{
             if(!data.error){
@@ -92,7 +92,7 @@ function EmployeeReimbursements()
                     })
                 };
                 
-                fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('emp_company_id'), requestOptions)
+                fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('emp_company_id'), requestOptions)
                 .then(response => response.json())
                 .then(res=>{
                     console.log(res);
@@ -150,10 +150,10 @@ function EmployeeReimbursements()
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                employeeId : localStorage.getItem('employee_id'),
-                companyId : localStorage.getItem('emp_company_id'),
-                employeeName : JSON.parse(localStorage.getItem('employee')).employeeName,
-                employeeEmail : JSON.parse(localStorage.getItem('employee')).employeeEmail,
+                employeeId : sessionStorage.getItem('employee_id'),
+                companyId : sessionStorage.getItem('emp_company_id'),
+                employeeName : JSON.parse(sessionStorage.getItem('employee')).employeeName,
+                employeeEmail : JSON.parse(sessionStorage.getItem('employee')).employeeEmail,
                 type : selectedReimbursment.type,
                 status : "Pending",
                 amount : amount,
@@ -171,7 +171,7 @@ function EmployeeReimbursements()
                     today=today.toString()
                     today = today.substring(4,today.length-30);
                     console.log(today);
-                    addLog(JSON.parse(localStorage.getItem('employee')).employeeName+"|"+JSON.parse(localStorage.getItem('employee')).employeeEmail+"|Reimbursement Claimed|"+today);
+                    addLog(JSON.parse(sessionStorage.getItem('employee')).employeeName+"|"+JSON.parse(sessionStorage.getItem('employee')).employeeEmail+"|Reimbursement Claimed|"+today);
                     console.log(data);
                 }
             })
@@ -258,7 +258,7 @@ function EmployeeReimbursements()
                 <div hidden={hidden}>
                     <Loader/>
                 </div>
-                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},3000)}</div>
+                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},2000)}</div>
                 <div className="text-center" style={{marginTop:"40px"}}><b>{records}</b></div>
                 </div>
                 :

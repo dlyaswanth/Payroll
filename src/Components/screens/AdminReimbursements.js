@@ -18,11 +18,11 @@ function AdminReimbursements()
             headers: { 'Content-Type': 'application/json' },
         };
         
-        fetch('https://payroll-fastify.herokuapp.com/api/companyReimbursment/'+localStorage.getItem("company_id"), requestOptions)
+        fetch('https://payroll-fastify.herokuapp.com/api/companyReimbursment/'+sessionStorage.getItem("company_id"), requestOptions)
             .then(response => response.json())
             .then(data => {
                 if(!data.error){
-                    setAppliedReimbursment(data);
+                    setAppliedReimbursment(data.reverse());
                     console.log(appliedReimbursment);
                 }
             })
@@ -35,7 +35,7 @@ function AdminReimbursements()
     //Log details Function
     function addLog(message){
         
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), {method: 'GET', headers: { 'Content-Type': 'application/json' }})
         .then(response => response.json())
         .then(data =>{
             if(!data.error){
@@ -50,7 +50,7 @@ function AdminReimbursements()
                     })
                 };
                 
-                fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+                fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), requestOptions)
                 .then(response => response.json())
                 .then(res=>{
                     console.log(res);
@@ -74,7 +74,7 @@ function AdminReimbursements()
             .then(data => { 
                 if(!data.error){
                     console.log(data);
-                    setAppliedReimbursment(data.reimbursment);
+                    setAppliedReimbursment(data.reimbursment.reverse());
                     var today= new Date();
                     today=today.toString()
                     today = today.substring(4,today.length-30);
@@ -177,7 +177,7 @@ function AdminReimbursements()
                 <div hidden={hidden}>
                     <Loader/>
                 </div>
-                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},5000)}</div>
+                <div hidden>{setTimeout(()=>{setRecords('No Records found');setHidden(true)},2000)}</div>
                 <div className="text-center" style={{marginTop:"40px"}}><b>{records}</b></div>
                 </div>
                 :

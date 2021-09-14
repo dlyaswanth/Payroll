@@ -26,7 +26,7 @@ function App() {
   // const [state,setState]=useState(false)
   function renderList()
   {
-    if (localStorage.getItem('company_id') || value === true)
+    if (sessionStorage.getItem('company_id') || value === true)
     {
       // setState(true)
       return (
@@ -49,7 +49,7 @@ function App() {
         </div>
       )
     }
-    else if(localStorage.getItem('employee_id') || value === true ){
+    else if(sessionStorage.getItem('employee_id') || value === true ){
       return(
         <div>
           <Route path="/emphome"><UserHome /></Route>

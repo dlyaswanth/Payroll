@@ -41,7 +41,7 @@ class OrganizationSetup extends React.Component {
     }
 
     submitorganisationSetupForm(e) {
-      const companyid= localStorage.getItem('company_id');
+      const companyid= sessionStorage.getItem('company_id');
       e.preventDefault();
       console.log(this.state.fields)
       if (this.validateForm()) {
@@ -56,7 +56,7 @@ class OrganizationSetup extends React.Component {
                   companyType : this.state.fields.industry
           })
       };
-      fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
+      fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), requestOptions)
           .then(console.log(companyid))
           .then(response => response.json())
           .then(data=>{

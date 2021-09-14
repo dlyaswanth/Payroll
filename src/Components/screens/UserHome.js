@@ -25,13 +25,13 @@ function UserHome()
             headers: { 'Content-Type': 'application/json' },
         };
         
-        fetch('https://payroll-fastify.herokuapp.com/api/employee/'+localStorage.getItem("employee_id"), requestOptions)
+        fetch('https://payroll-fastify.herokuapp.com/api/employee/'+sessionStorage.getItem("employee_id"), requestOptions)
             .then(response => response.json())
             .then(data => {
                 if(!data.error){
                     setempDetails(data);
                     
-                    fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("emp_company_id"),{method:'GET',headers:{'Content-Type':'application/json'}})
+                    fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem("emp_company_id"),{method:'GET',headers:{'Content-Type':'application/json'}})
                     .then(response => response.json())
                     .then(data => {
                         if(!data.error){
@@ -43,7 +43,7 @@ function UserHome()
                 }
             })
 
-            fetch('https://payroll-fastify.herokuapp.com/api/employeeReimbursment/'+localStorage.getItem("employee_id"),{method:'GET',headers:{'Content-Type':'application/json'}})
+            fetch('https://payroll-fastify.herokuapp.com/api/employeeReimbursment/'+sessionStorage.getItem("employee_id"),{method:'GET',headers:{'Content-Type':'application/json'}})
             .then(response => response.json())
             .then(data => {
                 if(!data.error){

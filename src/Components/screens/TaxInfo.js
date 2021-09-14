@@ -49,7 +49,7 @@ class Taxinfo extends React.Component {
       console.log(this.state.fields)
 
       if (this.validateForm()) {
-        const companyid= localStorage.getItem('company_id');
+        const companyid= sessionStorage.getItem('company_id');
         e.preventDefault();
         console.log(this.state.fields)
         if (this.validateForm()) {

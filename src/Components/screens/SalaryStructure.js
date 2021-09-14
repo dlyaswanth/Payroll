@@ -7,7 +7,7 @@ export default function SalaryStructure() {
   const [reimbursments,setReimbursments]=useState([]) 
 
   var totEarning = 0;
-  var deductions = JSON.parse(localStorage.getItem('employee')).deductions;
+  var deductions = JSON.parse(sessionStorage.getItem('employee')).deductions;
   var reimbursmentAmount = 0;
   var total,newded,reimb,ttamt;
   var yearCTC;
@@ -48,7 +48,7 @@ export default function SalaryStructure() {
                   { title: 'Taxes & Deductions', value: newded, color:'#EDD382'})
 
     //console.log(total,newded,reimb,ttamt);
-    yearCTC = (Number(JSON.parse(localStorage.getItem('employee')).basicPay)+totEarning)*12
+    yearCTC = (Number(JSON.parse(sessionStorage.getItem('employee')).basicPay)+totEarning)*12
   }
  
 
@@ -60,7 +60,7 @@ export default function SalaryStructure() {
         headers: { 'Content-Type': 'application/json' },
     };
       
-    fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("emp_company_id"), requestOptions1)
+    fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem("emp_company_id"), requestOptions1)
         .then(response => response.json())
         .then(data => {
           if(!data.error){
@@ -72,7 +72,7 @@ export default function SalaryStructure() {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         };
-    fetch('https://payroll-fastify.herokuapp.com/api/employeeReimbursment/'+localStorage.getItem("employee_id"), requestOptions2)
+    fetch('https://payroll-fastify.herokuapp.com/api/employeeReimbursment/'+sessionStorage.getItem("employee_id"), requestOptions2)
         .then(response => response.json())
         .then(data => {
           if(!data.error){
@@ -96,7 +96,7 @@ export default function SalaryStructure() {
   const Deduction = 
     {
       name: 'PF Empolyer Contribution',
-      money: JSON.parse(localStorage.getItem('employee')).deductions
+      money: JSON.parse(sessionStorage.getItem('employee')).deductions
     };
 
   var dataMock = [];
@@ -110,7 +110,7 @@ export default function SalaryStructure() {
       }
       
       <div className="details mb-3">
-        <h2>Monthly CTC : ₹{INR(JSON.parse(localStorage.getItem('employee')).salary)}.00</h2>
+        <h2>Monthly CTC : ₹{INR(JSON.parse(sessionStorage.getItem('employee')).salary)}.00</h2>
         <h3 style={{ color: 'grey' }}>Yearly CTC : ₹ {INR(yearCTC)}.00</h3>
       </div>
 
@@ -132,7 +132,7 @@ export default function SalaryStructure() {
         
             <div className="d-flex justify-content-between">
               <div className="name mb-1">Basic Pay</div>
-              <div className="amount mb-1">₹ {INR(JSON.parse(localStorage.getItem('employee')).basicPay)}.00</div>
+              <div className="amount mb-1">₹ {INR(JSON.parse(sessionStorage.getItem('employee')).basicPay)}.00</div>
             </div>
           
       </div>
@@ -184,7 +184,7 @@ export default function SalaryStructure() {
             </div>
         <hr />
         <div className="d-flex justify-content-end" >
-          <h6>Monthly CTC : ₹ {INR(JSON.parse(localStorage.getItem('employee')).salary + reimbursmentAmount)}.00</h6>
+          <h6>Monthly CTC : ₹ {INR(JSON.parse(sessionStorage.getItem('employee')).salary + reimbursmentAmount)}.00</h6>
         </div>
         <hr className="mb-5"/>
       </div>

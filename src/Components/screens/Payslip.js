@@ -33,7 +33,7 @@ function Payslip() {
         headers: { 'Content-Type': 'application/json' },
         };
         
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("emp_company_id"), requestOptions)
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem("emp_company_id"), requestOptions)
         .then(response => response.json())
         .then(data => {
           if(!data.error){
@@ -51,7 +51,7 @@ function Payslip() {
       headers: { 'Content-Type': 'application/json' },
       };
       
-      fetch('https://payroll-fastify.herokuapp.com/api/employee/'+localStorage.getItem("employee_id"), requestOptions1)
+      fetch('https://payroll-fastify.herokuapp.com/api/employee/'+sessionStorage.getItem("employee_id"), requestOptions1)
       .then(response => response.json())
       .then(data => {
         if(!data.error){
@@ -76,7 +76,7 @@ function Payslip() {
       headers: { 'Content-Type': 'application/json' },
       };
       
-      fetch('https://payroll-fastify.herokuapp.com/api/employeePayslip/'+localStorage.getItem("employee_id")+'/'+selectedMonth, requestOptions2)
+      fetch('https://payroll-fastify.herokuapp.com/api/employeePayslip/'+sessionStorage.getItem("employee_id")+'/'+selectedMonth, requestOptions2)
       .then(response => response.json())
       .then(data => {
         if(!data.error){

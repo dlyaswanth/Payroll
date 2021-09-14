@@ -152,9 +152,9 @@ const SignUpForm = () => {
       .then((data) => {
         if (!data.error) {
           console.log("data", data);
-          localStorage.setItem("company_id", data.company._id);
+          sessionStorage.setItem("company_id", data.company._id);
           console.log("cid", data.company._id);
-          history.push("/organizationsetup");
+          window.open("/organizationsetup","_self");
         } 
         else {
           toast.error("Setup Error! Contact admin", { autoClose: 2500 });

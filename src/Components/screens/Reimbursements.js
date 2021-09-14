@@ -70,8 +70,8 @@ function Demo()
               logArray: [log]
             })
         };
-        fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem('company_id'), requestOptions)
-            .then(console.log(localStorage.getItem('company_id')))
+        fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), requestOptions)
+            .then(console.log(sessionStorage.getItem('company_id')))
             .then(response => response.json())
             .then(data=>{
                 if (data.error){

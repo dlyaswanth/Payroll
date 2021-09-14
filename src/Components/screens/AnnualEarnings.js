@@ -11,7 +11,7 @@ export default function AnnualEarnings() {
   
   var earningAmount = 0;
 
-  var employee = JSON.parse(localStorage.getItem('employee'));
+  var employee = JSON.parse(sessionStorage.getItem('employee'));
 
   useEffect(()=>{
     //fetching earnings doc array from company
@@ -20,7 +20,7 @@ export default function AnnualEarnings() {
         headers: { 'Content-Type': 'application/json' },
     };
       
-    fetch('https://payroll-fastify.herokuapp.com/api/company/'+localStorage.getItem("emp_company_id"), requestOptions1)
+    fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem("emp_company_id"), requestOptions1)
         .then(response => response.json())
         .then(data => {
           if(!data.error){
@@ -45,8 +45,8 @@ export default function AnnualEarnings() {
               <tr>
                 <th scope="col">Earnings</th>
                 <th scope="col">Ytd Total</th>
-                <th scope="col">Jan 2018</th>
-                <th scope="col">Feb 2018</th>
+                <th scope="col">Monthly Earning</th>
+                
                 {/* <th scope="col">Mar 2018</th> */}
               </tr>
             </thead>
@@ -55,9 +55,9 @@ export default function AnnualEarnings() {
                 <th className="text-secondary" scope="row">
                   Basic
                 </th>
-                <td className="text-end">₹ {INR(Number(employee.basicPay)*12)}.00</td>
-                <td className="text-end">₹ {INR(Number(employee.basicPay))}.00</td>
-                <td className="text-end">₹ {INR(Number(employee.basicPay))}.00</td>
+                <td >₹ {INR(Number(employee.basicPay)*12)}.00</td>
+                <td >₹ {INR(Number(employee.basicPay))}.00</td>
+               
               </tr>
               {earnings.map((data,index) => {
                 return (
@@ -65,18 +65,18 @@ export default function AnnualEarnings() {
                     <th className="text-secondary" scope="row">
                       {data.name}
                     </th>
-                    <td className="text-end">₹ {INR(Number(data.amount)*12)}.00</td>
-                    <td className="text-end">₹ {INR(Number(data.amount))}.00</td>
-                    <td className="text-end">₹ {INR(Number(data.amount))}.00</td>
+                    <td >₹ {INR(Number(data.amount)*12)}.00</td>
+                    <td >₹ {INR(Number(data.amount))}.00</td>
+                    
                     {/* <td>240</td> */}
                   </tr>
                 );
               })}
               <tr>
                 <th scope="row">Total Earnings</th>
-                <td className="text-end"> ₹ {INR((earningAmount + Number(employee.basicPay))*12)}.00</td>
-                <td className="text-end"> ₹ {INR(earningAmount + Number(employee.basicPay))}.00</td>
-                <td className="text-end"> ₹ {INR(earningAmount + Number(employee.basicPay))}.00</td>
+                <td > ₹ {INR((earningAmount + Number(employee.basicPay))*12)}.00</td>
+                <td > ₹ {INR(earningAmount + Number(employee.basicPay))}.00</td>
+               
               </tr>
             </tbody>
           </table>

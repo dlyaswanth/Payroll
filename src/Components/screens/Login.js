@@ -33,8 +33,8 @@ function Loginpage()
               value=true;
               window.open("/home","_self")
               data.password=undefined;
-              localStorage.setItem('company',JSON.stringify(data))
-              localStorage.setItem('company_id',data._id);
+              sessionStorage.setItem('company',JSON.stringify(data))
+              sessionStorage.setItem('company_id',data._id);
             }
             else{
               toast.error(data.error,{autoClose:2500})
