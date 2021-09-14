@@ -44,7 +44,7 @@ function AdminNavbar() {
               color: "white",
             }}
           >
-           <i className="fas fa-bars"></i>
+            <i className="far fa-window-close"></i>
           </button>
         </h1>
 
