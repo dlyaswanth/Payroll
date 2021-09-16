@@ -39,12 +39,13 @@ function AdminNavbar() {
             onClick={() => closeNav()}
             style={{
               backgroundColor: "#001933",
-              height: "45px",
-              width: "50px",
+              
+              height: "40px",
+              width: "40px",
               color: "white",
             }}
           >
-            <i className="far fa-window-close"></i>
+           <i className="fas fa-times"></i>
           </button>
         </h1>
 

@@ -80,6 +80,7 @@ export default function PaySchedule() {
         else
         {
             toast.success(data.message,{autoClose:2500})
+            sessionStorage.setItem('companyAddress',data.updatedCompany.address);
             window.open("/statutory","_self")
             // history.push('/statutory')
         }

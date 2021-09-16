@@ -12,6 +12,8 @@ import CryptoJS from 'crypto-js';
 
 function AdminEmployee()
 {
+    const [companyWorkLocation,setCompanyWorkLocation] = useState([])
+
     //values for adding employees
     const [empname,setEmpName]=useState('')
     const [address,setAddress]=useState('')
@@ -19,6 +21,8 @@ function AdminEmployee()
     const [role,setRole]=useState('')
     const [password,setPassword]=useState('')
     const [mail,setMail]=useState('')
+    const [workLocation,setWorkLocation] = useState('')
+
     //values for updating employees
     const [updatename,setupdateName]=useState('')
     const [updateaddress,setupdateAddress]=useState('')
@@ -26,6 +30,8 @@ function AdminEmployee()
     const [updaterole,setupdateRole]=useState('')
     const [updatepassword,setupdatePassword]=useState('')
     const [updatemail,setupdateMail]=useState('')
+    const [updateWorkLocation,setUpdateWorkLocation] = useState('')
+
     const [records,setRecords]=useState('')
     const [hidden,setHidden]=useState(false)
     
@@ -51,6 +57,19 @@ function AdminEmployee()
                     if(!data.error){
                         setEmpDetails(data.employee);
                         console.log(empDetails);
+                    }
+                })
+
+            const requestOptions1 = {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            };
+                
+                fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem("company_id"), requestOptions1)
+                .then(response => response.json())
+                .then(data => {
+                    if(!data.error){
+                        setCompanyWorkLocation(data.workLocation);
                     }
                 })
 
@@ -112,6 +131,7 @@ function AdminEmployee()
                     var password = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
                     setupdatePassword(password)
                     setupdateMail(data.employeeEmail)
+                    setUpdateWorkLocation(data.workLocation)
                 }
                 // setEarnings(data)
                 // setEmpDetails(data.employee);
@@ -153,6 +173,7 @@ function AdminEmployee()
                 password:ciphertext1,
                 employeeAddress:updateaddress,
                 basicPay:updatebasicPay,
+                workLocation : updateWorkLocation,
                 role:updaterole,
                 deductions:updatedDeduction,
                 salary:updatedSalary
@@ -227,6 +248,7 @@ function AdminEmployee()
                 deductions:deduction,
                 role:role,
                 salary: 0,
+                workLocation : workLocation,
                 approvedReimbursment:0,
                 accNumber:'',
                 companyName: JSON.parse(sessionStorage.getItem("company")).company,
@@ -247,6 +269,7 @@ function AdminEmployee()
             console.log(today);
             addLog(data.employee.employeeName+"|"+data.employee.employeeEmail+"|Employee Created|"+today);
             toast.success('Employee Added Successfully',{autoClose:2500})
+            reset()
 
         }
         else{
@@ -254,6 +277,16 @@ function AdminEmployee()
         }
         })
         
+    }
+
+    function reset(){
+        setEmpName('');
+        setAddress('');
+        setBasicPay('')
+        setRole('');
+        setPassword('');
+        setMail('');
+        setWorkLocation('');
     }
     
     return (
@@ -287,42 +320,55 @@ function AdminEmployee()
                     <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">New Employee</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={reset}></button>
                     </div>
                     <div className="modal-body">
                     <span>Name : </span>
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="basic-addon1"><i className="fas fa-user-circle"></i></span>
-                            <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setEmpName(event.target.value)}}/>
+                            <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setEmpName(event.target.value)}} value={empname}/>
                         </div>
                         <span>Work Email :</span>
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="basic-addon1"><i className="far fa-envelope"></i></span>
-                            <input type="email" className="form-control" placeholder="Work Email" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setMail(event.target.value)}}/>
+                            <input type="email" className="form-control" placeholder="Work Email" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setMail(event.target.value)}} value={mail}/>
                         </div>
                         <span>Password :</span>
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="basic-addon1"><i className="fas fa-unlock-alt"></i></span>
-                            <input type="password" className="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setPassword(event.target.value)}}/>
-                        </div>
-                        <span>Address :</span>
-                        <div className="input-group mb-3">
-                            <span className="input-group-text" id="basic-addon1"><i className="fas fa-address-card"></i></span>
-                            <input type="text" className="form-control" placeholder="Address" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setAddress(event.target.value)}} />
+                            <input type="password" className="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setPassword(event.target.value)}} value={password}/>
                         </div>
                         <span>Basic Pay :</span>
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="basic-addon1"><i className="fas fa-rupee-sign"></i></span>
-                            <input type="text" className="form-control" placeholder="Basic Pay" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setBasicPay(event.target.value)}}/>
+                            <input type="text" className="form-control" placeholder="Basic Pay" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setBasicPay(event.target.value)}} value={basicPay} />
                         </div>
                         <span>Work Role :</span>
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="basic-addon1"><i className="fas fa-user-tag"></i></span>
-                            <input type="text" className="form-control" placeholder="Role" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setRole(event.target.value)}}/>
+                            <input type="text" className="form-control" placeholder="Role" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setRole(event.target.value)}} value={role} />
+                        </div>
+                        <span>Address :</span>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text" id="basic-addon1"><i className="fas fa-address-card"></i></span>
+                            <input type="text" className="form-control" placeholder="Address" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setAddress(event.target.value)}} value={address} />
+                        </div>
+                        <span>Work Location :</span>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text" id="basic-addon1"><i class="fas fa-building"></i></span>
+                            <select className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setWorkLocation(event.target.value)}} value={workLocation} >
+                                {
+                                    companyWorkLocation.map((item,index) =>{
+                                        return(
+                                            <option key={index} value={item}>{item}</option>
+                                        )
+                                    })
+                                }
+                            </select>
                         </div>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={reset}>Close</button>
                         <button type="button" className="btn btn-primary" onClick={AddEmp} data-bs-dismiss="modal">Save changes</button>
                     </div>
                     </div>
@@ -402,11 +448,6 @@ function AdminEmployee()
                             <span className="input-group-text" id="basic-addon1"><i className="fas fa-unlock-alt"></i></span>
                             <input type="password" className="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1" value={updatepassword} onChange={(event)=>{setupdatePassword(event.target.value)}}/>
                         </div>
-                        <span>Address :</span>
-                        <div className="input-group mb-3">
-                            <span className="input-group-text" id="basic-addon1"><i className="fas fa-address-card"></i></span>
-                            <input type="text" className="form-control" placeholder="Address" aria-label="Username" aria-describedby="basic-addon1" value={updateaddress} onChange={(event)=>{setupdateAddress(event.target.value)}} />
-                        </div>
                         <span>Basic Pay :</span>
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="basic-addon1"><i className="fas fa-rupee-sign"></i></span>
@@ -416,6 +457,24 @@ function AdminEmployee()
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="basic-addon1"><i className="fas fa-user-tag"></i></span>
                             <input type="text" className="form-control" placeholder="Role" aria-label="Username" aria-describedby="basic-addon1" value={updaterole} onChange={(event)=>{setupdateRole(event.target.value)}}/>
+                        </div>
+                        <span>Address :</span>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text" id="basic-addon1"><i className="fas fa-address-card"></i></span>
+                            <input type="text" className="form-control" placeholder="Address" aria-label="Username" aria-describedby="basic-addon1" value={updateaddress} onChange={(event)=>{setupdateAddress(event.target.value)}} />
+                        </div>
+                        <span>Work Location :</span>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text" id="basic-addon1"><i class="fas fa-building"></i></span>
+                            <select className="form-control" aria-label="Username" aria-describedby="basic-addon1" onChange={(event)=>{setUpdateWorkLocation(event.target.value)}} value={updateWorkLocation}>
+                                {
+                                    companyWorkLocation.map((item,index) =>{
+                                        return(
+                                            <option key={index} value={item}>{item}</option>
+                                        )
+                                    })
+                                }
+                            </select>
                         </div>
                     </div>
                     <div className="modal-footer">

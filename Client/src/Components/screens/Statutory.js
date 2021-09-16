@@ -15,7 +15,7 @@ function Statutory() {
   const [dc1, setDc1] =useState('Monthly');
   const [dc2, setDc2] =useState('Monthly');
   const [esinum, setEsinum] = useState('');
-  const [worl, setWorl] = useState('Head Office (Andhra Pradesh)');
+  const [worl, setWorl] = useState(sessionStorage.getItem('companyAddress'));
   const [ptnum, setPtnum] = useState('');
   const [onenum, setOnenum] = useState('1');
   const [twnum, setTwnum] = useState('');
@@ -284,7 +284,7 @@ fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getIte
       <form >
         <div className="form-group col-md-8">
         <label htmlFor="wl">Work Location</label>
-        <input type="text" className="form-control" id="wl" value= {worl} onChange={(e) => setWorl(e.target.value)} aria-describedby="emailHelp" value="Head Office (Andhra Pradesh)" disabled/>
+        <input type="text" className="form-control" id="wl" value= {worl} onChange={(e) => setWorl(e.target.value)} aria-describedby="emailHelp" disabled/>
       </div>
       <br/>
 

@@ -42,6 +42,13 @@ function AdminHeader() {
       const[workHours,setWorkHours]=useState(0)
       const[payDate,setPayDate]=useState('')
       const[payDateFrom,setPayDateFrom]=useState('')
+      const [workLocation,setWorkLocation] = useState([])
+
+      const [locationFlag,setLocationFlag] = useState(0)
+      const [workAddress,setWorkAddress] = useState('')
+      const [workCity,setWorkCity] = useState('')
+      const [workState,setWorkState] = useState('')
+      const [workPincode,setWorkPincode] = useState('')
  
       //payschedule data
 
@@ -167,6 +174,8 @@ function AdminHeader() {
             setPayDate(dateFromDb.reverse().join('-'));
             dateFromDb = data.payRollStartFrom.split('-')
             setPayDateFrom(dateFromDb.reverse().join('-')) 
+
+            setWorkLocation(data.workLocation);
           }
           
         })
@@ -205,7 +214,6 @@ function AdminHeader() {
       setSearch(text);
     }
   };
-
   
 
     function handleSubmitpwd(event) {
@@ -303,24 +311,6 @@ function AdminHeader() {
           
     
       }
-
-      
-        
-              
-              
-      
-    
-        // handleChange(e) {
-        // //   console.log(e.target.value)
-        // // //   let fields = this.state.fields;
-        // //   fields[e.target.name] = e.target.value;
-        //   const {fields}=this.state;
-        //   this.setState({
-           
-        //    fields:{...fields,[e.target.name]:e.target.value}
-        //   });
-    
-        // }
     
        function submitorganisationSetupForm(e) {
           const companyid= sessionStorage.getItem('company_id');
@@ -353,27 +343,6 @@ function AdminHeader() {
                     // history.push('/taxinfo');
                 }
             })
-    
-              //api integration
-    
-    
-            // fetch('', { //backend url
-            //   method: 'POST',
-            //   headers: { "Content-Type": "application/json" },
-            //   body: JSON.stringify(this.state.fields)
-            //   }).then(() => {
-            //   console.log('organisation setup added');
-            // })
-              // let fields = {};
-              // fields["orgName"] = "";
-              // fields["address"] = "";
-              // fields["city"] = "";
-              // fields["pincode"] = "";
-              // fields["industry"] = "";
-              // fields["state"] = "";
-              // this.setState({fields:fields});
-              //alert("Form saved");
-              
           }
     
         }
@@ -463,6 +432,97 @@ function AdminHeader() {
       );
     }
   };
+
+  function addNewLocation(){
+    if(locationFlag === 1){
+      return (
+        <div className="container">
+          <Form>
+            <Form.Group className="mb-3" controlId="formAddress">
+                <Form.Label> Work Location
+                </Form.Label>
+                <Form.Control type="text" placeholder="Address" name="address" value={workAddress} onChange={(e)=>setWorkAddress(e.target.value)} />
+            </Form.Group>
+
+            <Row className="mb-3">
+                <Form.Group as={Col} controlId="formGridCity">
+                <Form.Label>City</Form.Label>
+                <Form.Control type="text" placeholder="City" name="city" value={workCity} onChange={(e)=>setWorkCity(e.target.value)}/>
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridState">
+                    <Form.Label>State</Form.Label>
+                        <Form.Select  name="state" value={workState} onChange={(e)=>setWorkState(e.target.value)}>
+                        <option value='Select'>Select a state...</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>   
+                            <option value="Maharastra">Maharastra</option>       
+                        </Form.Select>
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridZip">
+                    <Form.Label>Pincode</Form.Label>
+                    <Form.Control type="text" placeholder="Pincode" name="pincode" value={workPincode} onChange={(e)=>setWorkPincode(e.target.value)}/>
+                </Form.Group>
+            </Row> 
+            <div className="text-center">
+              <button type="submit" className="btn btn-success mt-3 mb-3 w-50" onClick={(e)=>addLocation(e)}>Save</button>
+            </div>
+          </Form>
+        </div>
+      )
+    }
+    else{
+      return <p></p>
+    }
+  }
+
+  function addLocation(e){
+
+    e.preventDefault()
+
+    var tempVar = workLocation;
+    var inputAddress = workAddress + "," + workCity + "," + workState + "," + workPincode;
+
+    tempVar.push(inputAddress);
+
+    setWorkLocation(tempVar);
+    setLocationFlag(0);
+    resetLocation();
+
+  }
+
+  function resetLocation(){
+    setWorkAddress('')
+    setWorkCity('')
+    setWorkState('')
+    setWorkPincode('')
+  }
+
+  function updateLocation(){
+     //api integration
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+              workLocation : workLocation
+      })
+    };
+    fetch('https://payroll-fastify.herokuapp.com/api/company/'+sessionStorage.getItem('company_id'), requestOptions)
+        .then(response => response.json())
+        .then(data=>{
+          if (data.error)
+            toast.error(data.error,{autoClose:2500})
+          else
+          {
+              sessionStorage.setItem('company',JSON.stringify(data.updatedCompany))
+              toast.success(data.message,{autoClose:2500})
+          }
+      })
+  }
+
   return (
     <div id="main">
       <ToastContainer />
@@ -491,22 +551,9 @@ function AdminHeader() {
                   className="form-control me-2"
                   type="search"
                   placeholder="Search"
-                  //aria-label="Search"
-                  // className="btn-close"
-                  // data-bs-dismiss="modal"
                   onClick={() => handleShow()}
-                  // onChange={() => handleShow()}
                 />
               </li>
-              {/* <li>
-                 &nbsp;
-                <button
-                  className="btn btn-outline-success"
-                  onClick={() => Search(name)}
-                >
-                  Search
-                </button>
-              </li> */}
               <li className="company_name me-2 ">
               
               <img alt=""
@@ -528,18 +575,23 @@ function AdminHeader() {
                     <li data-bs-toggle="modal" data-bs-target="#organizationprofile" className="dropdown-item settings" style={{cursor:"pointer"}}>
                       Organization Profile
                     </li>
-                    
-                    <li className="settings">
-                      <hr />
-                    </li>
-                    <li data-bs-toggle="modal" data-bs-target="#updatepassword" className="dropdown-item settings" style={{cursor:"pointer"}}>
-                      Update Password
-                    </li>
                     <li className="settings">
                       <hr />
                     </li>
                     <li data-bs-toggle="modal" data-bs-target="#payschedule" className="dropdown-item settings" style={{cursor:"pointer"}}>
                       Pay Schedule
+                    </li>
+                    <li className="settings">
+                      <hr />
+                    </li>
+                    <li data-bs-toggle="modal" data-bs-target="#worklocation" className="dropdown-item settings" style={{cursor:"pointer"}}>
+                      Work Location
+                    </li>
+                    <li className="settings">
+                      <hr />
+                    </li>
+                    <li data-bs-toggle="modal" data-bs-target="#updatepassword" className="dropdown-item settings" style={{cursor:"pointer"}}>
+                      Update Password
                     </li>
                     
                   </ul>
@@ -560,11 +612,7 @@ function AdminHeader() {
               type="search"
               placeholder="Search"
               aria-label="Search"
-              // className="btn-close"
-              // data-bs-dismiss="modal"
               onChange={(event) => searchFilterFunction(event.target.value)}
-              //onClear={(event) => searchFilterFunction("")}
-              // onClear={(text) => searchFilterFunction("")}
               value={search}
             />
           </Modal.Title>
@@ -859,6 +907,37 @@ function AdminHeader() {
                     
                 </div>
             </div>
+            </div>
+            <div className="modal fade" id="worklocation" tabIndex="-1" aria-labelledby="payschedule" aria-hidden="true">
+              <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">Work Location</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>resetLocation()}></button>
+                    </div>
+                    <div className="mt-3">
+                      <ul>
+                        {
+                          workLocation.map((item,index) =>{
+                            return (
+                              <li key={index}>{item}</li>
+                            )
+                          })
+                        }
+                      </ul>
+                    </div>
+                    <div className="text-center">
+                      <button className="btn btn-primary my-4 w-75" onClick={()=>setLocationFlag(locationFlag===0?1:0)}><i className="fas fa-plus me-2"></i>Add Work Location</button>
+                    </div>
+                    <div className="container">
+                      {addNewLocation()}
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={()=>resetLocation()}>Close</button>
+                      <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" onClick={()=>updateLocation()}>Update</button>
+                    </div>
+                </div>
+              </div>
             </div>
     </div>
   );

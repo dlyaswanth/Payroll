@@ -354,14 +354,14 @@ color: green;
 }
 .logininnercard
 {
-  width: 40%  !important;
-  margin-left: 25%;
-  margin-right: 25%;
-  border-radius: 25px;
-  margin-top:10% !important;
+  width: 70%  !important;
+  height: 60vh !important;
+  margin-left: 7%;
+  border-radius: 15px;
+  margin-top:20% !important;
 background: #f1f1f1;
-box-shadow:  20px 20px 60px #cdcdcd,
-             -20px -20px 60px #ffffff;
+box-shadow:  -20px -20px 63px #acacac,
+             20px 20px 63px #ffffff;
 }
 input 
 {
@@ -369,10 +369,23 @@ input
 }
 .logincard 
 {
+  
   margin-left: 50px;
 }
 .searchinput
 {
   width:80% !important;
   margin-left: 100% !important;
+}
+
+.login
+{
+  margin-top: 20%;
+   
+}
+.emplogin
+{
+  margin-top: 25%;
+
+   
 }

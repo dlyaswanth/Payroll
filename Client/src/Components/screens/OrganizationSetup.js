@@ -45,14 +45,15 @@ class OrganizationSetup extends React.Component {
       e.preventDefault();
       console.log(this.state.fields)
       if (this.validateForm()) {
-        
+        var address = this.state.fields.address+","+this.state.fields.city+","+this.state.fields.state+","+this.state.fields.pincode;
         //api integration
         const requestOptions = {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
                   location : this.state.fields.location,
-                  address : this.state.fields.address+","+this.state.fields.city+","+this.state.fields.state+","+this.state.fields.pincode,
+                  address : address,
+                  workLocation : [address],
                   companyType : this.state.fields.industry
           })
       };

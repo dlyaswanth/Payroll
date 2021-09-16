@@ -12,6 +12,7 @@ function AdminPayrun()
     const [benefits,setBenefits] = useState(0)
     const [records,setRecords]=useState('')
     const [hidden,setHidden]=useState(false)
+    // const [available,setavailable]=useState(false)
 
     const headers = [
         { label: "Employee Name", key: "employeeName" },
@@ -238,6 +239,10 @@ function AdminPayrun()
         
         
         toast.success('Payment Done Successfully',{autoClose:2500})
+        setTimeout( ()=>{
+            window.location.reload()
+        },2500  
+        )
         return
         
     } 
